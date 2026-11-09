@@ -5,6 +5,8 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
+    # FIREBASE_SERVICE_ACCOUNT құпиясы қосылғанша өткізіліп кетеді
+    if: ${{ vars.FIREBASE_ON == '1' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
