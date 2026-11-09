@@ -3288,9 +3288,12 @@ $('#scoreBtn').onclick=openScore;
 /* balanced random grouping */
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function balancedGroups(){
-  let order=shuffle(GROUPS.map(g=>g.id));const counts={};GROUPS.forEach(g=>counts[g.id]=0);let k=0;
-  ['A','B','C'].forEach(L=>{const arr=shuffle(S.students.filter(s=>s.level===L));
-    arr.forEach(s=>{const lap=Math.floor(k/4),pos=k%4;const gid=order[lap%2?3-pos:pos];s.group=gid;counts[gid]++;k++})});
+  /* шынайы теңдестіру: озат (A) әр топқа бір-бірден, содан кейін екпінді (B) мен қанағат (C) —
+     ең аз топқа; B ең әлсіз топқа, C ең күшті топқа барады → әр топтың орташа деңгейі тең */
+  const W={A:3,B:2,C:1},gs=GROUPS.map(g=>({id:g.id,n:0,w:0}));
+  const list=['A','B','C'].flatMap(L=>shuffle(S.students.filter(s=>(s.level||'B')===L)));
+  list.forEach(st=>{const L=st.level||'B';const mn=Math.min(...gs.map(g=>g.n));let c=shuffle(gs.filter(g=>g.n===mn));
+    const t=L==='C'?Math.max(...c.map(g=>g.w)):Math.min(...c.map(g=>g.w));c=c.filter(g=>g.w===t);const g=c[0];st.group=g.id;g.n++;g.w+=W[L]});
   save();
 }
 
@@ -3312,7 +3315,7 @@ function renderTeacher(){
    <div class="slist">${S.students.map((s,i)=>`<div class="srow"><input value="${esc(s.name)}" onchange="S.students[${i}].name=this.value;save()"><select onchange="S.students[${i}].level=this.value;save()">${['A','B','C'].map(l=>`<option ${s.level===l?'selected':''}>${l}</option>`).join('')}</select><select onchange="S.students[${i}].group=this.value;save()"><option value="">— топ —</option>${GROUPS.map(g=>`<option value="${g.id}" ${s.group===g.id?'selected':''}>${g.name}</option>`).join('')}</select><button onclick="S.students.splice(${i},1);save();renderTeacher()">✕</button></div>`).join('')}</div>
    <button class="btn ghost sm" style="margin-top:12px" onclick="S.students.push({id:Date.now()+''+Math.random(),name:'Жаңа оқушы',level:'B',group:''});save();renderTeacher()">+ Оқушы қосу</button></div>
    <div class="card panel"><h2 style="font-size:22px">Тізімді жылдам енгізу</h2><div style="color:var(--muted);font-size:14px;margin:6px 0 12px">Әр жолға: <b>Аты, деңгей</b> (A — жоғары, B — орташа, C — төмен). Мысалы: <i>Айару, A</i></div>
-   <textarea id="bulk" rows="12" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line)" placeholder="Айару, A&#10;Нұрлан, B&#10;Дана, C"></textarea>
+   <textarea id="bulk" rows="12" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line)" placeholder="Аянат озат&#10;Кәмшат екпінді&#10;Жанарыс қанағат&#10;(немесе: Айару, A)"></textarea>
    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn sm" onclick="bulkAdd()">Тізімге қосу</button><button class="btn ghost sm" onclick="demoStudents()">Үлгі тізім (20)</button><button class="btn ghost sm" onclick="if(confirmClear())(S.students=[],save(),renderTeacher())">Тізімді тазалау</button></div></div></div>`}
   if(tTab==='groups'){body=`<div class="card panel"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><h2 style="font-size:22px">Топтар</h2><div style="flex:1"></div><button class="btn" onclick="balancedGroups();renderTeacher()">🎲 Кездейсоқ, бірақ тең бөлу</button></div>
    <div class="grp" style="margin-top:16px">${GROUPS.map(g=>{const m=S.students.filter(s=>s.group===g.id);const c=L=>m.filter(s=>s.level===L).length;return `<div class="card gcard" style="border-top:8px solid ${g.color};min-height:200px"><h3 style="font-size:22px">${g.icon} ${g.name} <small style="font-size:14px;color:var(--muted)">${m.length} оқушы · A${c('A')} B${c('B')} C${c('C')}</small></h3><ul>${m.map(s=>`<li style="font-size:17px">${esc(s.name)} <span class="lvl lv${s.level}">${s.level}</span></li>`).join('')}</ul></div>`}).join('')}</div></div>`}
@@ -3342,7 +3345,8 @@ function renderTeacher(){
 }
 function bumpT(t,g,k){S.scores[t]=S.scores[t]||{};const v=sc(t,g).slice();v[k]=(v[k]+1)%(TASKS[t].d[k][1]+1);S.scores[t][g]=v;save();renderTeacher()}
 function confirmClear(){const b=window.event&&window.event.target;if(!b||b.tagName!=='BUTTON')return true;if(b.dataset.armed){delete b.dataset.armed;return true}b.dataset.armed=1;const o=b.textContent;b.textContent='Растау үшін тағы басыңыз';setTimeout(()=>{if(b.dataset.armed){delete b.dataset.armed;b.textContent=o}},3000);return false}
-function bulkAdd(){$('#bulk').value.split('\n').map(l=>l.trim()).filter(Boolean).forEach(l=>{const [n,lv]=l.split(/[,;\t]/).map(x=>(x||'').trim());S.students.push({id:Date.now()+''+Math.random(),name:n,level:/^[ABCАВС]/i.test(lv||'')?({'А':'A','В':'B','С':'C'}[(lv[0]||'').toUpperCase()]||lv[0].toUpperCase()):'B',group:''})});save();renderTeacher()}
+function lvlOf(w){w=(w||'').toLowerCase().replace(/[.,;]/g,'');if(/^(a|а|озат|жоғары|жогары|high)$/.test(w))return 'A';if(/^(b|в|б|екпінді|екпинди|орта|mid)$/.test(w))return 'B';if(/^(c|с|ц|қанағат|канагат|қанағаттанарлық|канагаттанарлык|төмен|томен|low)$/.test(w))return 'C';return null}
+function bulkAdd(){$('#bulk').value.split('\n').map(l=>l.trim()).filter(Boolean).forEach(l=>{const t=l.split(/[\s,;\t]+/).filter(Boolean);let i=t.findIndex((w,j)=>j>0&&lvlOf(w));const name=(i>0?t.slice(0,i):t).join(' ');const lv=i>0?lvlOf(t[i]):'B';if(name)S.students.push({id:Date.now()+''+Math.random(),name,level:lv,group:''})});$('#bulk').value='';save();renderTeacher()}
 function demoStudents(){const n=['Айару','Нұрлан','Дана','Ерасыл','Аружан','Бекзат','Томирис','Әлихан','Мадина','Дидар','Інжу','Санжар','Жансая','Арсен','Аяулым','Елдос','Зарина','Мирас','Әйгерім','Темірлан'];const lv='AABBBCABCBACBBCABBCA';S.students=n.map((x,i)=>({id:'d'+i,name:x,level:lv[i],group:''}));balancedGroups();renderTeacher()}
 function exportCSV(){const rows=[['Топ',...Object.values(TASKS).map(t=>t.name),'Барлығы']];GROUPS.forEach(g=>rows.push([g.name,...Object.keys(TASKS).map(t=>sc(t,g.id).reduce((a,b)=>a+b,0)),total(g.id)]));rows.push([]);rows.push(['Оқушы','Топ','Топ ұпайы','Сәйкестендір','ЖИ-ді тексер','Белсенділік','Ұпай','Балл (10)']);roster().forEach(r=>{const v=indOf(r);rows.push([r.name,r.g?grp(r.g).name:'',v.gp,v.t1??'',v.t3??'',v.st,v.tot,v.ball])});
   const csv='﻿'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='ecoaimaq_natizhe.csv';a.click()}
