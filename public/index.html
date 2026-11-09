@@ -84,6 +84,8 @@ h1,h2,h3{letter-spacing:-.02em}
 .side{position:absolute;right:48px;top:112px;width:560px;bottom:118px;padding:26px 28px;overflow:auto;display:flex;flex-direction:column}
 .side .chip{font-size:17px}
 #stage.focus .side{display:none}#stage.focus .main{right:48px}
+.par{margin-top:14px;background:#FCD34D;color:#1A1405;border-radius:16px;padding:12px 16px;font-size:17px;line-height:1.35;font-weight:600}.par b{display:block;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.tpar{background:#FCD34D;color:#1A1405;border-radius:16px;padding:8px 14px;font-weight:700;font-size:15px;line-height:1.3;max-width:640px;min-width:300px;max-height:80px;overflow:hidden;box-shadow:var(--sh)}
 .illu{flex:1;min-height:0;margin-top:14px;display:flex;align-items:flex-end}.illu svg{width:100%;height:100%;display:block}
 .strip{position:absolute;left:0;right:0;bottom:0;height:120px;opacity:.35;pointer-events:none}.strip svg{width:100%;height:100%;display:block}
 .navlbl{width:auto!important;padding:0 26px;font-size:24px!important;gap:8px;display:flex!important;align-items:center}
@@ -3009,6 +3011,7 @@ const STAGES=[
  {id:'fb',title:'Кері байланыс',min:3,kind:'Сабақ соңы · Рефлексия',method:'«Бағдаршам» + «Екі жұлдыз, бір тілек»',mdesc:'Әр оқушы түсті карточка көтереді. Мұғалім санын енгізеді. Топтар бір-біріне 2 жұлдыз, 1 тілек айтады.'},
  {id:'hw',title:'Үй тапсырмасы',min:1,kind:'Сабақ соңы',method:'Саралап берілген үй тапсырмасы',mdesc:'Оқушы өз деңгейіне сай біреуін таңдайды.'}];
 
+const PAR={"invite": "Сабаққа дейін: әр топ үстелінде пакет — қорғау жоспары, жапсырмалар, маркер, желім. Тақтада 🔔 дыбысы тексерілді.", "hello": "Тілек айтып жатқанда телефондар партаның шетінде, экранымен төмен жатады.", "groups": "Отырған бойда рөлдерді бөліңдер: 🎤 спикер, ✍️ хатшы, 🔬 сарапшы, ⏱ уақыт сақшысы — жапсырмаларды киіңдер.", "warm": "Жауап кезінде хатшы топтың ойын жазып алады — экопаспортта керек болады.", "goal": "Сарапшы оқулықтағы 7-кестені (§19) ашып, қасына қойып отырады.", "world": "Хатшы 2 санды (¾ және ~3%) «3-2-1» парағына жазады.", "v1": "Видео кезінде: «3-2-1» парағын толтырыңдар. Суретші қорғау жоспарының 5-қадамына өз аймағының сурет нобайын бастайды.", "v2": "Видео кезінде: сарапшы 7-кестені видеомен салыстырып, жоспардың 4-қадамындағы деңгейге белгі дайындайды.", "k2": "3 мин — жоспарды толтыру, 1 мин — сурет пен жапсырма, спикер 40 с іштей жаттығады.", "k1": "Телефоны жоқтар 2-парақшаны алады. Ерте біткендер топ постерін тақтаға іледі.", "k3": "Жұпта біреуі оқиды, біреуі белгілейді. Біткен жұп экопаспорттың 1-қадамын (2 фактор) бастай береді.", "fix": "Ватман ілінген соң спикер сөз үлгісін бір рет іштей оқиды. Қорғамайтын топтар 1 сұрақ дайындайды.", "rate": "Рейтинг кезінде хатшылар топ парақтарын мұғалімге тапсырады.", "fb": "Бағдаршамды көтергенде телефоннан да белгілеңдер — нәтиже тақтаға түседі.", "hw": "Үй тапсырмасының деңгейін таңдап, күнделікке жазыңдар. Пакеттерді үстелге жинаймыз."};
 const ORDER=['invite','hello','groups','warm','goal','world','v1','v2','k2','k1','k3','fix','rate','fb','hw'];
 STAGES.sort((a,b)=>ORDER.indexOf(a.id)-ORDER.indexOf(b.id));
 const TOTAL_MIN=STAGES.reduce((a,s)=>a+s.min,0);
@@ -3118,6 +3121,7 @@ function sidePanel(st){
   if(t){h+=`<h4>Бағалау критерийі</h4><div class="crit">${esc(t.crit)}</div><h4>Дескрипторлар</h4><ul class="desc">${t.d.map(d=>`<li><b>${d[1]} ұп.</b>${esc(d[0])}</li>`).join('')}</ul>`}
   if(st.zhi)h+=`<h4>ЖИ байланысы</h4><div class="zhi">🤖 ${esc(st.zhi)}</div>`;
   if(st.id==='goal'||st.id==='invite')h+=`<h4>Пәнаралық байланыс</h4><div class="zhi">${esc(LESSON.inter)}</div>`;
+  if(PAR[st.id])h+=`<div class="par"><b>⚡ Қатар істейміз</b>${esc(PAR[st.id])}</div>`;
   const il=ILL[STAGE_ILL[st.id]];if(il)h+=`<div class="illu">${il}</div>`;
   return h+'</div>';
 }
@@ -3216,7 +3220,8 @@ function renderSlide(){
   const i=Math.max(0,Math.min(STAGES.length-1,S.stage|0));S.stage=i;const st=STAGES[i];
   $('#slideHost').innerHTML=`<div class="slide">${SL[st.id]()}</div>`;
   if(!$('#slideHost .side')&&MASC_LINES[st.id]){const f=$('#slideHost .full');if(f)f.style.right='450px';$('#slideHost .slide').insertAdjacentHTML('beforeend',`<div class="mfloat"><div class="bubble"><b>Аймақ</b><span class="say"></span></div>${mascot(MASC_LINES[st.id][0])}</div>`)}
-  const tm=$('#tmasc');if($('#slideHost .side')&&MASC_LINES[st.id]){tm.innerHTML=`<div class="tav">${mascot(MASC_LINES[st.id][0],'head')}</div><div class="tbub"><span class="say"></span></div>`;tm.style.display='flex'}else{tm.innerHTML='';tm.style.display='none'}
+  const tm=$('#tmasc');if($('#slideHost .side')&&MASC_LINES[st.id]){tm.innerHTML=`<div class="tav">${mascot(MASC_LINES[st.id][0],'head')}</div><div class="tbub"><span class="say"></span></div>`;tm.style.display='flex'}else if(PAR[st.id]){tm.innerHTML=`<div class="tpar">⚡ ${esc(PAR[st.id])}</div>`;tm.style.display='flex'}else{tm.innerHTML='';tm.style.display='none'}
+  requestAnimationFrame(()=>{const sd=$('#slideHost .side');if(!sd)return;if(sd.scrollHeight>sd.clientHeight+2){const il=sd.querySelector('.illu');if(il)il.remove()}if(sd.scrollHeight>sd.clientHeight+2){const pc=sd.querySelector('.par');if(pc){pc.remove();tm.innerHTML=`<div class="tav">${mascot(MASC_LINES[st.id]?MASC_LINES[st.id][0]:'point','head')}</div><div class="tpar">⚡ ${esc(PAR[st.id])}</div>`;tm.style.display='flex'}}});
   speak($('#stage .say'),(MASC_LINES[st.id]||[])[1]||'');
   const cum=STAGES.slice(0,i).reduce((a,x)=>a+x.min,0);$('#stitle').textContent=`${i+1}/${STAGES.length} · ${st.title} · жоспар: ${cum}–${cum+st.min} / ${TOTAL_MIN} мин`;
   $('#prog').innerHTML=STAGES.map((s,j)=>`<i class="${j<i?'done':''} ${j===i?'on':''}" title="${esc(s.title)}" onclick="S.stage=${j};stageChanged()"></i>`).join('');
