@@ -55,7 +55,7 @@ h1,h2,h3{letter-spacing:-.02em}
 #board{position:fixed;inset:0;overflow:hidden;background:#f5faf8}
 #stage{width:1920px;height:1080px;position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:#f5faf8}
 #stage .bgblobs{position:absolute}
-.topbar{position:absolute;left:0;right:0;top:0;height:96px;display:flex;align-items:center;gap:22px;padding:0 48px}
+.topbar{position:absolute;z-index:40;left:0;right:0;top:0;height:96px;display:flex;align-items:center;gap:22px;padding:0 48px}
 .topbar .brand{font-size:24px}
 .topbar .logo{width:44px;height:44px;font-size:22px}
 .prog{display:flex;gap:6px;margin-left:20px}
@@ -65,6 +65,19 @@ h1,h2,h3{letter-spacing:-.02em}
 .timer .t{font-size:40px;font-weight:900;font-variant-numeric:tabular-nums;min-width:132px}
 .timer.warn .t{color:var(--amber-d)}.timer.over .t{color:var(--l1);animation:blink 1s infinite}
 @keyframes blink{50%{opacity:.35}}
+.timer{position:relative}.tbar{position:absolute;left:14px;right:14px;bottom:4px;height:5px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden}.tbar i{display:block;height:100%;width:100%;background:#34d399;transition:width .25s linear}
+.timer.warn .tbar i{background:#FCD34D}.timer.over .tbar i{background:#E2475F}
+.timer.min1{box-shadow:0 0 0 4px #FCD34D,var(--sh)}
+#tover{position:absolute;inset:0;z-index:60;pointer-events:none;display:flex;align-items:center;justify-content:center}
+#tover .cd{font-family:'Golos Text';font-weight:900;font-size:360px;line-height:1;color:var(--ink);opacity:.9;text-shadow:0 10px 40px rgba(14,59,53,.25);animation:cdpop 1s ease-out}
+#tover .cd.last{color:#E2475F}
+@keyframes cdpop{0%{transform:scale(1.5);opacity:0}25%{opacity:.95}100%{transform:scale(.9);opacity:.15}}
+#tover .done{background:#E2475F;color:#fff;font-weight:900;font-size:84px;padding:40px 80px;border-radius:48px;box-shadow:0 30px 80px rgba(226,71,95,.45);animation:donepop .6s cubic-bezier(.2,1.6,.4,1)}
+#tover .m1{position:absolute;top:120px;left:50%;transform:translateX(-50%);background:#FCD34D;color:#1A1405;font-weight:900;font-size:44px;padding:18px 48px;border-radius:999px;box-shadow:0 20px 50px rgba(232,163,23,.45);animation:donepop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes donepop{0%{transform:translateX(var(--tx,0)) scale(.3);opacity:0}100%{transform:translateX(var(--tx,0)) scale(1);opacity:1}}
+#tover .m1{--tx:-50%}
+.sttimer{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;background:#0E3B35;color:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-weight:800}
+.sttimer b{font-size:26px;font-variant-numeric:tabular-nums;margin-left:auto}.sttimer.warn{background:#9A6400}.sttimer.over{background:#E2475F}
 .tbtn{width:46px;height:46px;border-radius:13px;background:#eef7f3;font-size:20px;display:grid;place-items:center}
 .tbtn:hover{background:#dff1e9}
 .main{position:absolute;left:48px;top:112px;right:632px;bottom:118px}
@@ -459,14 +472,17 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
 
 <!-- BOARD -->
 <section id="board" class="hidden">
-  <div id="stage">
+  <div id="stage"><div id="tover"></div>
     <div class="bgblobs"><i></i><i></i><i></i></div>
     <div class="topbar">
       <div class="brand"><div class="logo">◐</div>ЭкоАймақ</div>
       <div class="phase" id="phase"></div><div class="prog" id="prog"></div><div class="tmasc" id="tmasc"></div>
       <div class="timer" id="timer"><div class="t" id="tval">00:00</div>
         <button class="tbtn" id="tplay" title="Бастау / тоқтату">▶</button>
-        <button class="tbtn" id="treset" title="Қайта бастау">↺</button></div>
+        <button class="tbtn" id="treset" title="Қайта бастау">↺</button>
+        <button class="tbtn" id="tplus" title="+1 минут">+1</button>
+        <button class="tbtn" id="tsnd" title="Дыбыс сигналы">🔔</button>
+        <div class="tbar"><i id="tbarfill"></i></div></div>
     </div>
     <div class="strip" id="strip"></div><div id="slideHost"></div>
     <div class="bottombar">
@@ -3080,6 +3096,16 @@ function liveView(){const st=liveStudents();const net=NET===null?'⏳ қосыл
   <div style="font-size:18px;margin-top:14px">Бағдаршам (тақта + телефон): 🟢 ${lightAll().g} · 🟡 ${lightAll().y} · 🔴 ${lightAll().r}</div></div>`}
 startPoll();
 
+/* оқушы телефонындағы таймер (мұғалімнің таймерімен синхрон) */
+let STT=null,_sttPoll=null,_sttEnded=false;
+function pollStT(){dbReq('timer','GET').then(t=>{STT=t;drawStT()}).catch(()=>{})}
+function stLeft(){if(!STT)return null;return STT.run?Math.round((STT.end-Date.now())/1000):STT.left}
+function drawStT(){const el=document.getElementById('stt');if(!el)return;const l=stLeft();if(l==null||(!STT.run&&!l)){el.style.display='none';return}el.style.display='flex';const a=Math.abs(l);
+  el.className='sttimer'+(l<=0&&STT.run?' over':l<=60?' warn':'');el.innerHTML=`⏱ ${esc(STT.title||'Тапсырма')}<b>${l<0?'−':''}${String(Math.floor(a/60)).padStart(2,'0')}:${String(a%60).padStart(2,'0')}</b>`;
+  if(STT.run&&l<=0&&!_sttEnded){_sttEnded=true;if(navigator.vibrate)navigator.vibrate([300,120,300])}if(l>0)_sttEnded=false}
+setInterval(()=>{if((location.hash||'').startsWith('#student')){drawStT()}},1000);
+setInterval(()=>{if((location.hash||'').startsWith('#student'))pollStT()},5000);
+
 
 /* ================= BOARD ================= */
 function fit(){const W=window.innerWidth||document.documentElement.clientWidth,H=window.innerHeight||document.documentElement.clientHeight;if(!W||!H){requestAnimationFrame(fit);return}const k=Math.min(W/1920,H/1080);const st=$('#stage');st.style.width=(W/k)+'px';st.style.height=(H/k)+'px';st.style.transform=`scale(${k})`}
@@ -3198,18 +3224,35 @@ function renderSlide(){
   const ph=st.kind.startsWith('Сабақ басы')?['Сабақ басы','#E8A317']:st.kind.startsWith('Сабақ ортасы')?['Сабақ ортасы','#1C8FCB']:['Сабақ соңы','#1FA67A'];const pe=$('#phase');pe.textContent=ph[0];pe.style.background=ph[1];
   drawTimer();save();
 }
-function stageChanged(){S.timer={run:false,left:STAGES[S.stage].min*60,end:0};renderSlide()}
+function stageChanged(){S.timer={run:false,left:STAGES[S.stage].min*60,end:0,total:STAGES[S.stage].min*60};_lastL=null;try{tOver('')}catch(e){};renderSlide();try{pushTimer()}catch(e){}}
 $('#prev').onclick=()=>{if(S.stage>0){S.stage--;stageChanged()}};
 $('#next').onclick=()=>{if(S.stage<STAGES.length-1){S.stage++;stageChanged()}};
 document.addEventListener('keydown',e=>{if(location.hash!=='#board'||$('#modalHost').innerHTML)return;if(e.key==='ArrowRight')$('#next').click();if(e.key==='ArrowLeft')$('#prev').click();if(e.key===' '&&e.target.tagName!=='VIDEO'){e.preventDefault();$('#tplay').click()}});
 function toggleFS(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>{})}catch(e){}}
 document.addEventListener('fullscreenchange',()=>setTimeout(fit,100));
-/* timer */
+/* timer: әр кезеңге уақыт + дыбыс/көрініс сигналы (1 минут, соңғы 10 секунд, уақыт бітті) */
+let _ac=null,_lastL=null;
+function ac(){try{_ac=_ac||new (window.AudioContext||window.webkitAudioContext)();if(_ac.state==='suspended')_ac.resume();return _ac}catch(e){return null}}
+function tone(f,d,v,t0){const c=ac();if(!c||S.mute)return;const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+(t0||0);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v||.25,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+.05)}
+function sigMinute(){tone(880,.5,.22);tone(1175,.7,.22,.22)}
+function sigTick(last){tone(last?1320:988,.12,last?.3:.18)}
+function sigEnd(){[523,659,784,1047].forEach((f,i)=>tone(f,.6,.28,i*.16));tone(1047,1.4,.22,.7)}
+function tOver(html,ms){const o=$('#tover');if(!o)return;o.innerHTML=html;clearTimeout(o._t);if(ms)o._t=setTimeout(()=>{o.innerHTML=''},ms)}
 function tLeft(){const T=S.timer;if(T.left==null)T.left=STAGES[S.stage].min*60;return T.run?Math.round((T.end-Date.now())/1000):T.left}
+function tTotal(){return Math.max(60,(S.timer.total||STAGES[S.stage].min*60)||60)}
 function drawTimer(){const l=tLeft(),a=Math.abs(l);$('#tval').textContent=(l<0?'−':'')+String(Math.floor(a/60)).padStart(2,'0')+':'+String(a%60).padStart(2,'0');
-  const el=$('#timer');el.classList.toggle('warn',l<=30&&l>0);el.classList.toggle('over',l<=0&&S.timer.run);$('#tplay').textContent=S.timer.run?'❚❚':'▶'}
-$('#tplay').onclick=()=>{const T=S.timer;if(T.run){T.left=tLeft();T.run=false}else{T.end=Date.now()+tLeft()*1000;T.run=true}save();drawTimer()};
-$('#treset').onclick=()=>{S.timer={run:false,left:STAGES[S.stage].min*60,end:0};save();drawTimer()};
+  const el=$('#timer');el.classList.toggle('warn',l<=60&&l>0);el.classList.toggle('min1',l<=60&&l>10&&S.timer.run);el.classList.toggle('over',l<=0&&S.timer.run);$('#tplay').textContent=S.timer.run?'❚❚':'▶';$('#tsnd').textContent=S.mute?'🔕':'🔔';
+  const f=$('#tbarfill');if(f)f.style.width=Math.max(0,Math.min(100,l/tTotal()*100))+'%';
+  if(S.timer.run&&_lastL!==null&&l!==_lastL){
+    if(l===60&&tTotal()>90){sigMinute();tOver('<div class="m1">⏳ 1 минут қалды!</div>',3500)}
+    if(l<=10&&l>=1){sigTick(l<=3);tOver(`<div class="cd${l<=3?' last':''}">${l}</div>`,950)}
+    if(l===0){sigEnd();tOver('<div class="done">⏰ Уақыт бітті!</div>',4000);if(navigator.vibrate)navigator.vibrate([300,120,300])}}
+  _lastL=S.timer.run?l:null}
+function pushTimer(){const st=STAGES[S.stage]||{};dbReq('timer','PUT',{run:!!S.timer.run,end:S.timer.end||0,left:tLeft(),total:tTotal(),title:st.title||'',at:Date.now()}).catch(()=>{})}
+$('#tplay').onclick=()=>{ac();const T=S.timer;if(T.run){T.left=tLeft();T.run=false}else{if(!T.total)T.total=Math.max(tLeft(),60);T.end=Date.now()+tLeft()*1000;T.run=true;_lastL=tLeft()}save();drawTimer();pushTimer()};
+$('#treset').onclick=()=>{S.timer={run:false,left:STAGES[S.stage].min*60,end:0,total:STAGES[S.stage].min*60};tOver('');save();drawTimer();pushTimer()};
+$('#tplus').onclick=()=>{const T=S.timer;if(T.run)T.end+=60000;else T.left=tLeft()+60;T.total=tTotal()+60;save();drawTimer();pushTimer()};
+$('#tsnd').onclick=()=>{S.mute=!S.mute;save();if(!S.mute){ac();tone(988,.15,.2)}drawTimer()};
 setInterval(()=>{if(location.hash==='#board'&&S.timer.run)drawTimer()},250);
 
 /* scoring modal */
@@ -3297,6 +3340,7 @@ try{const x=JSON.parse(localStorage.getItem(LS_KEY+'_st'));if(x)ST=x}catch(e){}
 function saveST(){try{localStorage.setItem(LS_KEY+'_st',JSON.stringify(ST))}catch(e){};pushST()}
 function renderStudent(){
   if(!ST.g){$('#student').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="brand" style="font-size:22px"><div class="logo">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="btn ghost sm" onclick="history.length>1?history.back():go('home')">← Артқа</button><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div><div class="smasc">${mascot('wave')}<div class="bubble" style="order:-1"><b>Аймақ</b>Сәлем! Тобыңды таңда да, тапсырмаға кіріс!</div></div><h1 style="font-size:28px;margin:8px 0 6px">Тобыңды таңда</h1><p style="color:var(--muted);margin-bottom:16px">Телефон тек тапсырма кезінде қолданылады.</p><div class="field" style="margin-bottom:14px"><label>Атың (тек есім)</label><input id="stName" value="${esc(ST.name||'')}" placeholder="мысалы: Айару" oninput="ST.name=this.value"></div><div class="sg">${GROUPS.map(g=>`<button style="background:${g.color}" onclick="ST.name=($('#stName').value||'').trim();ST.g='${g.id}';saveST();renderStudent()">${g.icon}<br>${g.name}</button>`).join('')}</div>`;return}
+  if(!STT)setTimeout(pollStT,50);
   const g=grp(ST.g);const A=ST.ans;
   const tabs=[['k2','1. Сарапшы (әлем)'],['k1','2. Сәйкестендір (ҚР)'],['k3','3. ЖИ-ді тексер'],['fix','Экопаспорт'],['fb','Кері байланыс']];
   let b='';
@@ -3307,7 +3351,7 @@ function renderStudent(){
   if(ST.tab==='fb'){b=`<div class="card q"><label>Бағдаршам: сабақты қалай түсіндің?</label><div class="tf">${[['g','🟢 Толық'],['y','🟡 Сұрағым бар'],['r','🔴 Көмек керек']].map(x=>`<button class="${A.light===x[0]?'sel':''}" onclick="ST.ans.light='${x[0]}';saveST();renderStudent()">${x[1]}</button>`).join('')}</div><div style="font-size:13px;color:var(--muted);margin-top:8px">Таңдағаныңды мұғалімге карточкамен көрсет.</div></div>
    <div class="card q"><label>⭐ Бүгін не үйрендім?</label><textarea rows="2" oninput="ST.ans.s1=this.value;saveST()">${esc(A.s1||'')}</textarea></div><div class="card q"><label>💡 Не түсініксіз қалды?</label><textarea rows="2" oninput="ST.ans.s2=this.value;saveST()">${esc(A.s2||'')}</textarea></div>`}
   $('#student').innerHTML=`<div style="display:flex;align-items:center;gap:10px"><div class="brand" style="font-size:20px"><div class="logo" style="width:38px;height:38px;font-size:18px">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="chip" title="Топты ауыстыру" style="color:${g.color};border-color:${g.color};background:#fff" onclick="if(confirmClear()){ST={g:null,tab:'k2',ans:{}};saveST();renderStudent()}">${g.icon} ${g.name} ⇄</button><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div>
-  <div class="stabs">${tabs.map(t=>`<button class="${ST.tab===t[0]?'on':''}" onclick="ST.tab='${t[0]}';saveST();renderStudent()">${t[1]}</button>`).join('')}</div>${b}${(()=>{const k=tabs.findIndex(t=>t[0]===ST.tab);return `<div class="snav">${k>0?`<button onclick="ST.tab='${tabs[k-1][0]}';saveST();renderStudent();scrollTo(0,0)">← Алдыңғы</button>`:''}${k<tabs.length-1?`<button class="pr" onclick="ST.tab='${tabs[k+1][0]}';saveST();renderStudent();scrollTo(0,0)">Келесі →</button>`:''}</div>`})()}`;
+  <div id="stt" class="sttimer" style="display:none"></div><div class="stabs">${tabs.map(t=>`<button class="${ST.tab===t[0]?'on':''}" onclick="ST.tab='${t[0]}';saveST();renderStudent()">${t[1]}</button>`).join('')}</div>${b}${(()=>{const k=tabs.findIndex(t=>t[0]===ST.tab);return `<div class="snav">${k>0?`<button onclick="ST.tab='${tabs[k-1][0]}';saveST();renderStudent();scrollTo(0,0)">← Алдыңғы</button>`:''}${k<tabs.length-1?`<button class="pr" onclick="ST.tab='${tabs[k+1][0]}';saveST();renderStudent();scrollTo(0,0)">Келесі →</button>`:''}</div>`})()}`;
 }
 
 /* ================= PRINT ================= */
