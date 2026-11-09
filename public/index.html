@@ -3026,6 +3026,41 @@ function route(){
   if(r==='guest')renderGuest();
 }
 window.addEventListener('hashchange',route);
+/* ================= LIVE SYNC: Firebase Realtime Database (REST, SDK-сыз) ================= */
+const DB_DEFAULT='https://geoecoaudandastyru-default-rtdb.europe-west1.firebasedatabase.app';
+let LIVE={students:{},guests:{}},NET=null,_stT=null,_poll=null;
+function dbURL(){return(((S.settings||{}).db)||DB_DEFAULT).trim().replace(/\/+$/,'')}
+function dbReq(path,method,body){method=method||'GET';const o={method:method==='GET'?'GET':'POST'};if(body!==undefined)o.body=JSON.stringify(body);
+  /* PUT/DELETE → POST + x-http-method-override: CORS preflight-сыз қарапайым сұраныс */
+  return fetch(dbURL()+'/live'+(path?'/'+path:'')+'.json'+(method==='PUT'||method==='DELETE'?'?x-http-method-override='+method:''),o).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(j=>{NET=true;return j},e=>{NET=false;throw e})}
+function alertNet(){const b=document.getElementById('liveErr');if(b)b.textContent='Байланыс жоқ: интернетті және Firebase ережелерін тексеріңіз.'}
+function pushST(){if(!ST.g)return;if(!ST.id){ST.id='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);try{localStorage.setItem(LS_KEY+'_st',JSON.stringify(ST))}catch(e){}}
+  clearTimeout(_stT);_stT=setTimeout(()=>{dbReq('students/'+ST.id,'PUT',{name:(ST.name||'').slice(0,40),g:ST.g,ans:ST.ans,at:Date.now()}).catch(()=>{})},600)}
+function pollLive(){dbReq('','GET').then(j=>{j=j||{};LIVE={students:j.students||{},guests:j.guests||{}};liveRefresh()}).catch(()=>liveRefresh())}
+function liveRefresh(){const r=(location.hash||'#home').slice(1);
+  if(r==='teacher'&&['live','guests','result'].includes(tTab)){const a=document.activeElement;if(!a||!/INPUT|TEXTAREA|SELECT/.test(a.tagName)){const op=[...document.querySelectorAll('#teacher details')].map(d=>d.open),y=scrollY;renderTeacher();document.querySelectorAll('#teacher details').forEach((d,i)=>{if(op[i])d.open=true});scrollTo(0,y)}}
+  if(r==='board'){const id=(STAGES[S.stage]||{}).id;if(id==='fb'||id==='rate')renderSlide()}}
+function startPoll(){if(_poll)return;pollLive();_poll=setInterval(()=>{const r=(location.hash||'#home').slice(1);if(r==='teacher'||r==='board')pollLive()},4000)}
+function liveStudents(){return Object.values(LIVE.students||{}).filter(x=>x&&x.g)}
+function lightAll(){const L={g:S.light.g||0,y:S.light.y||0,r:S.light.r||0};liveStudents().forEach(x=>{const l=(x.ans||{}).light;if(l&&L[l]!=null)L[l]++});return L}
+function allGuests(){const loc=S.guestFb||[];const key=f=>[f.who,f.at,f.w,f.s1].join('|');const seen=new Set(loc.map(key));return loc.concat(Object.values(LIVE.guests||{}).filter(f=>f&&!seen.has(key(f))&&(seen.add(key(f)),true)).map(f=>Object.assign({r:{}},f)))}
+function k1Score(a){return MATCH.filter((m,i)=>a['m'+i]===m[1]).length}
+function k3Score(a){return CLAIMS.filter((c,i)=>a['f'+i]===c[1]).length}
+function liveView(){const st=liveStudents();const net=NET===null?'⏳ қосылуда…':NET?'🟢 Firebase қосулы':'🔴 Байланыс жоқ';
+  const txt=(arr)=>arr.filter(Boolean).map(t=>`<div style="background:var(--paper,#f3f7f2);border-radius:10px;padding:6px 10px;margin-top:6px;font-size:15px">${esc(t)}</div>`).join('');
+  return `<div class="card panel"><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><h2 style="font-size:22px">Тірі жауаптар</h2><span class="chip">${net}</span><span style="color:var(--muted)">Қосылған телефон: <b>${st.length}</b> · әр 4 секунд сайын жаңарады</span><div style="flex:1"></div><button class="btn ghost sm" onclick="pollLive()">↻ Жаңарту</button></div><div id="liveErr" class="bad" style="margin-top:6px"></div>
+  <div class="grp" style="margin-top:14px">${GROUPS.map(g=>{const m=st.filter(x=>x.g===g.id);const k1=m.filter(x=>(x.ans||{}).k1done);const k3=m.filter(x=>(x.ans||{}).k3done);
+   const avg=(a,f,max)=>a.length?(a.reduce((s,x)=>s+f(x.ans),0)/a.length).toFixed(1)+' / '+max:'—';
+   const pick=k=>m.map(x=>(x.ans||{})[k]).filter(Boolean);
+   return `<div class="card gcard" style="border-top:8px solid ${g.color};display:flex;flex-direction:column;gap:6px"><h3>${g.icon} ${g.name} <span style="color:var(--muted);font-weight:600;font-size:15px">(${m.length})</span></h3>
+   <div style="font-size:14px;color:var(--muted)">${m.map(x=>esc(x.name||'атсыз')).join(', ')||'әзірге ешкім жоқ'}</div>
+   <div style="font-size:16px">Сәйкестендір: <b>${avg(k1,k1Score,8)}</b> · ЖИ-ді тексер: <b>${avg(k3,k3Score,7)}</b></div>
+   <details><summary style="cursor:pointer;font-weight:700">Сарапшылар алаңы</summary>${['Компоненттер','Қайтымдылық','Деңгей + дәлел','Ұқсас аймақ'].map((q,i)=>pick('c'+i).length?`<div style="margin-top:6px;font-weight:700;font-size:14px">${q}</div>${txt(pick('c'+i))}`:'').join('')}</details>
+   <details><summary style="cursor:pointer;font-weight:700">Экопаспорт</summary>${['Деңгей','2 фактор','Дәлел','2 шешім','ЖИ-ге сұрақ'].map((q,i)=>pick('e'+i).length?`<div style="margin-top:6px;font-weight:700;font-size:14px">${q}</div>${txt(pick('e'+i))}`:'').join('')}</details>
+   <details><summary style="cursor:pointer;font-weight:700">Рефлексия</summary>${txt(pick('s1').map(t=>'⭐ '+t))}${txt(pick('s2').map(t=>'💡 '+t))}</details></div>`}).join('')}</div>
+  <div style="font-size:18px;margin-top:14px">Бағдаршам (тақта + телефон): 🟢 ${lightAll().g} · 🟡 ${lightAll().y} · 🔴 ${lightAll().r}</div></div>`}
+startPoll();
+
 
 /* ================= BOARD ================= */
 function fit(){const W=window.innerWidth||document.documentElement.clientWidth,H=window.innerHeight||document.documentElement.clientHeight;if(!W||!H){requestAnimationFrame(fit);return}const k=Math.min(W/1920,H/1080);const st=$('#stage');st.style.width=(W/k)+'px';st.style.height=(H/k)+'px';st.style.transform=`scale(${k})`}
@@ -3116,7 +3151,7 @@ world(){return `<div class="main" style="display:flex;flex-direction:column;gap:
   return `<div class="full" style="display:flex;flex-direction:column;gap:24px"><div style="display:flex;align-items:center;gap:16px"><div class="mid">Топтардың ұпай тақтасы</div><span class="chip">Барлығы ${MAXT} ұпай · критерийлер бойынша</span><div style="flex:1"></div><button class="btn amber" onclick="openScore()">★ Ұпайды түзету</button></div>
   <div class="card rate grow" style="padding:30px;justify-content:space-around">${sorted.map((g,i)=>`<div class="rrow"><b>${i===0&&total(g.id)>0?'🏆 ':''}${g.icon} ${g.name}</b><div class="bar"><i style="width:0;background:${g.color}" data-w="${(total(g.id)/MAXT*100).toFixed(1)}%"></i></div><div class="pts">${total(g.id)}</div></div>`).join('')}</div>
   <div class="card" style="padding:18px 22px"><table class="sgrid" style="font-size:18px"><tr><th></th>${Object.values(TASKS).map(t=>`<th>${esc(t.name)}</th>`).join('')}</tr>${GROUPS.map(g=>`<tr><td><b>${g.icon} ${g.name}</b></td>${Object.keys(TASKS).map(t=>`<td style="font-size:22px;font-weight:800">${sc(t,g.id).reduce((a,b)=>a+b,0)} / ${maxOf(t)}</td>`).join('')}</tr>`).join('')}</table></div></div>`},
- fb(){const L=S.light;return `<div class="full" style="display:flex;flex-direction:column;gap:22px"><div class="mid">Бағдаршам: сабақты қалай түсіндім?</div>
+ fb(){const L=lightAll();return `<div class="full" style="display:flex;flex-direction:column;gap:22px"><div class="mid">Бағдаршам: сабақты қалай түсіндім?</div>
   <div class="light grow">${[['g','#22c55e','Толық түсіндім, басқаға түсіндіре аламын'],['y','#eab308','Түсіндім, бірақ сұрағым бар'],['r','#f43f5e','Көмек керек, қайта қараймын']].map(x=>`<div class="card lamp"><div class="dot" style="background:${x[1]};color:${x[1]}"></div><div class="cnt">${L[x[0]]}</div><div style="font-size:21px;color:var(--muted)">${x[2]}</div><div class="cb"><button class="btn ghost sm" onclick="S.light.${x[0]}=Math.max(0,S.light.${x[0]}-1);save();renderSlide()">−</button><button class="btn sm" onclick="S.light.${x[0]}++;save();renderSlide()">+1</button></div></div>`).join('')}</div>
   <div class="card" style="padding:20px 24px;font-size:24px;line-height:1.5">⭐⭐ <b>Екі жұлдыз, бір тілек:</b> әр топ көрші топқа екі жетістік пен бір ұсыныс айтады.</div><div>${qrBlockFor(guestURL(),'🤝 Қонақтардың кері байланысы','Құрметті әріптестер, QR арқылы пікіріңізді қалдырыңыз.')}</div></div>`},
  hw(){return `<div class="full" style="display:flex;flex-direction:column;gap:20px"><div class="mid">Үй тапсырмасы: өз деңгейіңді таңда</div>
@@ -3183,7 +3218,7 @@ function balancedGroups(){
 /* ================= TEACHER ================= */
 let tTab='kmj';
 function renderTeacher(){
-  const tabs=[['kmj','📋 ҚМЖ'],['students','👥 Оқушылар'],['groups','🎲 Топтар'],['score','★ Бағалау'],['result','📊 Нәтиже'],['guests','🤝 Қонақтар'],['settings','⚙️ Баптаулар']];
+  const tabs=[['kmj','📋 ҚМЖ'],['students','👥 Оқушылар'],['groups','🎲 Топтар'],['score','★ Бағалау'],['result','📊 Нәтиже'],['live','📡 Тірі жауаптар'],['guests','🤝 Қонақтар'],['settings','⚙️ Баптаулар']];
   let body='';
   if(tTab==='kmj'){body=`<div class="card panel"><h2 style="font-size:26px">Қысқа мерзімді жоспар</h2>
    <table class="kmj" style="margin-top:14px"><tr><th style="width:190px">Пән / сынып</th><td>${esc(LESSON.subject)} · ${esc(LESSON.grade)} · Мұғалім: ${esc(LESSON.teacher)}</td></tr>
@@ -3205,20 +3240,22 @@ function renderTeacher(){
   if(tTab==='score'){body=`<div class="card panel"><h2 style="font-size:22px">Критерий бойынша бағалау</h2><div style="color:var(--muted);font-size:14px;margin:6px 0">Тақтадағы «★ Ұпай қою» батырмасымен де дәл осы кесте ашылады.</div>
    ${Object.keys(TASKS).map(t=>`<div style="margin-top:16px"><b>${esc(TASKS[t].name)}</b> — ${esc(TASKS[t].crit)}<table class="sgrid"><tr><th>Топ</th>${TASKS[t].d.map(d=>`<th>${esc(d[0])} (${d[1]})</th>`).join('')}<th>Σ</th></tr>${GROUPS.map(g=>{const v=sc(t,g.id);return `<tr><td><b>${g.icon} ${g.name}</b></td>${TASKS[t].d.map((d,k)=>`<td><button class="pt ${v[k]>=d[1]?'full':v[k]>0?'on1':''}" onclick="bumpT('${t}','${g.id}',${k})">${v[k]}</button></td>`).join('')}<td><b>${v.reduce((a,b)=>a+b,0)}</b></td></tr>`}).join('')}</table></div>`).join('')}</div>`}
   if(tTab==='result'){body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Топтар рейтингі</h2>${[...GROUPS].sort((a,b)=>total(b.id)-total(a.id)).map(g=>`<div style="display:flex;justify-content:space-between;font-size:20px;padding:10px 0;border-bottom:1px solid var(--line)"><b>${g.icon} ${g.name}</b><b>${total(g.id)} / ${MAXT}</b></div>`).join('')}
-   <h3 style="margin-top:18px">Бағдаршам</h3><div style="font-size:18px;margin-top:6px">🟢 ${S.light.g} · 🟡 ${S.light.y} · 🔴 ${S.light.r}</div></div>
+   <h3 style="margin-top:18px">Бағдаршам</h3><div style="font-size:18px;margin-top:6px">🟢 ${lightAll().g} · 🟡 ${lightAll().y} · 🔴 ${lightAll().r}</div></div>
    <div class="card panel"><h2 style="font-size:22px">Белсенді оқушылар ⭐</h2><div style="color:var(--muted);font-size:14px;margin:6px 0 10px">Жеке белсенділікті белгілеу үшін ⭐ басыңыз.</div>
    <div class="slist">${S.students.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)"><span style="flex:1">${esc(s.name)} <span class="lvl lv${s.level}">${s.level}</span> <small style="color:var(--muted)">${s.group?grp(s.group).name:''}</small></span><b>${'⭐'.repeat(S.stars[s.id]||0)}</b><button class="btn ghost sm" onclick="S.stars['${s.id}']=Math.min(5,(S.stars['${s.id}']||0)+1);save();renderTeacher()">+⭐</button><button class="btn ghost sm" onclick="S.stars['${s.id}']=0;save();renderTeacher()">0</button></div>`).join('')||'<div style="color:var(--muted)">Оқушылар енгізілмеген.</div>'}</div>
    <button class="btn ghost sm" style="margin-top:12px" onclick="exportCSV()">⬇ Нәтижені CSV ретінде жүктеу</button></div></div>`}
-  if(tTab==='guests'){const F=S.guestFb||[];const avg=i=>{const v=F.map(f=>f.r[i]).filter(Boolean);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'—'};
+  if(tTab==='guests'){const F=allGuests();const avg=i=>{const v=F.map(f=>f.r[i]).filter(Boolean);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'—'};
    body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Қонақтардың бағасы (${F.length})</h2><div style="color:var(--muted);font-size:14px;margin:6px 0 12px">Осы құрылғыда толтырылған парақтар. WhatsApp арқылы келгендері телефоныңызда болады.</div>
    ${GCRIT.map((c,i)=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)"><span>${c}</span><b style="font-size:20px">${avg(i)}</b></div>`).join('')}
    <div style="margin-top:16px">${qrBlockFor(guestURL(),'🤝 Қонақтарға арналған QR','Сканерлеп, кері байланыс парағын толтырады.')}</div></div>
    <div class="card panel"><h2 style="font-size:22px">Пікірлер</h2><div class="slist" style="max-height:620px">${F.slice().reverse().map(f=>`<div style="padding:12px 0;border-bottom:1px solid var(--line);line-height:1.45"><b>${esc(f.who||'Қонақ')}</b> <small style="color:var(--muted)">${esc(f.role||'')} · ${f.at}</small><br>⭐ ${esc(f.s1||'—')}<br>⭐ ${esc(f.s2||'—')}<br>💡 ${esc(f.w||'—')}</div>`).join('')||'<div style="color:var(--muted)">Әзірге пікір жоқ.</div>'}</div>
    ${F.length?`<button class="btn ghost sm" style="margin-top:12px" onclick="if(confirmClear()){S.guestFb=[];save();renderTeacher()}">Пікірлерді тазалау</button>`:''}</div></div>`}
+  if(tTab==='live')body=liveView();
   if(tTab==='settings'){const s=S.settings;body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Ашық сабақ мәліметтері</h2>
-   ${[['school','Мектеп атауы'],['city','Қала'],['date','Күні (мысалы: 14 қараша 2026)'],['time','Уақыты (мысалы: 10:05)'],['room','Кабинет'],['wa','Мұғалімнің WhatsApp нөмірі (қонақтар пікірі үшін, мысалы 7701…)']].map(f=>`<div class="field"><label>${f[1]}</label><input value="${esc(s[f[0]])}" onchange="S.settings.${f[0]}=this.value;save()"></div>`).join('')}</div>
+   ${[['school','Мектеп атауы'],['city','Қала'],['date','Күні (мысалы: 14 қараша 2026)'],['time','Уақыты (мысалы: 10:05)'],['room','Кабинет'],['wa','Мұғалімнің WhatsApp нөмірі (қонақтар пікірі үшін, мысалы 7701…)'],['db','Firebase дерекқор мекенжайы (бос болса — әдепкі)']].map(f=>`<div class="field"><label>${f[1]}</label><input value="${esc(s[f[0]])}" onchange="S.settings.${f[0]}=this.value;save()"></div>`).join('')}</div>
    <div class="card panel"><h2 style="font-size:22px">Тазалау</h2><div class="note" style="margin:10px 0">Жаңа сабақ алдында ұпайларды, бағдаршамды, жұлдыздарды және таймерді нөлдейді. Оқушылар тізімі сақталады.</div>
    <button class="btn amber" onclick="if(confirmClear()){S.scores={};S.stars={};S.light={g:0,y:0,r:0};S.stage=0;S.timer={run:false,left:null,end:0};save();renderTeacher()}">↺ Жаңа сабақ: бәрін тазалау</button>
+   <button class="btn ghost" style="margin-top:10px" onclick="if(confirmClear()){dbReq('','DELETE').then(()=>{LIVE={students:{},guests:{}};renderTeacher()}).catch(()=>alertNet())}">📡 Тірі жауаптарды тазалау (Firebase)</button>
    <h3 style="margin-top:22px">Телефон қалай қосылады?</h3><div style="font-size:15px;line-height:1.5;color:var(--muted);margin-top:6px">Оқушы беті QR арқылы ашылады, сайт интернетте орналасқан болса ғана. Тақтадағы ұпайды мұғалім қояды — оқушы телефоны мен тақта бір-бірімен байланыспайды (интернетсіз де жұмыс істеу үшін). Жауаптар тақтаға өзі түсуі үшін келесі кезеңде Firebase қосамыз.</div>
    <div style="margin-top:14px">${qrBlock()}</div></div></div>`}
   $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><button class="btn ghost" onclick="go('home')">⌂</button></div>
@@ -3234,9 +3271,9 @@ function exportCSV(){const rows=[['Топ',...Object.values(TASKS).map(t=>t.name
 /* ================= STUDENT ================= */
 let ST={g:null,tab:'k2',ans:{}};
 try{const x=JSON.parse(localStorage.getItem(LS_KEY+'_st'));if(x)ST=x}catch(e){}
-function saveST(){try{localStorage.setItem(LS_KEY+'_st',JSON.stringify(ST))}catch(e){}}
+function saveST(){try{localStorage.setItem(LS_KEY+'_st',JSON.stringify(ST))}catch(e){};pushST()}
 function renderStudent(){
-  if(!ST.g){$('#student').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="brand" style="font-size:22px"><div class="logo">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="btn ghost sm" onclick="history.length>1?history.back():go('home')">← Артқа</button><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div><div class="smasc">${mascot('wave')}<div class="bubble" style="order:-1"><b>Аймақ</b>Сәлем! Тобыңды таңда да, тапсырмаға кіріс!</div></div><h1 style="font-size:28px;margin:8px 0 6px">Тобыңды таңда</h1><p style="color:var(--muted);margin-bottom:16px">Телефон тек тапсырма кезінде қолданылады.</p><div class="sg">${GROUPS.map(g=>`<button style="background:${g.color}" onclick="ST.g='${g.id}';saveST();renderStudent()">${g.icon}<br>${g.name}</button>`).join('')}</div>`;return}
+  if(!ST.g){$('#student').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="brand" style="font-size:22px"><div class="logo">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="btn ghost sm" onclick="history.length>1?history.back():go('home')">← Артқа</button><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div><div class="smasc">${mascot('wave')}<div class="bubble" style="order:-1"><b>Аймақ</b>Сәлем! Тобыңды таңда да, тапсырмаға кіріс!</div></div><h1 style="font-size:28px;margin:8px 0 6px">Тобыңды таңда</h1><p style="color:var(--muted);margin-bottom:16px">Телефон тек тапсырма кезінде қолданылады.</p><div class="field" style="margin-bottom:14px"><label>Атың (тек есім)</label><input id="stName" value="${esc(ST.name||'')}" placeholder="мысалы: Айару" oninput="ST.name=this.value"></div><div class="sg">${GROUPS.map(g=>`<button style="background:${g.color}" onclick="ST.name=($('#stName').value||'').trim();ST.g='${g.id}';saveST();renderStudent()">${g.icon}<br>${g.name}</button>`).join('')}</div>`;return}
   const g=grp(ST.g);const A=ST.ans;
   const tabs=[['k2','1. Сарапшы (әлем)'],['k1','2. Сәйкестендір (ҚР)'],['k3','3. ЖИ-ді тексер'],['fix','Экопаспорт'],['fb','Кері байланыс']];
   let b='';
@@ -3282,7 +3319,7 @@ function gText(){const L=[`Ашық сабаққа кері байланыс —
   GCRIT.forEach((c,i)=>L.push(`• ${c}: ${GF.r[i]?'★'.repeat(GF.r[i])+' ('+GF.r[i]+'/5)':'—'}`));L.push(`⭐ ${GF.s1||'—'}`,`⭐ ${GF.s2||'—'}`,`💡 Тілек: ${GF.w||'—'}`);return L.join('\n')}
 function gRate(i,v){GF.r[i]=v;renderGuest(true)}
 function gSubmit(){if(!Object.keys(GF.r).length&&!GF.s1&&!GF.w){$('#gerr').textContent='Кемінде бір бағаны немесе пікірді толтырыңыз.';return}
-  S.guestFb=S.guestFb||[];S.guestFb.push({who:GF.who,role:GF.role,r:GF.r,s1:GF.s1,s2:GF.s2,w:GF.w,at:new Date().toLocaleTimeString('kk-KZ',{hour:'2-digit',minute:'2-digit'})});save();GF.sent=true;renderGuest(true);scrollTo(0,0)}
+  S.guestFb=S.guestFb||[];S.guestFb.push({who:GF.who,role:GF.role,r:GF.r,s1:GF.s1,s2:GF.s2,w:GF.w,at:new Date().toLocaleTimeString('kk-KZ',{hour:'2-digit',minute:'2-digit'})});save();dbReq('guests','POST',S.guestFb[S.guestFb.length-1]).catch(()=>{});GF.sent=true;renderGuest(true);scrollTo(0,0)}
 function gCopy(btn){const t=gText();try{navigator.clipboard.writeText(t).then(()=>{btn.textContent='✓ Көшірілді'},()=>{btn.textContent='Көшіру мүмкін болмады'})}catch(e){btn.textContent='Көшіру мүмкін болмады'}}
 function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s1:'',s2:'',w:'',sent:false};
   const wa='https://wa.me/'+(s.wa||'').replace(/\D/g,'')+'?text='+encodeURIComponent(gText());

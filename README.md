@@ -16,3 +16,18 @@
 
 
 Firebase қосылған соң: Settings → Secrets and variables → Actions → Variables → `FIREBASE_ON` = `1`.
+
+## Тірі жауаптар (Firebase Realtime Database)
+Сайт `https://geoecoaudandastyru-default-rtdb.europe-west1.firebasedatabase.app` дерекқорына SDK-сыз (REST) жазады. Деректер тек `live/` бұтағында сақталады.
+Firebase Console → Realtime Database → **Rules** бетіне мынаны қойып, **Publish** басыңыз:
+
+```json
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "live": { ".read": true, ".write": true }
+  }
+}
+```
+Сабақтан кейін: Мұғалім панелі → Баптаулар → «Тірі жауаптарды тазалау».
