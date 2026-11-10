@@ -3429,7 +3429,20 @@ function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s
 route();
 if(!location.hash)go('home');
 </script>
+<script src="vendor/d3-array.min.js"></script><script src="vendor/d3-geo.min.js"></script><script src="vendor/topojson-client.min.js"></script>
 <style id="ea-pro">
+.glroad{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
+.glroad button{border:0;border-radius:12px;background:#fff;padding:5px 2px;font-weight:900;font-size:20px;cursor:pointer;box-shadow:0 3px 10px rgba(0,40,30,.08);font-family:inherit;color:#0E3B35}
+.glroad button small{display:block;font-size:12px;font-weight:700;color:#5b6b80}
+.glroad button.on{background:#0B5FA5;color:#fff}.glroad button.on small{color:#cfe}
+.glroad button.ok{border-bottom:5px solid #1FA67A}.glroad button.no{border-bottom:5px solid #E2475F}
+.glbox{background:radial-gradient(circle at 50% 45%,#0B3550,#030E18);border-radius:22px;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}
+.glbox canvas{width:100%;height:100%;object-fit:contain}
+.glopts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.glopts button{display:flex;align-items:center;gap:10px;border:2px solid #CFE0E6;background:#fff;border-radius:14px;padding:10px 12px;font-weight:800;font-size:19px;color:#0E3B35;text-align:left;cursor:pointer;font-family:inherit;line-height:1.2}
+.glopts button span{flex:none;width:30px;height:30px;border-radius:9px;background:#0B5FA5;color:#fff;display:grid;place-items:center}
+.glopts button:disabled{cursor:default}.glopts button.right{background:#1FA67A;border-color:#1FA67A;color:#fff}.glopts button.wrong{background:#E2475F;border-color:#E2475F;color:#fff}.glopts button.dim{opacity:.4}
+
 /* ===== ЖАҢА АҒЫН: көк тақырып + «Сен не істейсің?», мұғалім панелі жасырын, оқушыға орын көп ===== */
 #stage .side{display:none}
 #stage.withside .side{display:flex}
@@ -3495,24 +3508,24 @@ if(!location.hash)go('home');
 /* ===== ЖАҢА АҒЫН (45 мин, 10 бөлім): тақырып пен мақсатқа сай ===== */
 (function(){
 const EA = {
-  order: ['invite','hello','groups','warm','v1','goal','v2','world','k2','k1','k3','fix','rate','fb','hw'],
-  min: {invite:0,hello:1,groups:1,warm:3,v1:2,goal:1,v2:2,world:3,k2:8,k1:6,k3:4,fix:9,rate:2,fb:2,hw:1},
+  order: ['invite','hello','groups','warm','v1','goal','k2','k1','k3','fix','rate','fb','hw'],
+  min: {invite:0,hello:1,groups:1,warm:3,v1:4,goal:1,k2:8,k1:9,k3:4,fix:9,rate:2,fb:2,hw:1},
   title: {
     hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Топқа бөлу: геожүйе компоненттері', warm:'Үй тапсырмасы: фото-жұмбақ',
-    v1:'1-видео: дүниежүзінен Қазақстанға', goal:'Тақырып, мақсат және бағалау', v2:'2-видео: 5 деңгей', world:'Дүниежүзі: неге 52% және 3%?',
-    k2:'Сарапшылар алаңы: дүниежүзі аймақтары', k1:'Сәйкестендір: Қазақстан аймақтары', k3:'ЖИ-ді тексер', fix:'Абай қаласының экопаспорты',
+    v1:'Видео: глобуста — дүниежүзінен Қазақстанға', goal:'Тақырып, мақсат және бағалау', v2:'2-видео: 5 деңгей', world:'Дүниежүзі: неге 52% және 3%?',
+    k2:'Сарапшылар алаңы: дүниежүзі аймақтары', k1:'3D глобус: аймақты деңгейге жатқыз', k3:'ЖИ-ді тексер', fix:'Абай қаласының экопаспорты',
     rate:'Баға · рейтинг · үздіктер', fb:'Кері байланыс: ұтымды · қызықты · ұсыныс', hw:'Үй тапсырмасы: өз деңгейіңді таңда'},
   /* әдіс · жұмыс түрі · критерий/ұпай · оқулық */
   meta: {
     hello:['«Табиғатқа тілек» — психологиялық ахуал','Бүкіл сынып','',''],
     groups:['«Геожүйе компоненттері» — деңгейі тең 4 топ','Топтық','',''],
     warm:['«Фото-жұмбақ» + «Ыстық орындық»','Топтық','К1 · 2 ұпай','§18 қайталау'],
-    v1:['«Белсенді көру 3-2-1»','Жеке · парақша','','§19'],
+    v1:['«Белсенді көру 3-2-1»','Жеке · парақша №1','','§19, 7-кесте'],
     goal:['«Мақсатты бірге құрамыз»','Бүкіл сынып','16 ұпай → 10 балл','10.3.2.3'],
     v2:['«Белсенді көру» (жалғасы)','Жеке · парақша','','§19, 7-кесте'],
     world:['«Картамен жұмыс» + «Неге сандар әртүрлі?»','Бүкіл сынып','','§19'],
     k2:['«Кейс-стади: Сарапшылар алаңы» + спикер','Топтық','К2 · 4 ұпай','7-кесте'],
-    k1:['«Сәйкестендір» · кездейсоқ оқушы тақтада','Жеке · тақта + парақша №2','К3 · 3 ұпай','7-кесте'],
+    k1:['«Глобус-эстафета» · кездейсоқ оқушы тақтада','Жеке · тақта + парақша №2','К3 · 3 ұпай','видео + 7-кесте'],
     k3:['«Фактчекинг: ЖИ-ді тексер»','Жұптық · парақша №3','К4 · 3 ұпай','§19, 7-кесте'],
     fix:['«Экопаспорт» + қорғау','Топтық · ватман','К5 · 4 ұпай','7-кесте'],
     rate:['«Ұпай → 10 балл» · мадақтау','Бүкіл сынып','16 ұпай → 10 балл',''],
@@ -3523,12 +3536,12 @@ const EA = {
     hello:['Туған жеріңе бір сөзбен тілек айт'],
     groups:['Тобыңды тап: Су · Ауа · Топырақ · Биота','Рөліңді ал: спикер, хатшы, сарапшы'],
     warm:['Топпен бір суретті таңда','30 секундта: не өзгерді? неге?','Деңгейін болжа'],
-    v1:['Видеоны көр','Парақшаға: 3 аймақ · 2 дерек · 1 сұрақ'],
+    v1:['Видеоны көр','Парақшаға: 3 аймақ · 2 дерек · 1 сұрақ','Деңгейлердің түсін есте сақта'],
     goal:['Тақырыпты болжа','Мақсат пен 16 ұпайды біл'],
     v2:['5 деңгейді пайызымен жаз','Түстерін есте сақта'],
     world:['Картадан апат аймақтарын тап','Неге 52% және 3%? — себебін айт'],
     k2:['4 мин: кейсті оқы, 4 сұраққа жауап','Спикер 1 минут сөйлейді','Басқалар деңгейді бағалайды'],
-    k1:['Парақшада 8 аймақты деңгейге жатқыз','Атың шықса — тақтаға шығып бас','Тақтамен тексер'],
+    k1:['Атың шықса — тақтаға шығып бас','Қалғандары: парақша №2-де белгіле','Глобуспен тексер'],
     k3:['Жұбыңмен 7 тұжырымды оқы','Дұрыс / Қате белгіле','Қатені оқулықпен түзет'],
     fix:['3 мин: экопаспортты толтыр','Әр топ 1,5 мин қорғайды','Басқалар 1 сұрақ қояды'],
     rate:['Өз балыңды тап','Үздіктерді құттықта'],
@@ -3538,12 +3551,12 @@ const EA = {
     hello:'Сәлемдесіп, әр оқушыға туған жеріне бір сөзбен тілек айтқызады.',
     groups:'«Кездейсоқ, бірақ тең бөлу» батырмасын басып, топтар мен рөлдерді шығарады.',
     warm:'4 суретті көрсетеді. Әр топ бір суретті таңдап, 30 секундта не өзгергенін және деңгейін айтады. Топқа 0–2 ұпай қояды.',
-    v1:'1-видеоны қосады. Оқушылар «3-2-1» парағын толтырады.',
+    v1:'Глобустағы видеоны (2:40) қосады: ұғым → 5 деңгей → дүниежүзінің 4 аймағы → Қазақстанның 8 аймағы → Абай қаласы. Оқушылар «3-2-1» парағын толтырады.',
     goal:'Тақырыпты оқушылар болжайды; мұғалім оқу мақсатын (10.3.2.3) және бағалауды (16 ұпай → 10 балл) ашады.',
     v2:'2-видеоны қосады, 5 деңгейді пайызымен қорытады.',
     world:'Картаны көрсетіп, «Неге 52% және 3%?» деп сұрайды: аудандастыру нәтижесі критерийге байланысты.',
     k2:'«Дайындық · 4 мин» батырмасын басады. Сосын әр топтың спикеріне 1 минут береді. Топ ұпайын (0–4) қояды.',
-    k1:'Оқушылар парақшада орындайды. «Оқушы таңдау» батырмасын басады — шыққан оқушы тақтада деңгейді басады. Дұрыс жауап — белсенділік ⭐.',
+    k1:'«Оқушы таңдау» батырмасын басады — глобус аймаққа айналады, шыққан оқушы тақтада жауапты басады. Қалғандары парақша №2-де белгілейді. Дұрыс жауап — белсенділік ⭐. 12 сұрақ: дүниежүзі → Қазақстан.',
     k3:'Жұптарға уақыт береді, соңында «Тексеру» батырмасымен 3 қатені бірге талдайды. Жеке ұпайды мұғалім панеліне енгізеді.',
     fix:'«Дайындық · 3 мин», сосын әр топтың «қорғайды · 1,5 мин» батырмасы. Критерий бойынша 0–4 ұпай қояды.',
     rate:'Рейтинг пен үздіктерді атымен көрсетеді, наклейка береді.',
@@ -3554,10 +3567,12 @@ window.EA = EA;
 /* 1. кезеңдердің реті мен уақыты (45 мин) */
 STAGES.forEach(s => { if (EA.min[s.id] != null) s.min = EA.min[s.id]; if (EA.title[s.id]) s.title = EA.title[s.id];
   const m = EA.meta[s.id]; if (m) s.method = m[0]; if (EA.stu[s.id]) PAR[s.id] = EA.stu[s.id].join(' → '); if (EA.tea[s.id]) TEA[s.id] = EA.tea[s.id]; });
+for (let i = STAGES.length - 1; i >= 0; i--) if (!EA.order.includes(STAGES[i].id)) STAGES.splice(i, 1);
 STAGES.sort((a, b) => EA.order.indexOf(a.id) - EA.order.indexOf(b.id));
 const MD = {
   k2:'Әр топ дүниежүзінің бір апат аймағын (кейс) талдайды: 4 мин дайындық, сосын спикер 1 минутта сарапшы ретінде сөйлейді — компоненттер, қайтымдылық, деңгей (7-кесте), Қазақстандағы ұқсас аймақ.',
-  k1:'Барлығы парақша №2-де 8 аймақты 5 деңгейге жатқызады; платформа кездейсоқ оқушыны таңдайды, ол тақтада деңгейді басады — сынып бірден тексереді. Дұрыс жауап — белсенділік ⭐.',
+  k1:'3D глобус: алдымен ұғым мен дүниежүзі (Нигер атырауы, Норильск, Чернобыль, Амазония), сосын Қазақстан (Арал, Семей, Балқаш, Теміртау, Астана). Платформа оқушыны кездейсоқ таңдайды, ол тақтада жауапты басады. Барлық сұрақтың жауабы видеода бар.',
+  v1:'Бір видео (2:40) глобус үстінде: ұғым, 5 деңгей (7-кесте), 52% және 3% (Hannah 1994; Plumptre 2021), 4 дүниежүзілік аймақ (UNEP, WWF), Қазақстанның 8 аймағы, Абай қаласы. Соңында дереккөздер.',
   k3:'Чат-бот жазған 7 тұжырымның 3-і қате. Жұптар парақша №3-те «Дұрыс/Қате» белгілеп, қатені оқулық дерегімен (§19, 7-кесте) түзетеді. Телефонсыз.',
   fix:'Топтар Абай қаласының экопаспортын толтырады: аймақ, ықтимал деңгей (7-кесте), 2 фактор, дәлел, 2 нақты шешім, ЖИ-ге сұрақ. 3 мин дайындық + әр топ 1,5 мин қорғау.',
   rate:'16 ұпай → 10 балл: топтық (үй тапсырмасы, сарапшылар, экопаспорт) + жеке (сәйкестендір) + жұптық (ЖИ-ді тексер). Үздіктер атымен, белсенділерге ⭐.',
@@ -3567,7 +3582,7 @@ STAGES.forEach(s => { if (MD[s.id]) s.mdesc = MD[s.id]; });
 try { MASC_LINES.fb = ['cheer', 'Не ұтымды, не қызықты болды? Жаз!']; MASC_LINES.k1 = ['point', 'Атың шықса — тақтаға шық!']; MASC_LINES.goal = ['wave', 'Бүгінгі мақсатымыз — аудандастыру!']; } catch (e) {}
 const KINDS = {k2:'Сабақ ортасы · Түсінуді тексеру', k1:'Сабақ ортасы · Түсінуді тексеру', k3:'Сабақ ортасы · Түсінуді тексеру', fix:'Сабақ ортасы · Бекіту'};
 STAGES.forEach(s => { if (KINDS[s.id]) s.kind = KINDS[s.id]; });
-TASKS.t2.name = 'Сарапшылар алаңы (дүниежүзі)'; TASKS.t1.name = 'Сәйкестендір (Қазақстан, тақтада + парақша)'; TASKS.t3.name = 'ЖИ-ді тексер (жұппен)';
+TASKS.t2.name = 'Сарапшылар алаңы (дүниежүзі)'; TASKS.t1.name = '3D глобус + парақша №2 (аймақ → деңгей)'; TASKS.t3.name = 'ЖИ-ді тексер (жұппен)';
 const STA = s => STAGES.find(x => x.id === s);
 const setT = sec => { S.timer = { run: false, left: sec, end: 0, total: sec }; _lastL = null; save(); $('#tplay').click(); };
 window.eaT = (sec, b) => { document.querySelectorAll('.eptim button').forEach(x => x.classList.remove('on')); if (b) b.classList.add('on'); setT(sec); };
@@ -3597,6 +3612,61 @@ SL.k1 = function () { const K = S.k1b, i = K.i, a = K.ans[i], who = a ? { name: 
   <div class="lvb">${LEVELS.slice(1).map((l, j) => `<button style="background:${l.c}" class="${a && j + 1 === MATCH[i][1] ? 'right' : ''}" ${a || !who ? 'disabled' : ''} onclick="k1Ans(${j + 1})"><span>${j + 1}. ${l.n}</span><span>${l.r}</span></button>`).join('')}</div>
   ${a ? `<div class="res ${a.ok ? 'ok' : 'no'}">${a.ok ? '✅ Дұрыс! ⭐ белсенділік' : '❌ Қате. Дұрысы: ' + MATCH[i][1] + '-деңгей (' + LEVELS[MATCH[i][1]].n + ')'}</div><button class="btn blue" onclick="k1Next()">Келесі аймақ →</button>` : `<div style="color:#5b6b80;font-size:17px">${who ? 'Деңгейді бас' : '🎲 басыңыз — платформа оқушыны өзі таңдайды'}</div>`}
   <div class="k1g">${tally}</div><button class="btn ghost sm" onclick="k1Reset()">↺ Қайта бастау</button></div></div></div>`; };
+
+/* 2б. 3D ГЛОБУС: Сәйкестендірдің орнына — видеодағы деректер бойынша 12 сұрақ, кездейсоқ оқушы тақтада */
+const GQ = [
+  { lv: 'Ұғым', p: 'Дүниежүзі', lon: 60, lat: 25, k: 1, q: 'Геоэкологиялық аудандастыру аумақты неге қарай бөледі?', o: ['Табиғи ортаның ластануы мен бұзылу дәрежесіне', 'Облыстардың әкімшілік шекарасына', 'Халық санына', 'Климат белдеулеріне'], src: 'Видео · §19' },
+  { lv: 'Ұғым', p: '5 деңгей', lon: 60, lat: 25, k: 1, q: 'Апатты деңгейде геожүйенің бұзылуы неше пайыз?', o: ['81–100%', '61–80%', '41–60%', '0–20%'], src: '§19, 7-кесте' },
+  { lv: 'Дүниежүзі', p: 'Нигер атырауы', lon: 6.5, lat: 4.8, k: 1.9, q: 'Нигер атырауында табиғатқа не зиян келтірді?', o: ['50 жылдан астам мұнай өндіру мен төгілу', 'Ядролық сынақтар', 'Мұздықтардың еруі', 'Орман өрттері'], src: 'UNEP, 2011' },
+  { lv: 'Дүниежүзі', p: 'Норильск', lon: 88.2, lat: 69.35, k: 1.9, q: 'Норильскте 2020 жылы өзенге не төгілді?', o: ['~21 мың м³ дизель отыны', 'Радиоактивті су', 'Тыңайтқыш', 'Тұзды су'], src: 'ESA, 2020' },
+  { lv: 'Дүниежүзі', p: 'Чернобыль', lon: 30.1, lat: 51.39, k: 1.9, q: 'Чернобыль АЭС айналасындағы жабық аймақ қандай?', o: ['30 шақырымдық аймақ (≈2 600 км²)', '3 шақырымдық аймақ', 'Бүкіл Украина', 'Аймақ жабылмаған'], src: 'Видео' },
+  { lv: 'Дүниежүзі', p: 'Амазония', lon: -62, lat: -6, k: 1.9, q: 'Соңғы 50 жылда Амазония орманының шамамен қанша бөлігі жойылды?', o: ['~17%', '~3%', '~52%', '~90%'], src: 'WWF, 2022' },
+  { lv: 'Дүниежүзі', p: '52% және 3%', lon: 20, lat: 15, k: 1, q: 'Неге бір зерттеу «~52% бұзылмаған», екіншісі «~3% ғана сақталған» дейді?', o: ['Критерийлері әртүрлі', 'Біреуі мүлде қате', 'Екеуі бір жылы жасалған', 'Карта масштабы әртүрлі'], src: 'Hannah 1994 · Plumptre 2021' },
+  { lv: 'Қазақстан', p: 'Арал теңізі', lon: 60.5, lat: 45.6, k: 4.2, q: 'Арал теңізінің бұрынғы акваториясы қай деңгейге жатады?', o: ['1 — Апатты', '2 — Қауіпті', '4 — Қанағаттанарлық', '5 — Қолайлы'], src: '7-кесте · UNCCD' },
+  { lv: 'Қазақстан', p: 'Семей полигоны', lon: 78.7, lat: 50.1, k: 4.2, q: 'Семей полигонында 1949–1989 жылдары неше ядролық сынақ жасалды?', o: ['456', '45', '4 560', '56'], src: 'Видео' },
+  { lv: 'Қазақстан', p: 'Балқаш көлі', lon: 74.9, lat: 46.6, k: 4.2, q: 'Балқаш көлі 7-кесте бойынша қай деңгейде?', o: ['2 — Қауіпті', '1 — Апатты', '4 — Қанағаттанарлық', '5 — Қолайлы'], src: '7-кесте' },
+  { lv: 'Қазақстан', p: 'Теміртау', lon: 72.95, lat: 50.06, k: 4.2, q: 'Теміртау ауасының басты ластану көзі қандай?', o: ['Металлургия', 'Мұнай өндіру', 'Ядролық сынақ', 'Күріш егісі'], src: 'Видео · 7-кесте' },
+  { lv: 'Қазақстан', p: 'Астана', lon: 71.45, lat: 51.17, k: 4.2, q: 'Астана урбо-өндірістік кешені қай деңгейге жатады?', o: ['4 — Қанағаттанарлық', '1 — Апатты', '2 — Қауіпті', '5 — Қолайлы'], src: '7-кесте' }];
+let GW = null; const gwLoad = fetch('vendor/countries-110m.json').then(r => r.json()).then(w => { GW = { land: topojson.feature(w, w.objects.land), mesh: topojson.mesh(w, w.objects.countries, (a, b) => a !== b), kz: topojson.feature(w, w.objects.countries).features.find(f => f.id === '398') }; }).catch(() => {});
+let gRot = [-60, -25], gK = 1, gAnim = null;
+function gDraw() { const c = document.getElementById('glcv'); if (!c || !GW || !window.d3) return; const x = c.getContext('2d'), Wd = c.width, Hd = c.height, R0 = Math.min(Wd, Hd) / 2 - 16;
+  const pr = d3.geoOrthographic().scale(R0 * gK).translate([Wd / 2, Hd / 2]).rotate(gRot).clipAngle(90), p = d3.geoPath(pr, x);
+  x.clearRect(0, 0, Wd, Hd); const oc = x.createRadialGradient(Wd / 2 - R0 * .3, Hd / 2 - R0 * .3, 20, Wd / 2, Hd / 2, R0 * gK); oc.addColorStop(0, '#2E8FC2'); oc.addColorStop(1, '#0E3F66');
+  x.beginPath(); p({ type: 'Sphere' }); x.fillStyle = oc; x.fill(); x.beginPath(); p(d3.geoGraticule10()); x.strokeStyle = 'rgba(255,255,255,.12)'; x.stroke();
+  x.beginPath(); p(GW.land); x.fillStyle = '#3FA06E'; x.fill(); x.beginPath(); p(GW.mesh); x.strokeStyle = 'rgba(10,40,30,.5)'; x.lineWidth = 1; x.stroke();
+  x.beginPath(); p(GW.kz); x.fillStyle = 'rgba(232,163,23,.8)'; x.fill(); x.strokeStyle = '#fff'; x.lineWidth = 2.5; x.stroke();
+  const q = GQ[S.k1b.i]; if (q && q.lv !== 'Ұғым') { const [px, py] = pr([q.lon, q.lat]) || [0, 0]; const t = (Date.now() / 900) % 1;
+    x.globalAlpha = 1 - t; x.beginPath(); x.arc(px, py, 12 + t * 40, 0, 7); x.strokeStyle = '#E2475F'; x.lineWidth = 5; x.stroke(); x.globalAlpha = 1;
+    x.beginPath(); x.arc(px, py, 12, 0, 7); x.fillStyle = '#E2475F'; x.fill(); x.strokeStyle = '#fff'; x.lineWidth = 4; x.stroke();
+    x.font = '800 26px "Golos Text"'; const w = x.measureText(q.p).width + 24; x.fillStyle = 'rgba(6,24,38,.9)'; x.beginPath(); x.roundRect(px + 20, py - 20, w, 40, 12); x.fill(); x.fillStyle = '#fff'; x.textBaseline = 'middle'; x.fillText(q.p, px + 32, py + 1); } }
+function gFly() { const q = GQ[S.k1b.i]; if (!q) return; const r0 = gRot.slice(), k0 = gK, r1 = [-q.lon, -q.lat], k1 = q.k, t0 = performance.now();
+  cancelAnimationFrame(gAnim); const step = n => { const e = Math.min(1, (n - t0) / 1400), k = e < .5 ? 2 * e * e : 1 - Math.pow(-2 * e + 2, 2) / 2;
+    let dl = r1[0] - r0[0]; if (dl > 180) dl -= 360; if (dl < -180) dl += 360; gRot = [r0[0] + dl * k, r0[1] + (r1[1] - r0[1]) * k]; gK = k0 + (k1 - k0) * k; gDraw();
+    if (STAGES[S.stage] && STAGES[S.stage].id === 'k1') gAnim = requestAnimationFrame(e < 1 ? step : () => { gDraw(); gAnim = requestAnimationFrame(function idle() { gDraw(); if (STAGES[S.stage] && STAGES[S.stage].id === 'k1') gAnim = requestAnimationFrame(idle); }); }); };
+  gAnim = requestAnimationFrame(step); }
+S.k1b = S.k1b && S.k1b.v === 2 ? S.k1b : { v: 2, i: 0, who: null, ans: {}, used: [], ord: {} };
+const gOrd = i => S.k1b.ord[i] || (S.k1b.ord[i] = shuffle4(GQ[i].o.map((_, k) => k)));
+function shuffle4(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+window.k1Ans = k => { const K = S.k1b; if (K.ans[K.i] || !K.who) return; const ok = k === 0;
+  K.ans[K.i] = { k, ok, name: K.who.name, g: K.who.g, id: K.who.id }; if (ok && K.who.id) S.stars[K.who.id] = Math.min(2, (S.stars[K.who.id] || 0) + 1);
+  K.who = null; save(); renderSlide(); };
+window.k1Go = i => { S.k1b.i = i; S.k1b.who = null; save(); renderSlide(); };
+window.k1Next = () => { const K = S.k1b; K.i = Math.min(GQ.length - 1, K.i + 1); K.who = null; save(); renderSlide(); };
+window.k1Reset = () => { S.k1b = { v: 2, i: 0, who: null, ans: {}, used: [], ord: {} }; save(); renderSlide(); };
+SL.k1 = function () { const K = S.k1b, i = K.i, q = GQ[i], a = K.ans[i], who = a ? { name: a.name, g: a.g } : K.who, g = who && grp(who.g);
+  const tally = GROUPS.map(G => `<div style="background:${G.color}">${G.icon} ${G.name}<b>${Object.values(K.ans).filter(x => x.ok && x.g === G.id).length}</b></div>`).join('');
+  return `<div class="main" style="display:flex;flex-direction:column;gap:10px"><div class="mid">3D глобус</div>
+  <div class="glroad">${GQ.map((x, j) => { const r = K.ans[j]; return `<button class="${j === i ? 'on' : ''} ${r ? (r.ok ? 'ok' : 'no') : ''}" onclick="k1Go(${j})"><small>${x.lv}</small>${r ? (r.ok ? '✅' : '❌') : j + 1}</button>`; }).join('')}</div>
+  <div class="k1b" style="grid-template-columns:1fr 760px"><div class="glbox"><canvas id="glcv" width="900" height="560"></canvas></div>
+  <div class="k1r"><div style="display:flex;align-items:center;gap:10px"><div class="who" style="flex:1">${who ? `<small>Тақтаға шығады</small><b style="color:${g ? g.color : '#0E3B35'}">${esc(who.name || (g ? g.name + ' тобы' : ''))}</b>` : `<small>${i + 1} / ${GQ.length} · ${q.lv} · ${esc(q.p)}</small><b>Кім шығады?</b>`}</div><button class="btn amber" onclick="k1Pick()">🎲 Оқушы таңдау</button></div>
+  <div class="q">${esc(q.q)}</div>
+  <div class="glopts">${gOrd(i).map((k, n) => `<button class="${a ? (k === 0 ? 'right' : k === a.k ? 'wrong' : 'dim') : ''}" ${a || !who ? 'disabled' : ''} onclick="k1Ans(${k})"><span>${'ABCD'[n]}</span>${esc(q.o[k])}</button>`).join('')}</div>
+  ${a ? `<div class="res ${a.ok ? 'ok' : 'no'}">${a.ok ? '✅ Дұрыс! ⭐ белсенділік' : '❌ Қате. Дұрысы: ' + esc(q.o[0])} <small style="font-weight:700;color:#5b6b80">· ${esc(q.src)}</small></div>${i < GQ.length - 1 ? '<button class="btn blue" onclick="k1Next()">Келесі сұрақ →</button>' : ''}` : `<div style="color:#5b6b80;font-size:17px">${who ? 'Жауапты бас' : '🎲 басыңыз — платформа оқушыны өзі таңдайды'}</div>`}
+  <div class="k1g">${tally}</div><button class="btn ghost sm" onclick="k1Reset()">↺ Қайта бастау</button></div></div></div>`; };
+/* видео: бір видео + 3-2-1 */
+SL.v1 = function () { return `<div class="main" style="display:flex;flex-direction:column;gap:14px"><div class="mid">Видео</div>
+  <video class="vid" src="media/video3.mp4" controls preload="metadata" poster="media/video3.jpg"></video>
+  <div class="card" style="padding:14px 20px;font-size:22px"><b>3-2-1:</b> 3 аймақ · 2 дерек (сан) · 1 сұрақ — парақша №1-ге жаз. <span style="color:var(--muted)">Глобус тапсырмасының жауаптары осы видеода.</span></div></div>`; };
 
 /* 3. ЖИ-ді тексер: телефонсыз, парақшамен */
 const _k3 = SL.k3; SL.k3 = function () { return _k3().replace(qrBlock(), `<div class="card" style="padding:14px 20px;font-size:21px;font-weight:700">📄 Парақша №3 · жұппен · телефонсыз. Соңында «Тексеру» — бірге талдаймыз.</div>`); };
@@ -3628,6 +3698,7 @@ renderSlide = function () { _rs(); const st = STAGES[S.stage]; const stg = $('#s
     const sub = r => r ? `${(grp(r.g) || {}).icon || ''} ${r.tot}/${MAXT} · ${r.ball} балл` : '';
     const e2 = gsum('t2'), e4 = gsum('t4');
     (box.firstElementChild || box).insertAdjacentHTML('afterend', `<div class="emeds">${md('🥇', '1-орын', R[0] && R[0].name, sub(R[0]))}${md('🥈', '2-орын', R[1] && R[1].name, sub(R[1]))}${md('🥉', '3-орын', R[2] && R[2].name, sub(R[2]))}${md('⭐', 'Белсенді', act && act.st ? act.name : '', act && act.st ? '⭐'.repeat(act.st) + ' тақтада' : '')}${md('🔬', 'Үздік сарапшылар', e2 && e2.v ? e2.G.icon + ' ' + e2.G.name : '', 'топ · Сарапшылар алаңы')}${md('🗺️', 'Үздік экопаспорт', e4 && e4.v ? e4.G.icon + ' ' + e4.G.name : '', 'топ · постер')}</div>`); }
+  if (st.id === 'k1') gwLoad.then(() => gFly());
   if (S.demo) sl.insertAdjacentHTML('beforeend', '<div class="eflag">🧪 СЫНАҚ РЕЖИМІ · 20 жалған оқушы</div>');
 };
 
@@ -3642,7 +3713,7 @@ if (bb) { const nx = $('#next');
       const N = ['Аянат', 'Ажар', 'Досжан', 'Кәмшат', 'Әлихан', 'Нұрай', 'Ерасыл', 'Дильназ', 'Бекарыс', 'Томирис', 'Арман', 'Жансая', 'Нұрсұлтан', 'Аружан', 'Ерғали', 'Інжу', 'Мирас', 'Сабина', 'Әсем', 'Ислам'];
       S.students = N.map((n, i) => ({ id: 'demo' + i, name: n, level: 'ABC'[i % 3], group: GROUPS[i % 4].id })); S.stars = {}; S.ind = {}; S.scores = {};
       Object.keys(TASKS).forEach(t => { S.scores[t] = {}; GROUPS.forEach((G, k) => { S.scores[t][G.id] = TASKS[t].d.map((d, j) => (k + j + t.length) % (d[1] + 1)); }); });
-      S.students.forEach((s, i) => { S.ind[s.id] = { t1: i % 4, t3: (i * 2) % 4 }; }); S.k1b = { i: 0, who: null, ans: {}, used: [] }; }
+      S.students.forEach((s, i) => { S.ind[s.id] = { t1: i % 4, t3: (i * 2) % 4 }; }); S.k1b = { v: 2, i: 0, who: null, ans: {}, used: [], ord: {} }; }
     save(); renderSlide(); };
   bb.insertBefore(b1, nx); bb.insertBefore(b2, nx); }
 if (location.hash === '#board') renderSlide();
