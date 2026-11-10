@@ -3152,7 +3152,7 @@ const SL={
   <div class="big">Геоэкологиялық<br><span class="grad">аудандастыру</span></div>
   <div class="lead">${esc(LESSON.subject)} · ${esc(LESSON.grade)} сынып · Мұғалім: <b style="color:var(--ink)">${esc(LESSON.teacher)}</b><br>${esc(s.school)}${s.city?', '+esc(s.city):''}</div>
   <div style="display:flex;gap:16px;flex-wrap:wrap">${[['📅',s.date||'Күні: панельде енгізіңіз'],['🕘',s.time||'Уақыты'],['🚪',s.room||'Кабинет']].map(x=>`<div class="card" style="padding:16px 22px;font-size:24px;font-weight:800">${x[0]} ${esc(x[1])}</div>`).join('')}</div>
-  <div class="lead" style="font-size:24px">Формат: 2 оқу видеосы · 4 топ · дүниежүзі мен Қазақстан аймақтары · ЖИ-ді тексеру · Абай қаласының экопаспорты</div><div style="display:flex;gap:24px;align-items:center;flex:1;min-height:0"><div>${qrBlockFor(guestURL(),'🤝 Құрметті қонақтар!','QR арқылы сабақ жоспарын көріп, соңында кері байланыс қалдырыңыз.')}</div><div class="fillart">${ILL.globe}</div></div></div>${sidePanel(STAGES.find(x=>x.id==='invite'))}`},
+  <div class="lead" style="font-size:24px">Формат: 2 видео · 4 топ · сарапшылар алаңы · тақтада сәйкестендіру · ЖИ-ді тексер · Абай қаласының экопаспорты</div><div style="display:flex;gap:24px;align-items:center;flex:1;min-height:0"><div>${qrBlockFor(guestURL(),'🤝 Құрметті қонақтар!','QR арқылы сабақ жоспарын көріп, соңында кері байланыс қалдырыңыз.')}</div><div class="fillart">${ILL.globe}</div></div></div>${sidePanel(STAGES.find(x=>x.id==='invite'))}`},
  hello(){return `<div class="main" style="gap:22px;padding-top:10px">
   <div class="big">Сәлеметсіздер ме,<br><span class="grad">құрметті қонақтар мен оқушылар!</span></div>
   <div class="lead">Бүгін біз жердің «жарақатын» өлшеуді үйренеміз.<br>Алдымен — <b style="color:var(--ink)">табиғатқа бір сөзбен тілек</b> айтайық.</div>
@@ -3365,8 +3365,7 @@ function renderStudent(){
   if(ST.tab==='k2'){const c=CASES[ST.g];b=`<div class="card q" style="border-left:6px solid ${g.color}"><b style="font-size:20px">${esc(c.t)}</b><p style="margin-top:6px;line-height:1.5;color:var(--muted)">${esc(c.p)}</p></div>`+['Қай табиғат компоненттері зардап шекті?','Өзгеріс қайтымды ма, әлде қайтымсыз ба? Неге?','Қай деңгейге жатқызасыңдар? 2 дәлел.','Қазақстандағы ұқсас аймақ қайсы?'].map((q,i)=>`<div class="card q"><label>${i+1}. ${q}</label><textarea rows="3" oninput="ST.ans['c${i}']=this.value;saveST()">${esc(A['c'+i]||'')}</textarea></div>`).join('')+`<div class="card q" style="font-size:14px;color:var(--muted)">Критерий: ${esc(TASKS.t2.crit)}</div>`}
   if(ST.tab==='k3'){b=`<div class="card q" style="background:#e0f2fe">🤖 Чат-бот осындай мәтін жазды. Әр тұжырым дұрыс па?</div>`+CLAIMS.map((c,i)=>`<div class="card q"><label>${i+1}. ${esc(c[0])}</label><div class="tf"><button class="${A['f'+i]===true?'sel':''}" onclick="ST.ans['f${i}']=true;saveST();renderStudent()">Дұрыс</button><button class="${A['f'+i]===false?'sel':''}" onclick="ST.ans['f${i}']=false;saveST();renderStudent()">Қате</button></div>${A.k3done?(A['f'+i]===c[1]?'<div class="ok" style="margin-top:6px">✓ Таптың</div>':'<div class="bad" style="margin-top:6px">✗ '+esc(c[2])+'</div>'):''}</div>`).join('')+`<button class="btn" style="width:100%;justify-content:center" onclick="ST.ans.k3done=1;saveST();renderStudent()">Тексеру</button>${A.k3done?`<div class="card q" style="margin-top:10px;font-size:20px;font-weight:900;text-align:center">Нәтиже: ${CLAIMS.filter((c,i)=>A['f'+i]===c[1]).length} / ${CLAIMS.length}</div>`:''}`}
   if(ST.tab==='fix'){b=['Ықтимал деңгей (7-кесте бойынша)','2 антропогендік фактор','Дәлел: қай компонент өзгерді?','2 нақты шешім','ЖИ-ге қоятын сұрағымыз және оны қалай тексереміз'].map((q,i)=>`<div class="card q"><label>${q}</label><textarea rows="2" oninput="ST.ans['e${i}']=this.value;saveST()">${esc(A['e'+i]||'')}</textarea></div>`).join('')}
-  if(ST.tab==='fb'){b=`<div class="card q"><label>Бағдаршам: сабақты қалай түсіндің?</label><div class="tf">${[['g','🟢 Толық'],['y','🟡 Сұрағым бар'],['r','🔴 Көмек керек']].map(x=>`<button class="${A.light===x[0]?'sel':''}" onclick="ST.ans.light='${x[0]}';saveST();renderStudent()">${x[1]}</button>`).join('')}</div><div style="font-size:13px;color:var(--muted);margin-top:8px">Таңдағаныңды мұғалімге карточкамен көрсет.</div></div>
-   <div class="card q"><label>⭐ Бүгін не үйрендім?</label><textarea rows="2" oninput="ST.ans.s1=this.value;saveST()">${esc(A.s1||'')}</textarea></div><div class="card q"><label>💡 Не түсініксіз қалды?</label><textarea rows="2" oninput="ST.ans.s2=this.value;saveST()">${esc(A.s2||'')}</textarea></div>`}
+  if(ST.tab==='fb'){b=`<div class="card q"><label>✅ Ұтымды болды: не пайдалы болды?</label><textarea rows="2" oninput="ST.ans.u=this.value;saveST()">${esc(A.u||'')}</textarea></div><div class="card q"><label>✨ Қызықты болды: не есте қалды?</label><textarea rows="2" oninput="ST.ans.s1=this.value;saveST()">${esc(A.s1||'')}</textarea></div><div class="card q"><label>💡 Ұсыныс: не өзгертер едің?</label><textarea rows="2" oninput="ST.ans.s2=this.value;saveST()">${esc(A.s2||'')}</textarea></div><div style="font-size:13px;color:var(--muted);margin-top:8px">Жазғаның тақтадағы «Кері байланыс» бетінде шығады.</div>`}
   $('#student').innerHTML=`<div style="display:flex;align-items:center;gap:10px"><div class="brand" style="font-size:20px"><div class="logo" style="width:38px;height:38px;font-size:18px">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="chip" title="Топты ауыстыру" style="color:${g.color};border-color:${g.color};background:#fff" onclick="if(confirmClear()){ST={g:null,tab:'k2',ans:{}};saveST();renderStudent()}">${g.icon} ${g.name} ⇄</button><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div>
   <div id="stt" class="sttimer" style="display:none"></div><div class="stabs">${tabs.map(t=>`<button class="${ST.tab===t[0]?'on':''}" onclick="ST.tab='${t[0]}';saveST();renderStudent()">${t[1]}</button>`).join('')}</div>${b}${(()=>{const k=tabs.findIndex(t=>t[0]===ST.tab);return `<div class="snav">${k>0?`<button onclick="ST.tab='${tabs[k-1][0]}';saveST();renderStudent();scrollTo(0,0)">← Алдыңғы</button>`:''}${k<tabs.length-1?`<button class="pr" onclick="ST.tab='${tabs[k+1][0]}';saveST();renderStudent();scrollTo(0,0)">Келесі →</button>`:''}</div>`})()}`;
 }
@@ -3378,20 +3377,20 @@ function renderPrint(){
   $('#print').innerHTML=`<div class="noprint" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap"><b style="font-size:22px">🖨️ Парақшалар</b><div style="flex:1"></div><button class="btn" onclick="print()">Басып шығару / PDF</button><button class="btn ghost" onclick="go('home')">⌂</button></div>
   <div class="sheet">${head('Белсенді көру: 3-2-1','Жаңа сабақ, видео кезінде')}
    <table><tr><th style="width:30%">3 аймақ</th><td><div class="lines"></div><div class="lines"></div><div class="lines"></div></td></tr><tr><th>2 дерек</th><td><div class="lines"></div><div class="lines"></div></td></tr><tr><th>1 сұрақ</th><td><div class="lines"></div></td></tr></table></div>
-  <div class="sheet">${head('1-парақша: Сарапшылар алаңы (дүниежүзі) — кейс-карталар','Топтық жұмыс · 7 мин · Блум: қолдану, талдау')}
+  <div class="sheet">${head('1-парақша: Сарапшылар алаңы (дүниежүзі) — кейс-карталар','Топтық жұмыс · 8 мин (4 мин дайындық + спикер 1 мин) · Блум: қолдану, талдау')}
    ${GROUPS.map(g=>`<div style="border:2px solid ${g.color};border-radius:12px;padding:12px;margin-bottom:10px"><b>${g.icon} ${g.name} тобы — ${esc(CASES[g.id].t)}</b><p style="font-size:13.5px;margin-top:4px">${esc(CASES[g.id].p)}</p></div>`).join('')}
    <table><tr><th>1. Зардап шеккен компоненттер</th><td style="height:46px"></td></tr><tr><th>2. Қайтымды / қайтымсыз?</th><td style="height:46px"></td></tr><tr><th>3. Деңгей + 2 дәлел</th><td style="height:60px"></td></tr><tr><th>4. Қазақстандағы ұқсас аймақ</th><td style="height:40px"></td></tr></table>${crbox('t2')}</div>
-  <div class="sheet">${head('2-парақша: Сәйкестендір (Қазақстан)','Жеке жұмыс · 4 мин · Блум: түсіну')}
+  <div class="sheet">${head('2-парақша: Сәйкестендір (Қазақстан)','Жеке жұмыс · 6 мин · тақтада кездейсоқ оқушы тексереді · Блум: түсіну')}
    <table><tr><th>Аймақ</th><th style="width:150px">Деңгей (1–5)</th></tr>${MATCH.map((m,i)=>`<tr><td>${i+1}. ${esc(m[0])}</td><td></td></tr>`).join('')}</table>
    <p style="margin-top:10px;font-size:13px">1 — Апатты (81–100%) · 2 — Қауіпті (61–80%) · 3 — Шиеленіскен (41–60%) · 4 — Қанағаттанарлық (21–40%) · 5 — Қолайлы (0–20%)</p>${crbox('t1')}</div>
-  <div class="sheet">${head('3-парақша: ЖИ-ді тексер','Жұптық жұмыс · 4 мин · Блум: бағалау')}
+  <div class="sheet">${head('3-парақша: ЖИ-ді тексер','Жұптық жұмыс · 4 мин · телефонсыз · Блум: бағалау')}
    <table><tr><th>Чат-бот жазған тұжырым</th><th style="width:90px">Д / Қ</th><th style="width:35%">Түзету (оқулықтан)</th></tr>${CLAIMS.map((c,i)=>`<tr><td>${i+1}. ${esc(c[0])}</td><td></td><td></td></tr>`).join('')}</table>${crbox('t3')}</div>
-  <div class="sheet">${head('4-парақша: Абай қаласының экопаспорты','Топтық жұмыс · 6 мин · Блум: жинақтау')}
+  <div class="sheet">${head('4-парақша: Абай қаласының экопаспорты','Топтық жұмыс · 9 мин (3 мин дайындық + әр топ 1,5 мин қорғау) · Блум: жинақтау')}
    <table>${['Ықтимал деңгей (7-кесте)','2 антропогендік фактор','Дәлел: қай компонент өзгерді? Қайтымды ма?','2 нақты шешім','ЖИ-ге бір сұрақ және оны тексеру жолы','Рөлдер: спикер / хатшы / сарапшы / уақыт сақшысы'].map(x=>`<tr><th style="width:38%">${x}</th><td style="height:60px"></td></tr>`).join('')}</table>${crbox('t4')}</div>
   <div class="sheet"><h2>Бағалау парағы (мұғалімге)</h2><div class="sub">${esc(LESSON.grade)} · ${esc(LESSON.topic)}</div>
    <table><tr><th>Тапсырма / дескриптор</th>${GROUPS.map(g=>`<th>${g.name}</th>`).join('')}</tr>${Object.values(TASKS).map(t=>`<tr><td colspan="5" style="background:#eee"><b>${esc(t.name)}</b> — ${esc(t.crit)}</td></tr>`+t.d.map(d=>`<tr><td>${esc(d[0])} (${d[1]})</td>${GROUPS.map(()=>'<td></td>').join('')}</tr>`).join('')).join('')}<tr><th>Барлығы (${MAXT})</th>${GROUPS.map(()=>'<td></td>').join('')}</tr></table></div>
   <div class="sheet"><h2>Қонақтарға: кері байланыс парағы</h2><div class="sub">${esc(LESSON.subject)} · ${esc(LESSON.grade)} · ${esc(LESSON.topic)} · Мұғалім: ${esc(LESSON.teacher)}</div>
-   <table>${['Оқу мақсатына жету деңгейі','Әдіс-тәсілдердің тиімділігі','Бағалау критерийлері мен дескрипторлардың қолданылуы','Саралау және оқушылардың белсенділігі','АКТ / ЖИ қолданудың орындылығы','⭐ Бірінші жұлдыз','⭐ Екінші жұлдыз','💡 Тілек'].map(x=>`<tr><th style="width:42%">${x}</th><td style="height:52px"></td></tr>`).join('')}</table></div>
+   <table>${['Оқу мақсатына жету деңгейі','Әдіс-тәсілдердің тиімділігі','Бағалау критерийлері мен дескрипторлардың қолданылуы','Саралау және оқушылардың белсенділігі','АКТ / ЖИ қолданудың орындылығы','⭐ Бірінші жұлдыз','✨ Қызықты: есте қалған сәт','💡 Тілек'].map(x=>`<tr><th style="width:42%">${x}</th><td style="height:52px"></td></tr>`).join('')}</table></div>
   <div class="sheet"><h2>Үй тапсырмасы карточкалары</h2><div class="sub">Қиып, оқушыларға таратыңыз</div>
    ${[['C · негізгі','§19-ды оқып, 7-кестедегі апатты және қауіпті деңгейдегі 6 аймақты контур картаға шартты белгімен түсір.'],['B · талдау','Дүниежүзінен 1 апатты аймақ таңдап, экопаспортын жаса: компоненттер, деңгей, 2 дәлел.'],['A · шығармашылық','ЖИ көмегімен Абай қаласы туралы экологиялық постер жаса. ЖИ берген 3 деректі дереккөзбен тексеріп, қатесін белгіле.']].map(x=>`<div style="border:2px dashed #999;border-radius:12px;padding:14px;margin-bottom:12px"><b>${x[0]}</b><p style="margin-top:4px">${x[1]}</p></div>`).join('')}</div>`;
 }
@@ -3417,9 +3416,9 @@ function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s
   else{form=`<h2 style="font-size:26px;margin:26px 0 12px">📝 Кері байланыс парағы</h2>
    <div class="card gq"><label>Аты-жөніңіз (міндетті емес)</label><input value="${esc(GF.who)}" oninput="GF.who=this.value"><label style="margin-top:12px">Лауазымыңыз</label><input value="${esc(GF.role)}" placeholder="Мысалы: әдіскер, пән мұғалімі" oninput="GF.role=this.value"></div>
    ${GCRIT.map((c,i)=>`<div class="card gq"><label>${i+1}. ${c}</label><div class="rt">${[1,2,3,4,5].map(v=>`<button class="${GF.r[i]>=v?'sel':''}" onclick="gRate(${i},${v})">${v}</button>`).join('')}</div></div>`).join('')}
-   <div class="card gq"><label>⭐ Бірінші жұлдыз: сабақтың ең сәтті тұсы</label><textarea rows="2" oninput="GF.s1=this.value">${esc(GF.s1)}</textarea></div>
+   <div class="card gq"><label>✅ Ұтымды: сабақтың ең пайдалы тұсы</label><textarea rows="2" oninput="GF.s1=this.value">${esc(GF.s1)}</textarea></div>
    <div class="card gq"><label>⭐ Екінші жұлдыз</label><textarea rows="2" oninput="GF.s2=this.value">${esc(GF.s2)}</textarea></div>
-   <div class="card gq"><label>💡 Бір тілек: не жақсартуға болады?</label><textarea rows="2" oninput="GF.w=this.value">${esc(GF.w)}</textarea></div>
+   <div class="card gq"><label>💡 Ұсыныс: не жақсартуға болады?</label><textarea rows="2" oninput="GF.w=this.value">${esc(GF.w)}</textarea></div>
    <div id="gerr" class="bad" style="margin-bottom:8px"></div><button class="btn" style="width:100%;justify-content:center;font-size:18px;padding:16px" onclick="gSubmit()">Пікірді жіберу</button>`}
   $('#guest').innerHTML=`<div style="max-width:760px;margin:0 auto;padding:22px 16px 110px"><div style="display:flex;align-items:center;gap:8px"><div class="brand"><div class="logo">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div>
   <span class="chip amber" style="margin-top:20px">Ашық сабақ ${esc(s.date||'')} ${esc(s.time||'')}</span>
@@ -3430,5 +3429,225 @@ function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s
 route();
 if(!location.hash)go('home');
 </script>
+<style id="ea-pro">
+/* ===== ЖАҢА АҒЫН: көк тақырып + «Сен не істейсің?», мұғалім панелі жасырын, оқушыға орын көп ===== */
+#stage .side{display:none}
+#stage.withside .side{display:flex}
+#stage:not(.withside) .main{right:48px}
+#stage:not([data-st="invite"]) .main,#stage:not([data-st="invite"]) .full{top:292px}
+#stage .navbtn{white-space:nowrap}
+#stage .who,#stage .mfloat{display:none}
+#stage .full{right:48px!important}
+#stage:not([data-st="invite"]) .slide .main>.mid:first-child,#stage .slide .full>.mid:first-child,#stage .slide .full>div:first-child>.mid:first-child{display:none}
+.tbub{white-space:normal!important;font-size:17px!important;max-height:80px;overflow:hidden}
+.eahd{position:absolute;left:48px;right:48px;top:104px;display:flex;flex-direction:column;gap:8px;z-index:6}
+.eahd h2{font-size:42px;font-weight:900;color:#0B5FA5;line-height:1.05;margin:0}
+.eahd h2 span{color:#0E3B35}
+.eahd .meta{display:flex;gap:8px;flex-wrap:wrap}
+.eahd .meta span{background:#EAF4F8;border-radius:999px;padding:4px 14px;font-size:18px;font-weight:600;color:#28485A}
+.eahd .meta b{color:#0E3B35}
+.eastu{display:flex;align-items:center;gap:12px;background:#fff;border:3px solid #0B5FA5;border-radius:18px;padding:7px 16px}
+.eastu .q{font-weight:900;font-size:22px;color:#0E3B35}
+.eastu .st{display:flex;align-items:center;gap:8px;background:#EEF6FA;border-radius:12px;padding:6px 12px;font-weight:800;font-size:21px;color:#0E3B35}
+.eastu .st i{font-style:normal;width:30px;height:30px;border-radius:50%;background:#0B5FA5;color:#fff;display:grid;place-items:center;font-size:16px}
+.eastu .ar{color:#0B5FA5;font-weight:900;font-size:22px}
+.eptim{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.eptim b{font-size:20px}
+.eptim button{border:0;border-radius:999px;padding:10px 18px;font-weight:800;font-size:18px;color:#fff;cursor:pointer;font-family:inherit}
+.eptim button.on{outline:4px solid #FFD24A}
+/* Сәйкестендір: тақтада */
+.k1b{display:grid;grid-template-columns:1fr 470px;gap:16px;flex:1;min-height:0}
+.k1l{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:10px;min-height:0}
+.k1c{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:8px 14px;font-size:22px;font-weight:700;border:3px solid transparent;cursor:pointer;box-shadow:0 4px 12px rgba(0,40,30,.08);line-height:1.2}
+.k1c .n{flex:none;width:40px;height:40px;border-radius:12px;background:#eef7f3;display:grid;place-items:center;font-weight:900}
+.k1c.on{border-color:#0B5FA5;background:#F2F8FD}
+.k1c.ok{border-color:#1FA67A}.k1c.no{border-color:#E2475F}
+.k1c .lv{margin-left:auto;font-size:16px;font-weight:900;padding:4px 10px;border-radius:999px;color:#fff;white-space:nowrap}
+.k1r{background:#fff;border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 22px rgba(0,40,30,.1);min-height:0}
+.k1r .who small{display:block;font-size:16px;color:#5b6b80;font-weight:700}
+.k1r .who b{display:block;font-size:34px;font-weight:900;line-height:1.1}
+.k1r .q{font-size:22px;font-weight:800;color:#0E3B35}
+.k1r .lvb{display:grid;grid-template-columns:1fr;gap:6px}
+.k1r .lvb button{border:0;border-radius:12px;padding:8px 12px;color:#fff;font-weight:900;font-size:19px;text-align:left;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between}
+.k1r .lvb button:disabled{opacity:.35;cursor:default}
+.k1r .lvb button.right{opacity:1;outline:4px solid #0E3B35}
+.k1r .res{font-size:20px;font-weight:900;border-radius:12px;padding:8px 12px}
+.k1r .res.ok{background:#E6F8EF;color:#0b7d52}.k1r .res.no{background:#FDECEA;color:#b91c1c}
+.k1g{display:flex;gap:6px}.k1g div{flex:1;border-radius:12px;padding:6px 8px;color:#fff;font-weight:900;font-size:16px;text-align:center}
+.k1g div b{display:block;font-size:24px}
+/* үздіктер */
+.emeds{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.emed{display:flex;gap:10px;align-items:center;background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:2px solid #F5B700;border-radius:16px;padding:8px 12px;min-width:0}
+.emed i{font-style:normal;font-size:34px}
+.emed small{display:block;font-size:13px;font-weight:900;color:#92400E;text-transform:uppercase;letter-spacing:.03em}
+.emed b{display:block;font-size:20px;font-weight:900;color:#0E3B35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.emed span{font-size:14px;color:#475569}
+/* кері байланыс */
+.efb{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;flex:1;min-height:0}
+.efb .col{border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-height:0;overflow:hidden}
+.efb .col h3{margin:0;font-size:28px;color:#fff;display:flex;align-items:center;gap:10px}
+.efb .col h3 small{font-size:16px;font-weight:700;opacity:.9}
+.efb .note{background:#fff;border-radius:12px;padding:8px 12px;font-size:18px;line-height:1.35}
+.efb .note small{display:block;color:#5b6b80;font-size:13px;font-weight:700}
+.eflag{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:60;background:#7c3aed;color:#fff;font-weight:800;font-size:16px;padding:5px 14px;border-radius:999px}
+</style>
+<script id="ea-pro-js">
+/* ===== ЖАҢА АҒЫН (45 мин, 10 бөлім): тақырып пен мақсатқа сай ===== */
+(function(){
+const EA = {
+  order: ['invite','hello','groups','warm','v1','goal','v2','world','k2','k1','k3','fix','rate','fb','hw'],
+  min: {invite:0,hello:1,groups:1,warm:3,v1:2,goal:1,v2:2,world:3,k2:8,k1:6,k3:4,fix:9,rate:2,fb:2,hw:1},
+  title: {
+    hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Топқа бөлу: геожүйе компоненттері', warm:'Үй тапсырмасы: фото-жұмбақ',
+    v1:'1-видео: дүниежүзінен Қазақстанға', goal:'Тақырып, мақсат және бағалау', v2:'2-видео: 5 деңгей', world:'Дүниежүзі: неге 52% және 3%?',
+    k2:'Сарапшылар алаңы: дүниежүзі аймақтары', k1:'Сәйкестендір: Қазақстан аймақтары', k3:'ЖИ-ді тексер', fix:'Абай қаласының экопаспорты',
+    rate:'Баға · рейтинг · үздіктер', fb:'Кері байланыс: ұтымды · қызықты · ұсыныс', hw:'Үй тапсырмасы: өз деңгейіңді таңда'},
+  /* әдіс · жұмыс түрі · критерий/ұпай · оқулық */
+  meta: {
+    hello:['«Табиғатқа тілек» — психологиялық ахуал','Бүкіл сынып','',''],
+    groups:['«Геожүйе компоненттері» — деңгейі тең 4 топ','Топтық','',''],
+    warm:['«Фото-жұмбақ» + «Ыстық орындық»','Топтық','К1 · 2 ұпай','§18 қайталау'],
+    v1:['«Белсенді көру 3-2-1»','Жеке · парақша','','§19'],
+    goal:['«Мақсатты бірге құрамыз»','Бүкіл сынып','16 ұпай → 10 балл','10.3.2.3'],
+    v2:['«Белсенді көру» (жалғасы)','Жеке · парақша','','§19, 7-кесте'],
+    world:['«Картамен жұмыс» + «Неге сандар әртүрлі?»','Бүкіл сынып','','§19'],
+    k2:['«Кейс-стади: Сарапшылар алаңы» + спикер','Топтық','К2 · 4 ұпай','7-кесте'],
+    k1:['«Сәйкестендір» · кездейсоқ оқушы тақтада','Жеке · тақта + парақша №2','К3 · 3 ұпай','7-кесте'],
+    k3:['«Фактчекинг: ЖИ-ді тексер»','Жұптық · парақша №3','К4 · 3 ұпай','§19, 7-кесте'],
+    fix:['«Экопаспорт» + қорғау','Топтық · ватман','К5 · 4 ұпай','7-кесте'],
+    rate:['«Ұпай → 10 балл» · мадақтау','Бүкіл сынып','16 ұпай → 10 балл',''],
+    fb:['«Ұтымды · Қызықты · Ұсыныс»','Жеке · оқушылар мен қонақтар','',''],
+    hw:['Деңгейлік үй тапсырмасы','Жеке','','§19–20']},
+  /* «Сен не істейсің?» */
+  stu: {
+    hello:['Туған жеріңе бір сөзбен тілек айт'],
+    groups:['Тобыңды тап: Су · Ауа · Топырақ · Биота','Рөліңді ал: спикер, хатшы, сарапшы'],
+    warm:['Топпен бір суретті таңда','30 секундта: не өзгерді? неге?','Деңгейін болжа'],
+    v1:['Видеоны көр','Парақшаға: 3 аймақ · 2 дерек · 1 сұрақ'],
+    goal:['Тақырыпты болжа','Мақсат пен 16 ұпайды біл'],
+    v2:['5 деңгейді пайызымен жаз','Түстерін есте сақта'],
+    world:['Картадан апат аймақтарын тап','Неге 52% және 3%? — себебін айт'],
+    k2:['4 мин: кейсті оқы, 4 сұраққа жауап','Спикер 1 минут сөйлейді','Басқалар деңгейді бағалайды'],
+    k1:['Парақшада 8 аймақты деңгейге жатқыз','Атың шықса — тақтаға шығып бас','Тақтамен тексер'],
+    k3:['Жұбыңмен 7 тұжырымды оқы','Дұрыс / Қате белгіле','Қатені оқулықпен түзет'],
+    fix:['3 мин: экопаспортты толтыр','Әр топ 1,5 мин қорғайды','Басқалар 1 сұрақ қояды'],
+    rate:['Өз балыңды тап','Үздіктерді құттықта'],
+    fb:['Не ұтымды болды?','Не қызықты болды?','Қандай ұсыныс бар?'],
+    hw:['Деңгейіңді таңда','Күнделікке жаз']},
+  tea: {
+    hello:'Сәлемдесіп, әр оқушыға туған жеріне бір сөзбен тілек айтқызады.',
+    groups:'«Кездейсоқ, бірақ тең бөлу» батырмасын басып, топтар мен рөлдерді шығарады.',
+    warm:'4 суретті көрсетеді. Әр топ бір суретті таңдап, 30 секундта не өзгергенін және деңгейін айтады. Топқа 0–2 ұпай қояды.',
+    v1:'1-видеоны қосады. Оқушылар «3-2-1» парағын толтырады.',
+    goal:'Тақырыпты оқушылар болжайды; мұғалім оқу мақсатын (10.3.2.3) және бағалауды (16 ұпай → 10 балл) ашады.',
+    v2:'2-видеоны қосады, 5 деңгейді пайызымен қорытады.',
+    world:'Картаны көрсетіп, «Неге 52% және 3%?» деп сұрайды: аудандастыру нәтижесі критерийге байланысты.',
+    k2:'«Дайындық · 4 мин» батырмасын басады. Сосын әр топтың спикеріне 1 минут береді. Топ ұпайын (0–4) қояды.',
+    k1:'Оқушылар парақшада орындайды. «Оқушы таңдау» батырмасын басады — шыққан оқушы тақтада деңгейді басады. Дұрыс жауап — белсенділік ⭐.',
+    k3:'Жұптарға уақыт береді, соңында «Тексеру» батырмасымен 3 қатені бірге талдайды. Жеке ұпайды мұғалім панеліне енгізеді.',
+    fix:'«Дайындық · 3 мин», сосын әр топтың «қорғайды · 1,5 мин» батырмасы. Критерий бойынша 0–4 ұпай қояды.',
+    rate:'Рейтинг пен үздіктерді атымен көрсетеді, наклейка береді.',
+    fb:'QR-ды көрсетеді: оқушылар мен қонақтар «Ұтымды · Қызықты · Ұсыныс» жазады.',
+    hw:'Үш деңгейлі үй тапсырмасын түсіндіріп, сабақты қорытады.'}
+};
+window.EA = EA;
+/* 1. кезеңдердің реті мен уақыты (45 мин) */
+STAGES.forEach(s => { if (EA.min[s.id] != null) s.min = EA.min[s.id]; if (EA.title[s.id]) s.title = EA.title[s.id];
+  const m = EA.meta[s.id]; if (m) s.method = m[0]; if (EA.stu[s.id]) PAR[s.id] = EA.stu[s.id].join(' → '); if (EA.tea[s.id]) TEA[s.id] = EA.tea[s.id]; });
+STAGES.sort((a, b) => EA.order.indexOf(a.id) - EA.order.indexOf(b.id));
+const MD = {
+  k2:'Әр топ дүниежүзінің бір апат аймағын (кейс) талдайды: 4 мин дайындық, сосын спикер 1 минутта сарапшы ретінде сөйлейді — компоненттер, қайтымдылық, деңгей (7-кесте), Қазақстандағы ұқсас аймақ.',
+  k1:'Барлығы парақша №2-де 8 аймақты 5 деңгейге жатқызады; платформа кездейсоқ оқушыны таңдайды, ол тақтада деңгейді басады — сынып бірден тексереді. Дұрыс жауап — белсенділік ⭐.',
+  k3:'Чат-бот жазған 7 тұжырымның 3-і қате. Жұптар парақша №3-те «Дұрыс/Қате» белгілеп, қатені оқулық дерегімен (§19, 7-кесте) түзетеді. Телефонсыз.',
+  fix:'Топтар Абай қаласының экопаспортын толтырады: аймақ, ықтимал деңгей (7-кесте), 2 фактор, дәлел, 2 нақты шешім, ЖИ-ге сұрақ. 3 мин дайындық + әр топ 1,5 мин қорғау.',
+  rate:'16 ұпай → 10 балл: топтық (үй тапсырмасы, сарапшылар, экопаспорт) + жеке (сәйкестендір) + жұптық (ЖИ-ді тексер). Үздіктер атымен, белсенділерге ⭐.',
+  fb:'Оқушылар мен қонақтар телефоннан үш жол жазады: ұтымды болғаны, қызықты болғаны, ұсыныс. Пікірлер тақтада бірден шығады.',
+  goal:'Бейнеден кейін оқушылар тақырыпты болжайды; мұғалім оқу мақсатын (10.3.2.3), сабақ мақсатын (барлығы/көпшілігі/кейбірі) және 16 ұпайлық бағалауды ашады.'};
+STAGES.forEach(s => { if (MD[s.id]) s.mdesc = MD[s.id]; });
+try { MASC_LINES.fb = ['cheer', 'Не ұтымды, не қызықты болды? Жаз!']; MASC_LINES.k1 = ['point', 'Атың шықса — тақтаға шық!']; MASC_LINES.goal = ['wave', 'Бүгінгі мақсатымыз — аудандастыру!']; } catch (e) {}
+const KINDS = {k2:'Сабақ ортасы · Түсінуді тексеру', k1:'Сабақ ортасы · Түсінуді тексеру', k3:'Сабақ ортасы · Түсінуді тексеру', fix:'Сабақ ортасы · Бекіту'};
+STAGES.forEach(s => { if (KINDS[s.id]) s.kind = KINDS[s.id]; });
+TASKS.t2.name = 'Сарапшылар алаңы (дүниежүзі)'; TASKS.t1.name = 'Сәйкестендір (Қазақстан, тақтада + парақша)'; TASKS.t3.name = 'ЖИ-ді тексер (жұппен)';
+const STA = s => STAGES.find(x => x.id === s);
+const setT = sec => { S.timer = { run: false, left: sec, end: 0, total: sec }; _lastL = null; save(); $('#tplay').click(); };
+window.eaT = (sec, b) => { document.querySelectorAll('.eptim button').forEach(x => x.classList.remove('on')); if (b) b.classList.add('on'); setT(sec); };
+const ptim = (items) => `<div class="eptim"><b>⏱ Таймер:</b>${items.map(([t, sec, c]) => `<button style="background:${c}" onclick="eaT(${sec},this)">${t}</button>`).join('')}</div>`;
+
+/* 2. Сәйкестендір: кездейсоқ оқушы тақтаға шығып басады */
+S.k1b = S.k1b || { i: 0, who: null, ans: {}, used: [] };
+window.k1Pick = () => { const K = S.k1b; if (K.ans[K.i]) return; const R = (S.students || []).filter(x => x && x.name);
+  const pool = R.filter(x => !K.used.includes(x.id)); const from = pool.length ? pool : R; const box = document.querySelector('.k1r .who'); let t = 0;
+  if (!from.length) { K.who = { id: '', name: '', g: GROUPS[K.i % 4].id }; save(); renderSlide(); return; }
+  const h = setInterval(() => { const x = from[Math.floor(Math.random() * from.length)]; const g = grp(x.group) || {};
+    if (box) box.innerHTML = `<small>Таңдап жатыр…</small><b style="color:${g.color || '#0E3B35'}">${esc(x.name)}</b>`;
+    if (++t > 14) { clearInterval(h); K.who = { id: x.id, name: x.name, g: x.group }; K.used.push(x.id); save(); renderSlide(); } }, 90); };
+window.k1Ans = lv => { const K = S.k1b; if (K.ans[K.i] || !K.who) return; const ok = lv === MATCH[K.i][1];
+  K.ans[K.i] = { lv, ok, name: K.who.name, g: K.who.g, id: K.who.id };
+  if (ok && K.who.id) S.stars[K.who.id] = Math.min(2, (S.stars[K.who.id] || 0) + 1);
+  K.who = null; save(); renderSlide(); };
+window.k1Go = i => { S.k1b.i = i; S.k1b.who = null; save(); renderSlide(); };
+window.k1Next = () => { const K = S.k1b; const n = MATCH.findIndex((m, j) => !K.ans[j]); K.i = n < 0 ? K.i : n; save(); renderSlide(); };
+window.k1Reset = () => { S.k1b = { i: 0, who: null, ans: {}, used: [] }; save(); renderSlide(); };
+SL.k1 = function () { const K = S.k1b, i = K.i, a = K.ans[i], who = a ? { name: a.name, g: a.g } : K.who, g = who && grp(who.g);
+  const tally = GROUPS.map(G => `<div style="background:${G.color}">${G.icon} ${G.name}<b>${Object.values(K.ans).filter(x => x.ok && x.g === G.id).length}</b></div>`).join('');
+  return `<div class="main" style="display:flex;flex-direction:column;gap:12px"><div class="mid">Аймақты деңгейге жатқыз</div>
+  <div class="k1b"><div class="k1l">${MATCH.map((m, j) => { const r = K.ans[j]; return `<div class="k1c ${j === i ? 'on' : ''} ${r ? (r.ok ? 'ok' : 'no') : ''}" onclick="k1Go(${j})"><span class="n">${j + 1}</span>${esc(m[0])}${r ? `<span class="lv" style="background:${LEVELS[m[1]].c}">${m[1]}-деңгей</span>` : ''}</div>`; }).join('')}</div>
+  <div class="k1r"><div style="display:flex;align-items:center;gap:10px"><div class="who" style="flex:1">${who ? `<small>Тақтаға шығады</small><b style="color:${g ? g.color : '#0E3B35'}">${esc(who.name || (g ? g.name + ' тобы' : ''))}</b>` : `<small>${i + 1} / ${MATCH.length} аймақ</small><b>Кім шығады?</b>`}</div><button class="btn amber" onclick="k1Pick()">🎲 Оқушы таңдау</button></div>
+  <div class="q">${i + 1}. ${esc(MATCH[i][0])} — қай деңгей?</div>
+  <div class="lvb">${LEVELS.slice(1).map((l, j) => `<button style="background:${l.c}" class="${a && j + 1 === MATCH[i][1] ? 'right' : ''}" ${a || !who ? 'disabled' : ''} onclick="k1Ans(${j + 1})"><span>${j + 1}. ${l.n}</span><span>${l.r}</span></button>`).join('')}</div>
+  ${a ? `<div class="res ${a.ok ? 'ok' : 'no'}">${a.ok ? '✅ Дұрыс! ⭐ белсенділік' : '❌ Қате. Дұрысы: ' + MATCH[i][1] + '-деңгей (' + LEVELS[MATCH[i][1]].n + ')'}</div><button class="btn blue" onclick="k1Next()">Келесі аймақ →</button>` : `<div style="color:#5b6b80;font-size:17px">${who ? 'Деңгейді бас' : '🎲 басыңыз — платформа оқушыны өзі таңдайды'}</div>`}
+  <div class="k1g">${tally}</div><button class="btn ghost sm" onclick="k1Reset()">↺ Қайта бастау</button></div></div></div>`; };
+
+/* 3. ЖИ-ді тексер: телефонсыз, парақшамен */
+const _k3 = SL.k3; SL.k3 = function () { return _k3().replace(qrBlock(), `<div class="card" style="padding:14px 20px;font-size:21px;font-weight:700">📄 Парақша №3 · жұппен · телефонсыз. Соңында «Тексеру» — бірге талдаймыз.</div>`); };
+/* 4. кері байланыс: Ұтымды · Қызықты · Ұсыныс */
+SL.fb = function () { const G = allGuests(), St = liveStudents().map(x => ({ n: x.name, a: x.ans || {} }));
+  const col = (title, ico, c, gk, sk) => { const items = G.filter(f => f[gk]).map(f => ({ w: f.who || 'Қонақ', t: f[gk], r: '🎩' })).concat(St.filter(x => x.a[sk]).map(x => ({ w: x.n, t: x.a[sk], r: '🎓' })));
+    return `<div class="col" style="background:${c}"><h3>${ico} ${title} <small>${items.length}</small></h3>${items.slice(-6).reverse().map(x => `<div class="note"><small>${x.r} ${esc(x.w)}</small>${esc(x.t)}</div>`).join('') || '<div class="note" style="opacity:.8">Әзірге жоқ — QR арқылы жазыңыз</div>'}</div>`; };
+  return `<div class="full" style="display:flex;flex-direction:column;gap:14px"><div class="mid">Кері байланыс</div>
+  <div class="efb">${col('Ұтымды', '✅', '#1FA67A', 's1', 'u')}${col('Қызықты', '✨', '#E8A317', 's2', 's1')}${col('Ұсыныс', '💡', '#1C8FCB', 'w', 's2')}</div>
+  <div style="display:flex;gap:18px;align-items:center">${qrBlockFor(guestURL(), '🤝 Қонақтар мен оқушылар', 'QR арқылы: ұтымды · қызықты · ұсыныс')}<div class="card" style="padding:14px 18px;font-size:20px;flex:1">📱 Оқушылар: телефондағы «Кері байланыс» бетінде үш жолды толтырады.</div></div></div>`; };
+
+/* 5. renderSlide: көк тақырып + «Сен не істейсің?» + таймерлер + үздіктер */
+const _rs = renderSlide;
+renderSlide = function () { _rs(); const st = STAGES[S.stage]; const stg = $('#stage'); stg.dataset.st = st.id;
+  const sl = $('#slideHost .slide'); if (!sl) return;
+  const m = EA.meta[st.id], stu = EA.stu[st.id];
+  if (m) { const cum = STAGES.slice(0, S.stage).reduce((a, x) => a + x.min, 0); const ph = st.kind.split(' · ')[0];
+    sl.insertAdjacentHTML('afterbegin', `<div class="eahd"><h2><span>${esc(ph)}:</span> ${esc(st.title)}</h2>
+    <div class="meta"><span>🧭 Әдіс: <b>${esc(m[0])}</b></span><span>👥 Түрі: <b>${esc(m[1])}</b></span>${m[2] ? `<span>📒 ${esc(m[2])}</span>` : ''}${m[3] ? `<span>📖 ${esc(m[3])}</span>` : ''}<span>⏱ ${st.min} мин · ${cum}–${cum + st.min}′</span></div>
+    ${stu ? `<div class="eastu"><span class="q">🧑‍🎓 Сен не істейсің?</span>${stu.map((x, i) => `${i ? '<span class="ar">→</span>' : ''}<span class="st"><i>${i + 1}</i>${esc(x)}</span>`).join('')}</div>` : ''}</div>`); }
+  const box = sl.querySelector('.main,.full');
+  if (st.id === 'k2' && box) box.insertAdjacentHTML('beforeend', ptim([['🛠️ Дайындық · 4 мин', 240, '#0E3B35']].concat(GROUPS.map(G => [`🎤 ${G.icon} ${G.name} · 1 мин`, 60, G.color]))));
+  if (st.id === 'fix' && box) box.insertAdjacentHTML('beforeend', ptim([['🛠️ Дайындық · 3 мин', 180, '#0E3B35']].concat(GROUPS.map(G => [`🖼️ ${G.icon} ${G.name} · 1,5 мин`, 90, G.color]))));
+  if (st.id === 'invite') { const s = S.settings; sl.querySelectorAll('.card').forEach(c => { const t = c.textContent; if ((!s.date && /панельде енгізіңіз/.test(t)) || (!s.time && /^\s*🕘\s*Уақыты\s*$/.test(t)) || (!s.room && /^\s*🚪\s*Кабинет\s*$/.test(t))) c.remove(); }); }
+  if (st.id === 'rate' && box) { const R = roster().map(r => Object.assign(r, indOf(r))).sort((a, b) => b.ball - a.ball || b.tot - a.tot);
+    const gsum = t => GROUPS.map(G => ({ G, v: sc(t, G.id).reduce((a, b) => a + b, 0) })).sort((a, b) => b.v - a.v)[0];
+    const act = [...R].sort((a, b) => (b.st || 0) - (a.st || 0))[0];
+    const md = (ico, t, n, sub) => `<div class="emed"><i>${ico}</i><div style="min-width:0"><small>${t}</small><b>${n ? esc(n) : '—'}</b><span>${sub || ''}</span></div></div>`;
+    const sub = r => r ? `${(grp(r.g) || {}).icon || ''} ${r.tot}/${MAXT} · ${r.ball} балл` : '';
+    const e2 = gsum('t2'), e4 = gsum('t4');
+    (box.firstElementChild || box).insertAdjacentHTML('afterend', `<div class="emeds">${md('🥇', '1-орын', R[0] && R[0].name, sub(R[0]))}${md('🥈', '2-орын', R[1] && R[1].name, sub(R[1]))}${md('🥉', '3-орын', R[2] && R[2].name, sub(R[2]))}${md('⭐', 'Белсенді', act && act.st ? act.name : '', act && act.st ? '⭐'.repeat(act.st) + ' тақтада' : '')}${md('🔬', 'Үздік сарапшылар', e2 && e2.v ? e2.G.icon + ' ' + e2.G.name : '', 'топ · Сарапшылар алаңы')}${md('🗺️', 'Үздік экопаспорт', e4 && e4.v ? e4.G.icon + ' ' + e4.G.name : '', 'топ · постер')}</div>`); }
+  if (S.demo) sl.insertAdjacentHTML('beforeend', '<div class="eflag">🧪 СЫНАҚ РЕЖИМІ · 20 жалған оқушы</div>');
+};
+
+/* 6. Мұғалім панелін көрсету/жасыру + сынақ режимі (төменгі жолақта) */
+const bb = document.querySelector('#board .bottombar') || document.querySelector('.bottombar');
+if (bb) { const nx = $('#next');
+  const b1 = document.createElement('button'); b1.className = 'btn ghost'; b1.textContent = '👩‍🏫 Әдіс панелі'; b1.title = 'Әдіс, критерий, дескрипторлар (мұғалімге)';
+  b1.onclick = () => { $('#stage').classList.toggle('withside'); };
+  const b2 = document.createElement('button'); b2.className = 'btn ghost'; b2.textContent = '🧪'; b2.title = 'Сынақ режимі: 20 жалған оқушы (сабаққа дейін тексеру)';
+  b2.onclick = () => { if (S.demo) { S.students = S._bak || []; S.scores = S._bakSc || {}; S.ind = S._bakInd || {}; S.stars = S._bakSt || {}; delete S._bak; S.demo = false; S.k1b = { i: 0, who: null, ans: {}, used: [] }; }
+    else { S._bak = S.students; S._bakSc = S.scores; S._bakInd = S.ind; S._bakSt = S.stars; S.demo = true;
+      const N = ['Аянат', 'Ажар', 'Досжан', 'Кәмшат', 'Әлихан', 'Нұрай', 'Ерасыл', 'Дильназ', 'Бекарыс', 'Томирис', 'Арман', 'Жансая', 'Нұрсұлтан', 'Аружан', 'Ерғали', 'Інжу', 'Мирас', 'Сабина', 'Әсем', 'Ислам'];
+      S.students = N.map((n, i) => ({ id: 'demo' + i, name: n, level: 'ABC'[i % 3], group: GROUPS[i % 4].id })); S.stars = {}; S.ind = {}; S.scores = {};
+      Object.keys(TASKS).forEach(t => { S.scores[t] = {}; GROUPS.forEach((G, k) => { S.scores[t][G.id] = TASKS[t].d.map((d, j) => (k + j + t.length) % (d[1] + 1)); }); });
+      S.students.forEach((s, i) => { S.ind[s.id] = { t1: i % 4, t3: (i * 2) % 4 }; }); S.k1b = { i: 0, who: null, ans: {}, used: [] }; }
+    save(); renderSlide(); };
+  bb.insertBefore(b1, nx); bb.insertBefore(b2, nx); }
+if (location.hash === '#board') renderSlide();
+})();
+</script>
+
 </body>
 </html>
