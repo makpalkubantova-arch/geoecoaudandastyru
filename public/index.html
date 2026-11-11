@@ -463,14 +463,13 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
   <div class="herogrid"><div class="hero">
     <span class="chip amber" id="hChip">10 «Ә» · ГЕОГРАФИЯ · 10.3.2.3</span>
     <h1 style="margin-top:16px">Геоэкологиялық <span>аудандастыру</span></h1>
-    <p>Ашық сабақ ҚМЖ бойынша құрылған: тақтада видео мен тапсырмалар, мұғалімде бағалау панелі, оқушыда тек тапсырма, ал телефон жоқ болса — парақша.</p>
+    <p>Сабақ ҚМЖ бойынша құрылған: тақтада видео мен тапсырмалар, мұғалімде бағалау панелі, оқушыда тек тапсырма, ал телефон жоқ болса — парақша.</p>
   </div><div class="art" id="heroArt"></div></div>
   <div class="tiles">
-    <button class="card tile prime" onclick="go('board')"><div class="ic" style="background:#d1fae5">🖥️</div><b>Тақта</b><small>Сабақтың барлық кезеңі ретімен: шақырудан үй тапсырмасына дейін. Таймер мен ұпай қою осында.</small></button>
+    <button class="card tile prime" onclick="go('board')"><div class="ic" style="background:#d1fae5">🖥️</div><b>Тақта</b><small>Сабақтың барлық кезеңі ретімен: сәлемдесуден үй тапсырмасына дейін. Таймер мен ұпай қою осында.</small></button>
     <button class="card tile" onclick="go('teacher')"><div class="ic" style="background:#e0f2fe">🧑‍🏫</div><b>Мұғалім панелі</b><small>ҚМЖ, оқушылар мен деңгейлер, топқа бөлу, критерий бойынша бағалау, нәтиже, тазалау.</small></button>
     <button class="card tile" onclick="go('student')"><div class="ic" style="background:#fef3c7">📱</div><b>Оқушы беті</b><small>Тек тапсырма кезінде ашылады: топ таңдайды, тапсырманы орындайды, өзін тексереді.</small></button>
-    <button class="card tile" onclick="go('print')"><div class="ic" style="background:#ede9fe">🖨️</div><b>Парақшалар</b><small>Барлық тапсырманың қағаз нұсқасы, бағалау парағы және қонақтарға кері байланыс парағы.</small></button>
-    <button class="card tile" onclick="go('guest')"><div class="ic" style="background:#ffe4e6">🤝</div><b>Қонақтарға</b><small>Сабақтың қысқаша жоспары және кері байланыс парағы: баға, екі жұлдыз, бір тілек. WhatsApp арқылы мұғалімге жіберіледі.</small></button>
+    <button class="card tile" onclick="go('print')"><div class="ic" style="background:#ede9fe">🖨️</div><b>Парақшалар</b><small>Барлық тапсырманың қағаз нұсқасы және бағалау парағы</small></button>
   </div>
   <div class="route">
     <div class="card"><div class="num" style="background:#1C8FCB">1</div><div><b>Дүниежүзі</b><small>Чернобыльден Амазонияға дейін: планетаның апат және қауіп аймақтары</small></div></div>
@@ -491,6 +490,7 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
         <button class="tbtn" id="treset" title="Қайта бастау">↺</button>
         <button class="tbtn" id="tplus" title="+1 минут">+1</button>
         <button class="tbtn" id="tsnd" title="Дыбыс сигналы">🔔</button>
+        <button class="tbtn" id="gidBtn" title="Гид Аймақтың дауысы" onclick="gidToggle()">🔊</button>
         <div class="tbar"><i id="tbarfill"></i></div></div>
     </div>
     <div class="strip" id="strip"></div><div id="slideHost"></div>
@@ -2946,7 +2946,7 @@ function mascot(pose,view){
   ${extra}
  </svg>`;
 }
-const MASC_LINES={invite:['wave','Сәлем! Мен — Аймақ, бүгінгі экогидіңмін!'],hello:['wave','Туған жерге бір сөзбен тілек айтайық!'],groups:['point','Су, Ауа, Топырақ, Биота — командаңды тап!'],
+const MASC_LINES={invite:['wave','Сәлем! Мен — Аймақ, бүгінгі экогидіңмін!'],hello:['wave','Сәлем! Мен — Аймақ, экогидіңмін. Туған жерге бір сөзбен тілек айтайық!'],groups:['point','Су, Ауа, Топырақ, Биота — командаңды тап!'],
  warm:['think','Суреттерге мұқият қара: не өзгерді?'],goal:['point','Бүгін жердің «жарақатын» өлшеуді үйренеміз.'],world:['think','Неге 52% және 3%? Критерийге назар аудар!'],
  v1:['point','3 аймақ, 2 дерек, 1 сұрақ — жазып отыр!'],v2:['point','5 деңгейдің түсін есте сақта!'],k2:['think','Сен бүгін — халықаралық сарапшысың!'],
  k1:['think','Апатты ма, қауіпті ме? 7-кестеге сүйен.'],k3:['think','ЖИ де қателеседі. Дереккөзін тексер!'],fix:['point','Өз қаламызға шешім ұсынайық!'],
@@ -3002,7 +3002,6 @@ const CASES={
 
 /* stages */
 const STAGES=[
- {id:'invite',title:'Ашық сабаққа шақыру',min:0,kind:'Сабақ басы',method:'Шақыру',mdesc:'Қонақтар мен оқушыларға сабақтың тақырыбы, уақыты және форматы.'},
  {id:'hello',title:'Сәлемдесу',min:2,kind:'Сабақ басы · Ұйымдастыру',method:'«Табиғатқа тілек»',mdesc:'Әр оқушы туған жеріне бір сөзбен тілек айтады. Психологиялық ахуал + құндылыққа баулу.'},
  {id:'groups',title:'Топқа бөлу',min:2,kind:'Сабақ басы',method:'«Геожүйе компоненттері»',mdesc:'Кездейсоқ, бірақ деңгейі тең 4 топ: Су, Ауа, Топырақ, Биота. Әр топта жоғары, орташа және төмен деңгейлі оқушылар тең бөлінеді.'},
  {id:'warm',title:'Ой қозғау + үй тапсырмасы',min:5,kind:'Сабақ басы · Ү/т тексеру',method:'«Фото-жұмбақ» + «Ыстық орындық»',mdesc:'4 сурет: топ бір суретті таңдап, «Не өзгерді? Неге?» деп 30 секундта жауап береді. Жауапта өткен тақырыптың ұғымдары (антропогендік әсер, ластану түрлері) қолданылады.',task:'t0',bloom:'Білу, түсіну',res:'Тақта',zhi:'ЖИ спутник суреттерінен құрғаған су айдындарын, кесілген орманды және түтінді автоматты түрде табады. Бүгін біз де «адам-сарапшы» ретінде суретті талдаймыз.'},
@@ -3019,7 +3018,7 @@ const STAGES=[
  {id:'hw',title:'Үй тапсырмасы',min:1,kind:'Сабақ соңы',method:'Саралап берілген үй тапсырмасы',mdesc:'Оқушы өз деңгейіне сай біреуін таңдайды.'}];
 
 const PAR={"invite": "Пакетті ашпай күтеміз, телефон — партаның шетінде.", "hello": "Тілек айтып жатқанда телефондар партаның шетінде, экранымен төмен жатады.", "groups": "Отырған бойда рөлдерді бөліңдер: 🎤 спикер, ✍️ хатшы, 🔬 сарапшы, ⏱ уақыт сақшысы — жапсырмаларды киіңдер.", "warm": "Жауап кезінде хатшы топтың ойын жазып алады — экопаспортта керек болады.", "goal": "Сарапшы оқулықтағы 7-кестені (§19) ашып, қасына қойып отырады.", "world": "Хатшы 2 санды (¾ және ~3%) «3-2-1» парағына жазады.", "v1": "Видео кезінде: «3-2-1» парағын толтырыңдар. Суретші қорғау жоспарының 5-қадамына өз аймағының сурет нобайын бастайды.", "v2": "Видео кезінде: сарапшы 7-кестені видеомен салыстырып, жоспардың 4-қадамындағы деңгейге белгі дайындайды.", "k2": "3 мин — жоспарды толтыру, 1 мин — сурет пен жапсырма, спикер 40 с іштей жаттығады.", "k1": "Телефоны жоқтар 2-парақшаны алады. Ерте біткендер топ постерін тақтаға іледі.", "k3": "Жұпта біреуі оқиды, біреуі белгілейді. Біткен жұп экопаспорттың 1-қадамын (2 фактор) бастай береді.", "fix": "Ватман ілінген соң спикер сөз үлгісін бір рет іштей оқиды. Қорғамайтын топтар 1 сұрақ дайындайды.", "rate": "Рейтинг кезінде хатшылар топ парақтарын мұғалімге тапсырады.", "fb": "Бағдаршамды көтергенде телефоннан да белгілеңдер — нәтиже тақтаға түседі.", "hw": "Үй тапсырмасының деңгейін таңдап, күнделікке жазыңдар. Пакеттерді үстелге жинаймыз."};
-const TEA={"invite": "Қонақтарды қарсы алады, QR-ды көрсетеді, таймер мен 🔔 дыбысын тексереді.", "hello": "Сәлемдесіп, әр оқушыға «Табиғатқа тілек» айтқызады.", "groups": "Топтарды экранға шығарып, оқушыларды отырғызады, рөлдерді тексереді.", "warm": "4 суретті көрсетіп, «Не өзгерді? Неге?» деп сұрайды, ұпай қояды.", "goal": "Тақырыпты болжатады, мақсат пен критерийлерді (16 ұпай) ашады.", "world": "Картаны көрсетіп, «Неге сандар әртүрлі?» деп сұрайды.", "v1": "«3-2-1» тапсырмасын беріп, 1-видеоны қосады.", "v2": "2-видеоны қосады, соңында 4 принципті қорытады.", "k2": "Таймерді қосады, топтарды аралайды, спикерлерді тыңдап ★ ұпай қояды.", "k1": "QR-ды көрсетеді, телефоны жоқтарға 2-парақша береді, соңында жауапты ашады.", "k3": "Жұптарға уақыт береді, қате 3 тұжырымды бірге талдайды.", "fix": "2 топты қорғауға шақырады, критерий бойынша ұпай қояды.", "rate": "Қорытынды рейтингті көрсетеді, ⭐ белсенділерді атайды.", "fb": "Бағдаршам санын енгізеді, қонақтарды QR арқылы пікірге шақырады.", "hw": "Үш деңгейлі үй тапсырмасын түсіндіріп, сабақты қорытады."};
+const TEA={"invite": "Таймер мен 🔔 дыбысын тексереді.", "hello": "Сәлемдесіп, әр оқушыға «Табиғатқа тілек» айтқызады.", "groups": "Топтарды экранға шығарып, оқушыларды отырғызады, рөлдерді тексереді.", "warm": "4 суретті көрсетіп, «Не өзгерді? Неге?» деп сұрайды, ұпай қояды.", "goal": "Тақырыпты болжатады, мақсат пен критерийлерді (16 ұпай) ашады.", "world": "Картаны көрсетіп, «Неге сандар әртүрлі?» деп сұрайды.", "v1": "«3-2-1» тапсырмасын беріп, 1-видеоны қосады.", "v2": "2-видеоны қосады, соңында 4 принципті қорытады.", "k2": "Таймерді қосады, топтарды аралайды, спикерлерді тыңдап ★ ұпай қояды.", "k1": "QR-ды көрсетеді, телефоны жоқтарға 2-парақша береді, соңында жауапты ашады.", "k3": "Жұптарға уақыт береді, қате 3 тұжырымды бірге талдайды.", "fix": "2 топты қорғауға шақырады, критерий бойынша ұпай қояды.", "rate": "Қорытынды рейтингті көрсетеді, ⭐ белсенділерді атайды.", "fb": "Бағдаршам санын енгізеді, оқушыларды QR арқылы пікірге шақырады.", "hw": "Үш деңгейлі үй тапсырмасын түсіндіріп, сабақты қорытады."};
 const ORDER=['invite','hello','groups','warm','goal','world','v1','v2','k2','k1','k3','fix','rate','fb','hw'];
 STAGES.sort((a,b)=>ORDER.indexOf(a.id)-ORDER.indexOf(b.id));
 const TOTAL_MIN=STAGES.reduce((a,s)=>a+s.min,0);
@@ -3148,13 +3147,13 @@ function qrBlock_old(){const u=studentURL();const local=location.protocol==='fil
   return `<div class="qrbox"><div class="qr"><img src="${qrImg(u)}" alt="QR"></div><div style="font-size:20px;line-height:1.45"><b style="font-size:24px">📱 Телефон — тек осы тапсырмаға</b><br>QR-кодты сканерлеп, тобыңды таңда.<br><span style="color:var(--muted)">Телефон жоқ болса — парақшамен орындайсың.</span>${local?'<br><span style="color:#b45309;font-size:16px">Ескерту: сайт флешкадан ашылған. QR жұмыс істеуі үшін сайт интернетте орналасуы керек.</span>':''}</div></div>`}
 const SL={
  invite(){const s=S.settings;return `<div class="main" style="gap:14px;padding-top:4px">
-  <span class="chip amber" style="align-self:flex-start;font-size:18px">Ашық сабаққа шақырамыз</span>
+  <span class="chip amber" style="align-self:flex-start;font-size:18px">Сабаққа шақырамыз</span>
   <div class="big">Геоэкологиялық<br><span class="grad">аудандастыру</span></div>
   <div class="lead">${esc(LESSON.subject)} · ${esc(LESSON.grade)} сынып · Мұғалім: <b style="color:var(--ink)">${esc(LESSON.teacher)}</b><br>${esc(s.school)}${s.city?', '+esc(s.city):''}</div>
   <div style="display:flex;gap:16px;flex-wrap:wrap">${[['📅',s.date||'Күні: панельде енгізіңіз'],['🕘',s.time||'Уақыты'],['🚪',s.room||'Кабинет']].map(x=>`<div class="card" style="padding:16px 22px;font-size:24px;font-weight:800">${x[0]} ${esc(x[1])}</div>`).join('')}</div>
-  <div class="lead" style="font-size:24px">Формат: 2 видео · 4 топ · сарапшылар алаңы · тақтада сәйкестендіру · ЖИ-ді тексер · Абай қаласының экопаспорты</div><div style="display:flex;gap:24px;align-items:center;flex:1;min-height:0"><div>${qrBlockFor(guestURL(),'🤝 Құрметті қонақтар!','QR арқылы сабақ жоспарын көріп, соңында кері байланыс қалдырыңыз.')}</div><div class="fillart">${ILL.globe}</div></div></div>${sidePanel(STAGES.find(x=>x.id==='invite'))}`},
+  <div class="lead" style="font-size:24px">Формат: 2 видео · 4 топ · сарапшылар алаңы · тақтада сәйкестендіру · ЖИ-ді тексер · Абай қаласының экопаспорты</div><div style="display:flex;gap:24px;align-items:center;flex:1;min-height:0"><div>${qrBlockFor(guestURL(),'📱 Сабақ жоспары','QR арқылы сабақ жоспарын көріп, соңында кері байланыс қалдырыңыз.')}</div><div class="fillart">${ILL.globe}</div></div></div>${sidePanel(STAGES.find(x=>x.id==='invite'))}`},
  hello(){return `<div class="main" style="gap:22px;padding-top:10px">
-  <div class="big">Сәлеметсіздер ме,<br><span class="grad">құрметті қонақтар мен оқушылар!</span></div>
+  <div class="big">Сәлеметсіздер ме,<br><span class="grad">құрметті оқушылар!</span></div>
   <div class="lead">Бүгін біз жердің «жарақатын» өлшеуді үйренеміз.<br>Алдымен — <b style="color:var(--ink)">табиғатқа бір сөзбен тілек</b> айтайық.</div>
   <div style="display:flex;gap:12px;flex-wrap:wrap">${['Таза ауа','Мөлдір су','Жасыл орман','Тірі Арал','Құнарлы топырақ','Тыныш дала'].map((w,i)=>`<span class="chip" style="font-size:22px;padding:10px 18px">${w}</span>`).join('')}</div>
   <div class="card" style="padding:18px 22px;font-size:22px;line-height:1.5"><b>Сабақтың құндылығы:</b> ${esc(LESSON.value)}</div><div class="fillart">${ILL.landscape}</div></div>${sidePanel(STAGES.find(x=>x.id==='hello'))}`},
@@ -3213,7 +3212,7 @@ world(){return `<div class="main" style="display:flex;flex-direction:column;gap:
   <div style="display:flex;gap:16px;margin-top:12px;font-size:16px;color:var(--muted);font-weight:700"><span>${bChip(9)} 8–10 жоғары</span><span>${bChip(5)} 4–7 орта</span><span>${bChip(2)} 1–3 төмен</span><span>⭐ белсенділік: +1 балл</span></div></div></div></div>`},
  fb(){const L=lightAll();return `<div class="full" style="display:flex;flex-direction:column;gap:22px"><div class="mid">Бағдаршам: сабақты қалай түсіндім?</div>
   <div class="light grow">${[['g','#22c55e','Толық түсіндім, басқаға түсіндіре аламын'],['y','#eab308','Түсіндім, бірақ сұрағым бар'],['r','#f43f5e','Көмек керек, қайта қараймын']].map(x=>`<div class="card lamp"><div class="dot" style="background:${x[1]};color:${x[1]}"></div><div class="cnt">${L[x[0]]}</div><div style="font-size:21px;color:var(--muted)">${x[2]}</div><div class="cb"><button class="btn ghost sm" onclick="S.light.${x[0]}=Math.max(0,S.light.${x[0]}-1);save();renderSlide()">−</button><button class="btn sm" onclick="S.light.${x[0]}++;save();renderSlide()">+1</button></div></div>`).join('')}</div>
-  <div class="card" style="padding:20px 24px;font-size:24px;line-height:1.5">⭐⭐ <b>Екі жұлдыз, бір тілек:</b> әр топ көрші топқа екі жетістік пен бір ұсыныс айтады.</div><div>${qrBlockFor(guestURL(),'🤝 Қонақтардың кері байланысы','Құрметті әріптестер, QR арқылы пікіріңізді қалдырыңыз.')}</div></div>`},
+  <div class="card" style="padding:20px 24px;font-size:24px;line-height:1.5">⭐⭐ <b>Екі жұлдыз, бір тілек:</b> әр топ көрші топқа екі жетістік пен бір ұсыныс айтады.</div><div>${qrBlockFor(guestURL(),'📱 Кері байланыс','QR арқылы сабаққа пікіріңді қалдыр.')}</div></div>`},
  hw(){return `<div class="full" style="display:flex;flex-direction:column;gap:20px"><div class="mid">Үй тапсырмасы: өз деңгейіңді таңда</div>
   <div class="grow" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
   <div class="card hw" style="border-top:8px solid var(--green)"><span class="chip">C · негізгі</span><h3 style="margin-top:10px">§19 + контур карта</h3><p>§19-ды оқып, 7-кестедегі апатты және қауіпті деңгейдегі 6 аймақты контур картаға шартты белгімен түсір.</p><div class="fillart" style="margin-top:14px">${ILL.book}</div></div>
@@ -3221,6 +3220,12 @@ world(){return `<div class="main" style="display:flex;flex-direction:column;gap:
   <div class="card hw" style="border-top:8px solid var(--amber)"><span class="chip amber">A · шығармашылық</span><h3 style="margin-top:10px">ЖИ + фактчек постер</h3><p>ЖИ көмегімен Абай қаласы туралы экологиялық постер жаса. ЖИ берген 3 деректі дереккөзбен тексеріп, қатесін белгіле.</p><div class="fillart" style="margin-top:14px">${ILL.robot}</div></div></div>
   <div class="card" style="padding:16px 22px;font-size:21px">Келесі сабақ: <b>§20 Геоэкологиядағы антропогендік факторлар</b> (10.3.2.4) — бүгінгі экопаспорттағы факторларды топтастырамыз.</div></div>`}
 };
+/* Аймақ гидінің дауысы: media/gid/<кезең>.mp3 */
+const GID=new Audio();setTimeout(()=>{const b=document.getElementById('gidBtn');if(b)b.textContent=gidOn()?'🔊':'🔇'},0);GID.preload='auto';
+function gidOn(){try{return localStorage.getItem('gidVoice')!=='0'}catch(e){return true}}
+function gidSay(id){try{GID.pause();if(!gidOn()||!(MASC_LINES[id]))return;GID.src='media/gid/'+id+'.mp3';GID.currentTime=0;const p=GID.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+function gidToggle(){const on=!gidOn();try{localStorage.setItem('gidVoice',on?'1':'0')}catch(e){}if(!on)GID.pause();else gidSay(STAGES[S.stage|0].id);const b=document.getElementById('gidBtn');if(b)b.textContent=on?'🔊':'🔇'}
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.mfloat,.tav')){gidSay(STAGES[S.stage|0].id)}});
 function speak(el,text){clearInterval(window._tw);clearTimeout(window._tt);if(!el)return;const rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm){el.textContent=text;return}let i=0;el.textContent='';window._tt=setTimeout(()=>{const h=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(h)},32);window._tw=h},450)}
 function revealClaims(){CLAIMS.forEach((c,i)=>{const el=$('#cl'+i);el.classList.add(c[1]?'t':'f');el.querySelector('.ans').innerHTML=c[1]?'<span style="color:#059669">✓ Дұрыс</span>':'<span style="color:#be123c">✗ Қате</span>';if(!c[1])el.querySelector('span:nth-child(2)').innerHTML+=`<br><small style="color:#059669;font-size:18px">→ ${esc(c[2])}</small>`})}
 function renderSlide(){
@@ -3231,6 +3236,7 @@ function renderSlide(){
   if(TEA[st.id]||PAR[st.id])$('#slideHost .slide').insertAdjacentHTML('beforeend',`<div class="who"><div class="wt"><b>👩‍🏫 МҰҒАЛІМ</b><span>${esc(TEA[st.id]||'')}</span></div><div class="wp"><b>👥 ОҚУШЫЛАР</b><span>${esc(PAR[st.id]||'')}</span></div></div>`);
   requestAnimationFrame(()=>{const sd=$('#slideHost .side');if(sd&&sd.scrollHeight>sd.clientHeight+2){const il=sd.querySelector('.illu');if(il)il.remove()}if(sd&&sd.scrollHeight>sd.clientHeight+2)sd.classList.add('tight')});
   speak($('#stage .say'),(MASC_LINES[st.id]||[])[1]||'');
+  gidSay(st.id);
   const cum=STAGES.slice(0,i).reduce((a,x)=>a+x.min,0);$('#stitle').textContent=`${i+1}/${STAGES.length} · ${st.title} · жоспар: ${cum}–${cum+st.min} / ${TOTAL_MIN} мин`;
   $('#prog').innerHTML=STAGES.map((s,j)=>`<i class="${j<i?'done':''} ${j===i?'on':''}" title="${esc(s.title)}" onclick="S.stage=${j};stageChanged()"></i>`).join('');
   $('#scoreBtn').classList.toggle('hidden',!st.task&&st.id!=='rate');
@@ -3300,7 +3306,7 @@ function balancedGroups(){
 /* ================= TEACHER ================= */
 let tTab='kmj';
 function renderTeacher(){
-  const tabs=[['kmj','📋 ҚМЖ'],['students','👥 Оқушылар'],['groups','🎲 Топтар'],['score','★ Бағалау'],['result','📊 Нәтиже'],['live','📡 Тірі жауаптар'],['guests','🤝 Қонақтар'],['settings','⚙️ Баптаулар']];
+  const tabs=[['kmj','📋 ҚМЖ'],['students','👥 Оқушылар'],['groups','🎲 Топтар'],['score','★ Бағалау'],['result','📊 Нәтиже'],['live','📡 Тірі жауаптар'],['guests','💬 Кері байланыс'],['settings','⚙️ Баптаулар']];
   let body='';
   if(tTab==='kmj'){body=`<div class="card panel"><h2 style="font-size:26px">Қысқа мерзімді жоспар</h2>
    <table class="kmj" style="margin-top:14px"><tr><th style="width:190px">Пән / сынып</th><td>${esc(LESSON.subject)} · ${esc(LESSON.grade)} · Мұғалім: ${esc(LESSON.teacher)}</td></tr>
@@ -3327,14 +3333,14 @@ function renderTeacher(){
    <table class="sgrid" style="font-size:15px;width:100%"><tr><th style="text-align:left">Оқушы</th><th>Топ</th><th>Сәйкест.</th><th>ЖИ</th><th>⭐</th><th>Ұпай</th><th>Балл</th></tr>${roster().map(r=>{const v=indOf(r),g=grp(r.g),o=(S.ind||{})[r.key]||{};return `<tr><td style="text-align:left"><b>${esc(r.name)}</b> <small style="color:var(--muted)">${g?g.icon+' '+g.name:'топсыз'}${r.live?' · 📱':''}</small></td><td>${v.gp}/10</td><td><input style="width:52px" type="number" min="0" max="3" value="${o.t1!=null?o.t1:''}" placeholder="${v.t1!=null?v.t1:'—'}" onchange="setInd('${r.key}','t1',this.value);renderTeacher()"></td><td><input style="width:52px" type="number" min="0" max="3" value="${o.t3!=null?o.t3:''}" placeholder="${v.t3!=null?v.t3:'—'}" onchange="setInd('${r.key}','t3',this.value);renderTeacher()"></td><td style="white-space:nowrap"><button class="btn ghost sm" onclick="S.stars['${r.key}']=Math.min(2,(S.stars['${r.key}']||0)+1);save();renderTeacher()">+⭐</button>${v.st?' '+'⭐'.repeat(v.st):''}${v.st?` <button class="btn ghost sm" onclick="S.stars['${r.key}']=0;save();renderTeacher()">0</button>`:''}</td><td><b>${v.tot}/${MAXT}</b></td><td>${bChip(v.ball)}</td></tr>`}).join('')}</table>${roster().length?'':'<div style="color:var(--muted)">Оқушылар енгізілмеген.</div>'}</div>
    <button class="btn ghost sm" style="margin-top:12px" onclick="exportCSV()">⬇ Нәтижені CSV ретінде жүктеу</button></div></div>`}
   if(tTab==='guests'){const F=allGuests();const avg=i=>{const v=F.map(f=>f.r[i]).filter(Boolean);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'—'};
-   body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Қонақтардың бағасы (${F.length})</h2><div style="color:var(--muted);font-size:14px;margin:6px 0 12px">Осы құрылғыда толтырылған парақтар. WhatsApp арқылы келгендері телефоныңызда болады.</div>
+   body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Кері байланыс (${F.length})</h2><div style="color:var(--muted);font-size:14px;margin:6px 0 12px">Осы құрылғыда толтырылған парақтар. WhatsApp арқылы келгендері телефоныңызда болады.</div>
    ${GCRIT.map((c,i)=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)"><span>${c}</span><b style="font-size:20px">${avg(i)}</b></div>`).join('')}
-   <div style="margin-top:16px">${qrBlockFor(guestURL(),'🤝 Қонақтарға арналған QR','Сканерлеп, кері байланыс парағын толтырады.')}</div></div>
-   <div class="card panel"><h2 style="font-size:22px">Пікірлер</h2><div class="slist" style="max-height:620px">${F.slice().reverse().map(f=>`<div style="padding:12px 0;border-bottom:1px solid var(--line);line-height:1.45"><b>${esc(f.who||'Қонақ')}</b> <small style="color:var(--muted)">${esc(f.role||'')} · ${f.at}</small><br>⭐ ${esc(f.s1||'—')}<br>⭐ ${esc(f.s2||'—')}<br>💡 ${esc(f.w||'—')}</div>`).join('')||'<div style="color:var(--muted)">Әзірге пікір жоқ.</div>'}</div>
+   <div style="margin-top:16px">${qrBlockFor(guestURL(),'📱 Кері байланыс QR','Сканерлеп, кері байланыс парағын толтырады.')}</div></div>
+   <div class="card panel"><h2 style="font-size:22px">Пікірлер</h2><div class="slist" style="max-height:620px">${F.slice().reverse().map(f=>`<div style="padding:12px 0;border-bottom:1px solid var(--line);line-height:1.45"><b>${esc(f.who||'Оқушы')}</b> <small style="color:var(--muted)">${esc(f.role||'')} · ${f.at}</small><br>⭐ ${esc(f.s1||'—')}<br>⭐ ${esc(f.s2||'—')}<br>💡 ${esc(f.w||'—')}</div>`).join('')||'<div style="color:var(--muted)">Әзірге пікір жоқ.</div>'}</div>
    ${F.length?`<button class="btn ghost sm" style="margin-top:12px" onclick="if(confirmClear()){S.guestFb=[];save();renderTeacher()}">Пікірлерді тазалау</button>`:''}</div></div>`}
   if(tTab==='live')body=liveView();
-  if(tTab==='settings'){const s=S.settings;body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Ашық сабақ мәліметтері</h2>
-   ${[['school','Мектеп атауы'],['city','Қала'],['date','Күні (мысалы: 14 қараша 2026)'],['time','Уақыты (мысалы: 10:05)'],['room','Кабинет'],['wa','Мұғалімнің WhatsApp нөмірі (қонақтар пікірі үшін, мысалы 7701…)'],['db','Firebase дерекқор мекенжайы (бос болса — әдепкі)']].map(f=>`<div class="field"><label>${f[1]}</label><input value="${esc(s[f[0]])}" onchange="S.settings.${f[0]}=this.value;save()"></div>`).join('')}</div>
+  if(tTab==='settings'){const s=S.settings;body=`<div class="two"><div class="card panel"><h2 style="font-size:22px">Сабақ мәліметтері</h2>
+   ${[['school','Мектеп атауы'],['city','Қала'],['date','Күні (мысалы: 14 қараша 2026)'],['time','Уақыты (мысалы: 10:05)'],['room','Кабинет'],['wa','Мұғалімнің WhatsApp нөмірі (пікірлер үшін, мысалы 7701…)'],['db','Firebase дерекқор мекенжайы (бос болса — әдепкі)']].map(f=>`<div class="field"><label>${f[1]}</label><input value="${esc(s[f[0]])}" onchange="S.settings.${f[0]}=this.value;save()"></div>`).join('')}</div>
    <div class="card panel"><h2 style="font-size:22px">Тазалау</h2><div class="note" style="margin:10px 0">Жаңа сабақ алдында ұпайларды, бағдаршамды, жұлдыздарды және таймерді нөлдейді. Оқушылар тізімі сақталады.</div>
    <button class="btn amber" onclick="if(confirmClear()){S.scores={};S.stars={};S.light={g:0,y:0,r:0};S.stage=0;S.timer={run:false,left:null,end:0};save();renderTeacher()}">↺ Жаңа сабақ: бәрін тазалау</button>
    <button class="btn ghost" style="margin-top:10px" onclick="if(confirmClear()){dbReq('','DELETE').then(()=>{LIVE={students:{},guests:{}};renderTeacher()}).catch(()=>alertNet())}">📡 Тірі жауаптарды тазалау (Firebase)</button>
@@ -3389,7 +3395,7 @@ function renderPrint(){
    <table>${['Ықтимал деңгей (7-кесте)','2 антропогендік фактор','Дәлел: қай компонент өзгерді? Қайтымды ма?','2 нақты шешім','ЖИ-ге бір сұрақ және оны тексеру жолы','Рөлдер: спикер / хатшы / сарапшы / уақыт сақшысы'].map(x=>`<tr><th style="width:38%">${x}</th><td style="height:60px"></td></tr>`).join('')}</table>${crbox('t4')}</div>
   <div class="sheet"><h2>Бағалау парағы (мұғалімге)</h2><div class="sub">${esc(LESSON.grade)} · ${esc(LESSON.topic)}</div>
    <table><tr><th>Тапсырма / дескриптор</th>${GROUPS.map(g=>`<th>${g.name}</th>`).join('')}</tr>${Object.values(TASKS).map(t=>`<tr><td colspan="5" style="background:#eee"><b>${esc(t.name)}</b> — ${esc(t.crit)}</td></tr>`+t.d.map(d=>`<tr><td>${esc(d[0])} (${d[1]})</td>${GROUPS.map(()=>'<td></td>').join('')}</tr>`).join('')).join('')}<tr><th>Барлығы (${MAXT})</th>${GROUPS.map(()=>'<td></td>').join('')}</tr></table></div>
-  <div class="sheet"><h2>Қонақтарға: кері байланыс парағы</h2><div class="sub">${esc(LESSON.subject)} · ${esc(LESSON.grade)} · ${esc(LESSON.topic)} · Мұғалім: ${esc(LESSON.teacher)}</div>
+  <div class="sheet"><h2>Кері байланыс парағы</h2><div class="sub">${esc(LESSON.subject)} · ${esc(LESSON.grade)} · ${esc(LESSON.topic)} · Мұғалім: ${esc(LESSON.teacher)}</div>
    <table>${['Оқу мақсатына жету деңгейі','Әдіс-тәсілдердің тиімділігі','Бағалау критерийлері мен дескрипторлардың қолданылуы','Саралау және оқушылардың белсенділігі','АКТ / ЖИ қолданудың орындылығы','⭐ Бірінші жұлдыз','✨ Қызықты: есте қалған сәт','💡 Тілек'].map(x=>`<tr><th style="width:42%">${x}</th><td style="height:52px"></td></tr>`).join('')}</table></div>
   <div class="sheet"><h2>Үй тапсырмасы карточкалары</h2><div class="sub">Қиып, оқушыларға таратыңыз</div>
    ${[['C · негізгі','§19-ды оқып, 7-кестедегі апатты және қауіпті деңгейдегі 6 аймақты контур картаға шартты белгімен түсір.'],['B · талдау','Дүниежүзінен 1 апатты аймақ таңдап, экопаспортын жаса: компоненттер, деңгей, 2 дәлел.'],['A · шығармашылық','ЖИ көмегімен Абай қаласы туралы экологиялық постер жаса. ЖИ берген 3 деректі дереккөзбен тексеріп, қатесін белгіле.']].map(x=>`<div style="border:2px dashed #999;border-radius:12px;padding:14px;margin-bottom:12px"><b>${x[0]}</b><p style="margin-top:4px">${x[1]}</p></div>`).join('')}</div>`;
@@ -3398,7 +3404,7 @@ function renderPrint(){
 const GCRIT=['Оқу мақсатына жету деңгейі','Әдіс-тәсілдердің тиімділігі','Бағалау критерийлері мен дескрипторлар','Саралау және оқушылардың белсенділігі','АКТ / ЖИ қолданудың орындылығы','Уақытты басқару'];
 let GF={who:'',role:'',r:{},s1:'',s2:'',w:'',sent:false};
 function guestURL(){return location.href.split('#')[0]+'#guest'}
-function gText(){const L=[`Ашық сабаққа кері байланыс — ${LESSON.subject}, ${LESSON.grade}, ${LESSON.teacher}`,`Тақырып: ${LESSON.topic}`];if(GF.who||GF.role)L.push(`Қонақ: ${GF.who} ${GF.role?'('+GF.role+')':''}`);
+function gText(){const L=[`Сабаққа кері байланыс — ${LESSON.subject}, ${LESSON.grade}, ${LESSON.teacher}`,`Тақырып: ${LESSON.topic}`];if(GF.who||GF.role)L.push(`Аты: ${GF.who} ${GF.role?'('+GF.role+')':''}`);
   GCRIT.forEach((c,i)=>L.push(`• ${c}: ${GF.r[i]?'★'.repeat(GF.r[i])+' ('+GF.r[i]+'/5)':'—'}`));L.push(`⭐ ${GF.s1||'—'}`,`⭐ ${GF.s2||'—'}`,`💡 Тілек: ${GF.w||'—'}`);return L.join('\n')}
 function gRate(i,v){GF.r[i]=v;renderGuest(true)}
 function gSubmit(){if(!Object.keys(GF.r).length&&!GF.s1&&!GF.w){$('#gerr').textContent='Кемінде бір бағаны немесе пікірді толтырыңыз.';return}
@@ -3411,7 +3417,7 @@ function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s
    <p style="color:var(--muted);font-size:16px;line-height:1.5">Пікіріңіз мұғалімге жетуі үшін төмендегі батырманы басыңыз.</p>
    <div style="display:flex;flex-direction:column;gap:10px;margin-top:18px"><a class="btn" style="justify-content:center;text-decoration:none;background:#25D366" href="${wa}" target="_blank" rel="noopener">WhatsApp арқылы мұғалімге жіберу</a>
    <button class="btn ghost" style="justify-content:center" onclick="gCopy(this)">Мәтінді көшіру</button>
-   <button class="btn ghost" style="justify-content:center" onclick="renderGuest()">Келесі қонаққа жаңа парақ</button></div>
+   <button class="btn ghost" style="justify-content:center" onclick="renderGuest()">Келесі адамға жаңа парақ</button></div>
    ${s.wa?'':'<div class="note" style="margin-top:14px;text-align:left">Мұғалімнің WhatsApp нөмірі панельде енгізілмеген: WhatsApp ашылғанда алушыны өзіңіз таңдайсыз.</div>'}</div>`}
   else{form=`<h2 style="font-size:26px;margin:26px 0 12px">📝 Кері байланыс парағы</h2>
    <div class="card gq"><label>Аты-жөніңіз (міндетті емес)</label><input value="${esc(GF.who)}" oninput="GF.who=this.value"><label style="margin-top:12px">Лауазымыңыз</label><input value="${esc(GF.role)}" placeholder="Мысалы: әдіскер, пән мұғалімі" oninput="GF.role=this.value"></div>
@@ -3421,7 +3427,7 @@ function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s
    <div class="card gq"><label>💡 Ұсыныс: не жақсартуға болады?</label><textarea rows="2" oninput="GF.w=this.value">${esc(GF.w)}</textarea></div>
    <div id="gerr" class="bad" style="margin-bottom:8px"></div><button class="btn" style="width:100%;justify-content:center;font-size:18px;padding:16px" onclick="gSubmit()">Пікірді жіберу</button>`}
   $('#guest').innerHTML=`<div style="max-width:760px;margin:0 auto;padding:22px 16px 110px"><div style="display:flex;align-items:center;gap:8px"><div class="brand"><div class="logo">◐</div>ЭкоАймақ</div><div style="flex:1"></div><button class="btn ghost sm" onclick="go('home')">⌂ Шығу</button></div>
-  <span class="chip amber" style="margin-top:20px">Ашық сабақ ${esc(s.date||'')} ${esc(s.time||'')}</span>
+  <span class="chip amber" style="margin-top:20px">Сабақ ${esc(s.date||'')} ${esc(s.time||'')}</span>
   <h1 style="font-size:34px;margin:12px 0 6px">${esc(LESSON.topic)}</h1><p style="color:var(--muted);font-size:17px">${esc(LESSON.subject)} · ${esc(LESSON.grade)} · ${esc(LESSON.teacher)} · ${esc(s.school)}</p>
   ${GF.sent?'':`<details class="card panel" style="margin-top:16px"><summary style="font-weight:800;cursor:pointer">📋 Сабақтың қысқаша жоспары (ашу)</summary><div style="margin-top:12px;line-height:1.5"><b>Оқу мақсаты:</b> ${esc(LESSON.goalCode)}<br><br><b>Сабақ мақсаты:</b><br>${LESSON.aims.map(esc).join('<br>')}<br><br><b>Құндылық:</b> ${esc(LESSON.value)}</div>
   ${STAGES.filter(x=>x.min).map(st=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip" style="flex:none">${st.min} мин</span><div><b>${esc(st.title)}</b> — ${esc(st.method)}</div></div>`).join('')}</details>`}
@@ -3508,7 +3514,7 @@ if(!location.hash)go('home');
 /* ===== ЖАҢА АҒЫН (45 мин, 10 бөлім): тақырып пен мақсатқа сай ===== */
 (function(){
 const EA = {
-  order: ['invite','hello','groups','warm','v1','goal','k2','k1','k3','fix','rate','fb','hw'],
+  order: ['hello','groups','warm','v1','goal','k2','k1','k3','fix','rate','fb','hw'],
   min: {invite:0,hello:1,groups:1,warm:3,v1:4,goal:1,k2:8,k1:9,k3:4,fix:9,rate:2,fb:2,hw:1},
   title: {
     hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Топқа бөлу: геожүйе компоненттері', warm:'Үй тапсырмасы: фото-жұмбақ',
@@ -3529,7 +3535,7 @@ const EA = {
     k3:['«Фактчекинг: ЖИ-ді тексер»','Жұптық · парақша №3','К4 · 3 ұпай','§19, 7-кесте'],
     fix:['«Экопаспорт» + қорғау','Топтық · ватман','К5 · 4 ұпай','7-кесте'],
     rate:['«Ұпай → 10 балл» · мадақтау','Бүкіл сынып','16 ұпай → 10 балл',''],
-    fb:['«Ұтымды · Қызықты · Ұсыныс»','Жеке · оқушылар мен қонақтар','',''],
+    fb:['«Ұтымды · Қызықты · Ұсыныс»','Жеке · оқушылар','',''],
     hw:['Деңгейлік үй тапсырмасы','Жеке','','§19–20']},
   /* «Сен не істейсің?» */
   stu: {
@@ -3560,7 +3566,7 @@ const EA = {
     k3:'Жұптарға уақыт береді, соңында «Тексеру» батырмасымен 3 қатені бірге талдайды. Жеке ұпайды мұғалім панеліне енгізеді.',
     fix:'«Дайындық · 3 мин», сосын әр топтың «қорғайды · 1,5 мин» батырмасы. Критерий бойынша 0–4 ұпай қояды.',
     rate:'Рейтинг пен үздіктерді атымен көрсетеді, наклейка береді.',
-    fb:'QR-ды көрсетеді: оқушылар мен қонақтар «Ұтымды · Қызықты · Ұсыныс» жазады.',
+    fb:'QR-ды көрсетеді: оқушылар «Ұтымды · Қызықты · Ұсыныс» жазады.',
     hw:'Үш деңгейлі үй тапсырмасын түсіндіріп, сабақты қорытады.'}
 };
 window.EA = EA;
@@ -3576,7 +3582,7 @@ const MD = {
   k3:'Чат-бот жазған 7 тұжырымның 3-і қате. Жұптар парақша №3-те «Дұрыс/Қате» белгілеп, қатені оқулық дерегімен (§19, 7-кесте) түзетеді. Телефонсыз.',
   fix:'Топтар Абай қаласының экопаспортын толтырады: аймақ, ықтимал деңгей (7-кесте), 2 фактор, дәлел, 2 нақты шешім, ЖИ-ге сұрақ. 3 мин дайындық + әр топ 1,5 мин қорғау.',
   rate:'16 ұпай → 10 балл: топтық (үй тапсырмасы, сарапшылар, экопаспорт) + жеке (сәйкестендір) + жұптық (ЖИ-ді тексер). Үздіктер атымен, белсенділерге ⭐.',
-  fb:'Оқушылар мен қонақтар телефоннан үш жол жазады: ұтымды болғаны, қызықты болғаны, ұсыныс. Пікірлер тақтада бірден шығады.',
+  fb:'Оқушылар телефоннан үш жол жазады: ұтымды болғаны, қызықты болғаны, ұсыныс. Пікірлер тақтада бірден шығады.',
   goal:'Бейнеден кейін оқушылар тақырыпты болжайды; мұғалім оқу мақсатын (10.3.2.3), сабақ мақсатын (барлығы/көпшілігі/кейбірі) және 16 ұпайлық бағалауды ашады.'};
 STAGES.forEach(s => { if (MD[s.id]) s.mdesc = MD[s.id]; });
 try { MASC_LINES.fb = ['cheer', 'Не ұтымды, не қызықты болды? Жаз!']; MASC_LINES.k1 = ['point', 'Атың шықса — тақтаға шық!']; MASC_LINES.goal = ['wave', 'Бүгінгі мақсатымыз — аудандастыру!']; } catch (e) {}
@@ -3672,11 +3678,11 @@ SL.v1 = function () { return `<div class="main" style="display:flex;flex-directi
 const _k3 = SL.k3; SL.k3 = function () { return _k3().replace(qrBlock(), `<div class="card" style="padding:14px 20px;font-size:21px;font-weight:700">📄 Парақша №3 · жұппен · телефонсыз. Соңында «Тексеру» — бірге талдаймыз.</div>`); };
 /* 4. кері байланыс: Ұтымды · Қызықты · Ұсыныс */
 SL.fb = function () { const G = allGuests(), St = liveStudents().map(x => ({ n: x.name, a: x.ans || {} }));
-  const col = (title, ico, c, gk, sk) => { const items = G.filter(f => f[gk]).map(f => ({ w: f.who || 'Қонақ', t: f[gk], r: '🎩' })).concat(St.filter(x => x.a[sk]).map(x => ({ w: x.n, t: x.a[sk], r: '🎓' })));
+  const col = (title, ico, c, gk, sk) => { const items = G.filter(f => f[gk]).map(f => ({ w: f.who || 'Оқушы', t: f[gk], r: '🎩' })).concat(St.filter(x => x.a[sk]).map(x => ({ w: x.n, t: x.a[sk], r: '🎓' })));
     return `<div class="col" style="background:${c}"><h3>${ico} ${title} <small>${items.length}</small></h3>${items.slice(-6).reverse().map(x => `<div class="note"><small>${x.r} ${esc(x.w)}</small>${esc(x.t)}</div>`).join('') || '<div class="note" style="opacity:.8">Әзірге жоқ — QR арқылы жазыңыз</div>'}</div>`; };
   return `<div class="full" style="display:flex;flex-direction:column;gap:14px"><div class="mid">Кері байланыс</div>
   <div class="efb">${col('Ұтымды', '✅', '#1FA67A', 's1', 'u')}${col('Қызықты', '✨', '#E8A317', 's2', 's1')}${col('Ұсыныс', '💡', '#1C8FCB', 'w', 's2')}</div>
-  <div style="display:flex;gap:18px;align-items:center">${qrBlockFor(guestURL(), '🤝 Қонақтар мен оқушылар', 'QR арқылы: ұтымды · қызықты · ұсыныс')}<div class="card" style="padding:14px 18px;font-size:20px;flex:1">📱 Оқушылар: телефондағы «Кері байланыс» бетінде үш жолды толтырады.</div></div></div>`; };
+  <div style="display:flex;gap:18px;align-items:center">${qrBlockFor(guestURL(), '📱 Кері байланыс', 'QR арқылы: ұтымды · қызықты · ұсыныс')}<div class="card" style="padding:14px 18px;font-size:20px;flex:1">📱 Оқушылар: телефондағы «Кері байланыс» бетінде үш жолды толтырады.</div></div></div>`; };
 
 /* 5. renderSlide: көк тақырып + «Сен не істейсің?» + таймерлер + үздіктер */
 const _rs = renderSlide;
