@@ -480,6 +480,7 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
 
 <!-- BOARD -->
 <section id="board" class="hidden">
+<div class="ea-deco" aria-hidden="true"><div class="ea-ph"><i style="background-image:url(media/aral_3.jpg)"></i><i style="background-image:url(media/burabay_3.jpg)"></i><i style="background-image:url(media/temirtau_14.jpg)"></i><i style="background-image:url(media/balkhash_9.jpg)"></i><i style="background-image:url(media/semey_0.jpg)"></i><i style="background-image:url(media/caspseal_13.jpg)"></i></div><div class="ea-band"></div><svg class="eab b1" viewBox="0 0 120 40"><path d="M2 22 Q30 -2 60 22 Q90 -2 118 22 Q92 12 60 34 Q28 12 2 22Z"/></svg><svg class="eab b2" viewBox="0 0 120 40"><path d="M2 22 Q30 -2 60 22 Q90 -2 118 22 Q92 12 60 34 Q28 12 2 22Z"/></svg><svg class="eab b3" viewBox="0 0 120 40"><path d="M2 22 Q30 -2 60 22 Q90 -2 118 22 Q92 12 60 34 Q28 12 2 22Z"/></svg><svg class="eab b4" viewBox="0 0 120 40"><path d="M2 22 Q30 -2 60 22 Q90 -2 118 22 Q92 12 60 34 Q28 12 2 22Z"/></svg><svg class="eab b5" viewBox="0 0 120 40"><path d="M2 22 Q30 -2 60 22 Q90 -2 118 22 Q92 12 60 34 Q28 12 2 22Z"/></svg><svg class="eab b6" viewBox="0 0 120 40"><path d="M2 22 Q30 -2 60 22 Q90 -2 118 22 Q92 12 60 34 Q28 12 2 22Z"/></svg></div>
   <div id="stage"><div id="tover"></div>
     <div class="bgblobs"><i></i><i></i><i></i></div>
     <div class="topbar">
@@ -3726,5 +3727,52 @@ if (location.hash === '#board') renderSlide();
 })();
 </script>
 
+<style id="ea-bright">
+/* ================= ЭкоАймақ · жарқын нұсқа (өз түстері: көл-көк, арша-жасыл, алтын, саз-қызыл) ================= */
+body{--ph:#1C8FCB;--ph2:#21B5E8}
+body[data-ph="basy"]{--ph:#E8A317;--ph2:#F7C948}
+body[data-ph="ortasy"]{--ph:#1C8FCB;--ph2:#21B5E8}
+body[data-ph="sony"]{--ph:#1FA67A;--ph2:#4CD69A}
+#board{background:linear-gradient(165deg,#FFFFFF 0%,#E6F7FF 45%,#E4FAEE 100%)!important}
+/* фонда — Қазақстанның өңірлері (Арал, Бурабай, Теміртау, Балқаш, Семей, Каспий) баяу ауысады */
+.ea-deco{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ea-ph i{position:absolute;inset:-4%;background:center/cover no-repeat;opacity:0;animation:eaSlide 48s linear infinite;filter:saturate(1.45) brightness(1.1)}
+.ea-ph i:nth-child(2){animation-delay:8s}.ea-ph i:nth-child(3){animation-delay:16s}.ea-ph i:nth-child(4){animation-delay:24s}.ea-ph i:nth-child(5){animation-delay:32s}.ea-ph i:nth-child(6){animation-delay:40s}
+@keyframes eaSlide{0%{opacity:0;transform:scale(1.02)}3%{opacity:1}16.6%{opacity:1}20%{opacity:0;transform:scale(1.12) translateX(-2%)}100%{opacity:0}}
+.ea-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.66) 55%,rgba(255,255,255,.55)),linear-gradient(120deg,color-mix(in srgb,var(--ph2) 22%,transparent),transparent 70%)}
+/* сол жақтағы 4 компонент түсті жолақ (су · ауа · топырақ · биота) */
+.ea-band{position:absolute;left:0;top:0;bottom:0;width:14px;background:linear-gradient(180deg,#1C8FCB 0 25%,#8B5CF6 25% 50%,#E8A317 50% 75%,#1FA67A 75% 100%);box-shadow:3px 0 12px -4px rgba(0,0,0,.3)}
+/* құстар — фаза түсімен */
+.eab{position:absolute;width:56px;fill:var(--ph);opacity:0;animation:eaFly linear infinite;filter:drop-shadow(0 3px 4px rgba(0,40,60,.25));z-index:1}
+.eab.b1{top:91vh;animation-duration:36s;animation-delay:-4s;width:64px}.eab.b2{top:93vh;animation-duration:36s;animation-delay:-5.4s;width:40px}
+.eab.b3{top:12vh;animation-duration:44s;animation-delay:-20s;width:46px;left:60%}.eab.b4{top:10vh;animation-duration:44s;animation-delay:-21.3s;width:32px}
+.eab.b5{top:89vh;animation-duration:52s;animation-delay:-30s;fill:#E8A317}.eab.b6{top:13vh;animation-duration:58s;animation-delay:-44s;fill:#1FA67A}
+@keyframes eaFly{0%{left:-6vw;transform:translateY(0) scaleY(1);opacity:0}5%{opacity:.95}25%{transform:translateY(-10px) scaleY(.7)}50%{transform:translateY(3px) scaleY(1)}75%{transform:translateY(-8px) scaleY(.75)}95%{opacity:.95}100%{left:104vw;opacity:0}}
+#stage{background:transparent!important;z-index:1}
+/* жоғарғы жолақ — анық ақ */
+.topbar{background:rgba(255,255,255,.94)!important;box-shadow:0 12px 30px -20px rgba(14,59,53,.55)}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:5px;background:linear-gradient(90deg,#1C8FCB,#8B5CF6,#E8A317,#1FA67A,#E2475F);background-size:200% 100%;animation:eaFlow 10s linear infinite}
+@keyframes eaFlow{to{background-position:200% 0}}
+.phase{background:linear-gradient(135deg,var(--ph),var(--ph2))!important;box-shadow:0 8px 18px -10px var(--ph)}
+/* кезең тақырыбы — ақ карточка, сол жақта фаза түсі, оң жақта айналатын компас-белгі */
+.eahd{background:rgba(255,255,255,.97);border-radius:22px;top:94px!important;padding:10px 130px 8px 26px;box-shadow:0 22px 44px -30px rgba(14,59,53,.6),inset 0 0 0 2px color-mix(in srgb,var(--ph2) 25%,#fff)}
+.eahd::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;border-radius:24px 0 0 24px;background:linear-gradient(180deg,var(--ph2),var(--ph))}
+.eahd::after{content:"";position:absolute;right:22px;top:50%;width:84px;height:84px;margin-top:-42px;animation:eaSpin 50s linear infinite;filter:drop-shadow(0 6px 12px rgba(14,59,53,.3));
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Ccircle r='56' fill='%23fff' stroke='%230E3B35' stroke-width='3'/%3E%3Cpath d='M0-50A50 50 0 0 1 50 0H0Z' fill='%231C8FCB'/%3E%3Cpath d='M50 0A50 50 0 0 1 0 50V0Z' fill='%23E8A317'/%3E%3Cpath d='M0 50A50 50 0 0 1-50 0H0Z' fill='%231FA67A'/%3E%3Cpath d='M-50 0A50 50 0 0 1 0-50V0Z' fill='%238B5CF6'/%3E%3Ccircle r='22' fill='%23fff'/%3E%3Cpath d='M0-30L7 0 0 30-7 0Z' fill='%23E2475F'/%3E%3Ccircle r='5' fill='%230E3B35'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes eaSpin{to{transform:rotate(360deg)}}
+.eahd h2{color:var(--ph)!important}
+.eahd h2 span{color:#0E3B35}
+.eahd .meta span{background:color-mix(in srgb,var(--ph2) 14%,#fff)!important}
+/* «Сен не істейсің?» — фаза түсімен тұтас жарқын панель */
+.eastu{background:linear-gradient(110deg,var(--ph),var(--ph2))!important;border:0!important;color:#fff!important;box-shadow:0 16px 32px -18px var(--ph)!important}
+.eastu *{color:inherit}
+.eastu>*:first-child{color:#fff!important}
+.eastu span,.eastu .st,.eastu>div>*{}
+.stitle{background:rgba(255,255,255,.92);border-radius:14px;padding:6px 14px;box-shadow:0 8px 18px -12px rgba(14,59,53,.5)}
+@media (prefers-reduced-motion:reduce){.ea-ph i,.eab,.eahd::after{animation:none}.ea-ph i:first-child{opacity:1}}
+</style>
+<script>/* фаза белгісі бойынша бет түсі: Сабақ басы — алтын, ортасы — көл-көк, соңы — арша-жасыл */
+(function(){const f=()=>{const p=document.getElementById('phase');if(!p)return;const t=(p.textContent||'').toLowerCase();document.body.dataset.ph=t.includes('басы')?'basy':t.includes('соңы')?'sony':'ortasy';};
+const o=new MutationObserver(f);document.addEventListener('DOMContentLoaded',()=>{const p=document.getElementById('phase');if(p)o.observe(p,{childList:true,characterData:true,subtree:true});f();});})();</script>
 </body>
 </html>
