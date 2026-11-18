@@ -471,7 +471,7 @@ a.btn{text-decoration:none!important}</style>
     <button class="card tile" onclick="go('student')"><div class="ic" style="background:#fef3c7">📱</div><b>Оқушы беті</b><small>Тек тапсырма кезінде ашылады: топ таңдайды, тапсырманы орындайды, өзін тексереді.</small></button>
     <button class="card tile" onclick="go('print')"><div class="ic" style="background:#ede9fe">🖨️</div><b>Парақшалар</b><small>Барлық тапсырманың қағаз нұсқасы және бағалау парағы</small></button>
   </div>
-  <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;margin:14px 0"><b style="margin-right:6px">📥 Материалдар:</b><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf" target="_blank">🗂️ Парақшалар (PDF)</a></div>
+  <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;margin:14px 0"><b style="margin-right:6px">📥 Материалдар:</b><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx?v=2" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf?v=2" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">🗂️ Парақшалар (PDF)</a></div>
   <div class="route">
     <div class="card"><div class="num" style="background:#1C8FCB">1</div><div><b>Дүниежүзі</b><small>Чернобыльден Амазонияға дейін: планетаның апат және қауіп аймақтары</small></div></div>
     <div class="card"><div class="num" style="background:#E2475F">2</div><div><b>Қазақстан</b><small>5 деңгей, 47 провинция: Арал, Семей, Кенді Алтай, Балқаш</small></div></div>
@@ -3170,7 +3170,7 @@ const SL={
  warm(){const P=[['aral_3','Арал'],['semey_0','Семей'],['temirtau_14','Теміртау'],['burabay_3','Бурабай']];
   return `<div class="main" style="display:flex;flex-direction:column;gap:18px"><div class="mid">Фото-жұмбақ: бұл жерлерді не біріктіреді?</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1">${P.map((p,i)=>`<div class="photo" style="background-image:url(media/${p[0]}.jpg)"><span class="num">${i+1}</span><span class="lbl">${p[1]}</span></div>`).join('')}</div>
-  <div class="card" style="padding:16px 20px;font-size:21px;line-height:1.45"><b>«Ыстық орындық» сұрақтары (үй тапсырмасы):</b> Антропогендік әсер деген не? · Суреттегі қай компонент өзгерді? · Бұл өзгеріс қайтымды ма?</div></div>${sidePanel(STAGES.find(x=>x.id==='warm'))}`},
+  <div class="card" style="padding:16px 20px;font-size:21px;line-height:1.45"><b>«Ыстық орындық» сұрақтары (үй тапсырмасы):</b> Антропогендік әсер деген не? · Қай сфера өзгерді: гидросфера, атмосфера, литосфера әлде биосфера? · Бұл өзгеріс қайтымды ма?</div></div>${sidePanel(STAGES.find(x=>x.id==='warm'))}`},
  goal(){return `<div class="main" style="display:flex;flex-direction:column;gap:18px">
   <div class="mid">Тақырып: <span class="grad">Геоэкологиялық аудандастыру</span></div>
   <div class="card grow cardc" style="padding:18px 26px"><div style="font-size:17px;font-weight:700;color:var(--muted)">Оқу мақсаты</div><div style="font-size:24px;font-weight:700;margin-top:6px;line-height:1.4">${esc(LESSON.goalCode)}</div></div>
@@ -3225,7 +3225,7 @@ world(){return `<div class="main" style="display:flex;flex-direction:column;gap:
 /* Аймақ гидінің дауысы: media/gid/<кезең>.mp3 */
 const GID=new Audio();setTimeout(()=>{const b=document.getElementById('gidBtn');if(b)b.textContent=gidOn()?'🔊':'🔇'},0);GID.preload='auto';
 function gidOn(){try{return localStorage.getItem('gidVoice')!=='0'}catch(e){return true}}
-function gidSay(id){try{GID.pause();if(!gidOn()||!(MASC_LINES[id]))return;GID.src='media/gid/'+id+'.mp3';GID.currentTime=0;const p=GID.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+function gidSay(id){try{GID.pause();if(!gidOn()||!(MASC_LINES[id]))return;GID.src='media/gid/'+id+'.mp3?v=2';GID.currentTime=0;const p=GID.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
 function gidToggle(){const on=!gidOn();try{localStorage.setItem('gidVoice',on?'1':'0')}catch(e){}if(!on)GID.pause();else gidSay(STAGES[S.stage|0].id);const b=document.getElementById('gidBtn');if(b)b.textContent=on?'🔊':'🔇'}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.mfloat,.tav')){gidSay(STAGES[S.stage|0].id)}});
 function speak(el,text){clearInterval(window._tw);clearTimeout(window._tt);if(!el)return;const rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm){el.textContent=text;return}let i=0;el.textContent='';window._tt=setTimeout(()=>{const h=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(h)},32);window._tw=h},450)}
@@ -3348,7 +3348,7 @@ function renderTeacher(){
    <button class="btn ghost" style="margin-top:10px" onclick="if(confirmClear()){dbReq('','DELETE').then(()=>{LIVE={students:{},guests:{}};renderTeacher()}).catch(()=>alertNet())}">📡 Тірі жауаптарды тазалау (Firebase)</button>
    <h3 style="margin-top:22px">Телефон қалай қосылады?</h3><div style="font-size:15px;line-height:1.5;color:var(--muted);margin-top:6px">Оқушы беті QR арқылы ашылады, сайт интернетте орналасқан болса ғана. Тақтадағы ұпайды мұғалім қояды — оқушы телефоны мен тақта бір-бірімен байланыспайды (интернетсіз де жұмыс істеу үшін). Жауаптар тақтаға өзі түсуі үшін келесі кезеңде Firebase қосамыз.</div>
    <div style="margin-top:14px">${qrBlock()}</div></div></div>`}
-  $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf" target="_blank">🗂️ Парақшалар (PDF)</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
+  $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx?v=2" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf?v=2" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">🗂️ Парақшалар (PDF)</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
    <div class="tabs">${tabs.map(t=>`<button class="${tTab===t[0]?'on':''}" onclick="tTab='${t[0]}';renderTeacher()">${t[1]}</button>`).join('')}</div>${body}`;
 }
 function bumpT(t,g,k){S.scores[t]=S.scores[t]||{};const v=sc(t,g).slice();v[k]=(v[k]+1)%(TASKS[t].d[k][1]+1);S.scores[t][g]=v;save();renderTeacher()}
@@ -3382,7 +3382,7 @@ function renderStudent(){
 function head(t,sub){return `<h2>${t}</h2><div class="sub">${sub} · ${esc(LESSON.grade)} · ${esc(LESSON.topic)} · Аты-жөні / тобы: ____________________</div>`}
 function crbox(tid){const t=TASKS[tid];return `<div class="crbox"><b>Критерий:</b> ${esc(t.crit)}<br>${t.d.map(d=>'☐ '+esc(d[0])+' — '+d[1]+' ұп.').join('<br>')}</div>`}
 function renderPrint(){
-  $('#print').innerHTML=`<div class="noprint" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap"><b style="font-size:22px">🖨️ Парақшалар</b><div style="flex:1"></div><button class="btn" onclick="print()">Басып шығару / PDF</button><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf" target="_blank">PDF жүктеу</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
+  $('#print').innerHTML=`<div class="noprint" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap"><b style="font-size:22px">🖨️ Парақшалар</b><div style="flex:1"></div><button class="btn" onclick="print()">Басып шығару / PDF</button><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">PDF жүктеу</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
   <div class="sheet">${head('1-парақша: Белсенді көру 3-2-1','Видео кезінде (глобус пен карта) · жеке жұмыс · 5 мин')}
    <table><tr><th style="width:30%">3 аймақ</th><td><div class="lines"></div><div class="lines"></div><div class="lines"></div></td></tr><tr><th>2 дерек</th><td><div class="lines"></div><div class="lines"></div></td></tr><tr><th>1 сұрақ</th><td><div class="lines"></div></td></tr></table></div>
   <div class="sheet">${head('2-парақша: Видео бойынша тапсырма — 3D глобус (аймақ → деңгей)','Жеке жұмыс · 9 мин · тақтада кездейсоқ оқушы глобуспен тексереді · Блум: түсіну')}
@@ -3393,7 +3393,7 @@ function renderPrint(){
    <table><tr><th>1. Зардап шеккен компоненттер</th><td style="height:46px"></td></tr><tr><th>2. Қайтымды / қайтымсыз?</th><td style="height:46px"></td></tr><tr><th>3. Деңгей + 2 дәлел</th><td style="height:60px"></td></tr><tr><th>4. Қазақстандағы ұқсас аймақ</th><td style="height:40px"></td></tr></table>${crbox('t2')}</div>
   <div class="sheet">${head('4-парақша: ЖИ-ді тексер','Жұптық жұмыс · 4 мин · телефонсыз · Блум: бағалау')}
    <table><tr><th>Чат-бот жазған тұжырым</th><th style="width:90px">Д / Қ</th><th style="width:35%">Түзету (оқулықтан)</th></tr>${CLAIMS.map((c,i)=>`<tr><td>${i+1}. ${esc(c[0])}</td><td></td><td></td></tr>`).join('')}</table>${crbox('t3')}</div>
-  <div class="sheet">${head('5-парақша: Абай қаласының экопаспорты','Топтық жұмыс · 9 мин (3 мин дайындық + әр топ 1,5 мин қорғау) · Блум: жинақтау')}
+  <div class="sheet">${head('5-парақша: Абай қаласының экопаспорты (өз сфераң бойынша)','Топтық жұмыс · 9 мин (3 мин дайындық + әр топ 1,5 мин қорғау) · Блум: жинақтау')}<p style="font-size:14px;margin:6px 0">Сфераңды белгіле: ☐ 💧 Су — гидросфера ☐ 🌬️ Ауа — атмосфера ☐ 🪨 Топырақ — литосфера ☐ 🌿 Биота — биосфера</p>
    <table>${['Ықтимал деңгей (7-кесте)','2 антропогендік фактор','Дәлел: қай компонент өзгерді? Қайтымды ма?','2 нақты шешім','ЖИ-ге бір сұрақ және оны тексеру жолы','Рөлдер: спикер / хатшы / сарапшы / уақыт сақшысы'].map(x=>`<tr><th style="width:38%">${x}</th><td style="height:60px"></td></tr>`).join('')}</table>${crbox('t4')}</div>
   <div class="sheet"><h2>Бағалау парағы (мұғалімге)</h2><div class="sub">${esc(LESSON.grade)} · ${esc(LESSON.topic)}</div>
    <table><tr><th>Тапсырма / дескриптор</th>${GROUPS.map(g=>`<th>${g.name}</th>`).join('')}</tr>${Object.values(TASKS).map(t=>`<tr><td colspan="5" style="background:#eee"><b>${esc(t.name)}</b> — ${esc(t.crit)}</td></tr>`+t.d.map(d=>`<tr><td>${esc(d[0])} (${d[1]})</td>${GROUPS.map(()=>'<td></td>').join('')}</tr>`).join('')).join('')}<tr><th>Барлығы (${MAXT})</th>${GROUPS.map(()=>'<td></td>').join('')}</tr></table></div>
@@ -3519,14 +3519,14 @@ const EA = {
   order: ['groups','warm','v1','k1','k2','k3','fix','rate','fb','hw'],
   min: {invite:0,hello:0,groups:2,warm:3,v1:5,goal:0,k1:9,k2:8,k3:4,fix:9,rate:2,fb:2,hw:1},
   title: {
-    hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Сәлемдесу және топқа бөлу', warm:'Үй тапсырмасы: фото-жұмбақ',
+    hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Сәлемдесу: «Планетаға 4 тілек» · топқа бөлу', warm:'Үй тапсырмасы: фото-жұмбақ',
     v1:'Видео: глобус пен картада — дүниежүзінен Қазақстанға', goal:'Тақырып, мақсат және бағалау', v2:'2-видео: 5 деңгей', world:'Дүниежүзі: неге 52% және 3%?',
     k2:'Сарапшылар алаңы: дүниежүзі аймақтары', k1:'Видео бойынша тапсырма: 3D глобус', k3:'ЖИ-ді тексер', fix:'Абай қаласының экопаспорты',
-    rate:'Баға · рейтинг · үздіктер', fb:'Кері байланыс: ұтымды · қызықты · ұсыныс', hw:'Үй тапсырмасы: өз деңгейіңді таңда'},
+    rate:'Баға · рейтинг · үздіктер', fb:'Кері байланыс: «Сауыққан планета»', hw:'Үй тапсырмасы: өз деңгейіңді таңда'},
   /* әдіс · жұмыс түрі · критерий/ұпай · оқулық */
   meta: {
     hello:['«Табиғатқа тілек» — психологиялық ахуал','Бүкіл сынып','',''],
-    groups:['«Табиғатқа тілек» + «Геожүйе компоненттері»','Бүкіл сынып → 4 топ','',''],
+    groups:['«Планетаға 4 тілек» + «Геосфералар»','Бүкіл сынып → 4 топ','',''],
     warm:['«Фото-жұмбақ» + «Ыстық орындық»','Топтық','К1 · 2 ұпай','Өткен тақырыпты қайталау'],
     v1:['«Белсенді көру 3-2-1» + «Мақсатты бірге құрамыз»','Жеке · парақша №1','16 ұпай → 10 балл','10.3.2.3 · 7-кесте'],
     goal:['«Мақсатты бірге құрамыз»','Бүкіл сынып','16 ұпай → 10 балл','10.3.2.3'],
@@ -3537,12 +3537,12 @@ const EA = {
     k3:['«Фактчекинг: ЖИ-ді тексер»','Жұптық · парақша №4','К4 · 3 ұпай','7-кесте'],
     fix:['«Экопаспорт» + қорғау','Топтық · ватман · парақша №5','К5 · 4 ұпай','7-кесте'],
     rate:['«Ұпай → 10 балл» · мадақтау','Бүкіл сынып','16 ұпай → 10 балл',''],
-    fb:['«Ұтымды · Қызықты · Ұсыныс»','Жеке · оқушылар','',''],
+    fb:['«Сауыққан планета» + «Бағдаршам»','Жеке · бүкіл сынып','',''],
     hw:['Деңгейлік үй тапсырмасы','Жеке','','Оқулық']},
   /* «Сен не істейсің?» */
   stu: {
     hello:['Туған жеріңе бір сөзбен тілек айт'],
-    groups:['Туған жеріңе бір сөзбен тілек айт','Тобыңды тап: Су · Ауа · Топырақ · Биота','Рөліңді ал'],
+    groups:['Тобыңды тап: Су · Ауа · Топырақ · Биота','Өз сфераңа бір сөзбен тілек айт','Планетаны жандандыр'],
     warm:['Топпен бір суретті таңда','30 секундта: не өзгерді? неге?','Деңгейін болжа'],
     v1:['Видеоны көр','Парақшаға: 3 аймақ · 2 дерек · 1 сұрақ','Тақырып пен мақсатты болжа'],
     goal:['Тақырыпты болжа','Мақсат пен 16 ұпайды біл'],
@@ -3553,11 +3553,11 @@ const EA = {
     k3:['Жұбыңмен 7 тұжырымды оқы','Дұрыс / Қате белгіле','Қатені оқулықпен түзет'],
     fix:['3 мин: экопаспортты толтыр','Әр топ 1,5 мин қорғайды','Басқалар 1 сұрақ қояды'],
     rate:['Өз балыңды тап','Үздіктерді құттықта'],
-    fb:['Не ұтымды болды?','Не қызықты болды?','Қандай ұсыныс бар?'],
+    fb:['Тақтада атыңды бас: 🟢 · 🟡 · 🔴','Тілегің орындалуы үшін не істейсің?','Планета сауықты ма?'],
     hw:['Деңгейіңді таңда','Күнделікке жаз']},
   tea: {
     hello:'Сәлемдесіп, әр оқушыға туған жеріне бір сөзбен тілек айтқызады.',
-    groups:'Сәлемдесіп, әр оқушыға туған жеріне бір сөзбен тілек айтқызады. Сосын «Кездейсоқ, бірақ тең бөлу» батырмасын басып, топтар мен рөлдерді шығарады.',
+    groups:'Сәлемдесіп, «Кездейсоқ, бірақ тең бөлу» батырмасымен 4 топ шығарады. Тақтадағы планета «ауырып тұр»: әр топ өз сферасына (атмосфера, гидросфера, литосфера, биосфера) бір сөзбен тілек айтады — мұғалім жазады, сфера жанданады. «Тілектеріміз орындала ма — сабақ соңында көреміз».',
     warm:'4 суретті көрсетеді. Әр топ бір суретті таңдап, 30 секундта не өзгергенін және деңгейін айтады. Топқа 0–2 ұпай қояды.',
     v1:'Глобус пен картадағы видеоны (2:40) қосады: ұғым → 5 деңгей → дүниежүзінің 4 аймағы → Қазақстанның 8 аймағы → Абай қаласы. Оқушылар «3-2-1» парағын толтырады. Видеодан кейін «🎯 Мақсат және бағалау» батырмасымен тақырып, оқу мақсаты (10.3.2.3) мен 16 ұпайлық бағалауды ашады.',
     goal:'Тақырыпты оқушылар болжайды; мұғалім оқу мақсатын (10.3.2.3) және бағалауды (16 ұпай → 10 балл) ашады.',
@@ -3568,7 +3568,7 @@ const EA = {
     k3:'Жұптарға уақыт береді, соңында «Тексеру» батырмасымен 3 қатені бірге талдайды. Жеке ұпайды мұғалім панеліне енгізеді.',
     fix:'«Дайындық · 3 мин», сосын әр топтың «қорғайды · 1,5 мин» батырмасы. Критерий бойынша 0–4 ұпай қояды.',
     rate:'Рейтинг пен үздіктерді атымен көрсетеді, наклейка береді.',
-    fb:'QR-ды көрсетеді: оқушылар «Ұтымды · Қызықты · Ұсыныс» жазады.',
+    fb:'Сабақ басындағы планета мен тілектерді қайта ашады. Әр оқушы тақтада атын басып, бағдаршаммен өзін бағалайды — жасыл көбейген сайын планета сауығады. 2–3 оқушы: «Тілегіміз орындалуы үшін мен … істеймін». Қонақтар QR арқылы пікір қалдырады.',
     hw:'Үш деңгейлі үй тапсырмасын түсіндіріп, сабақты қорытады.'}
 };
 window.EA = EA;
@@ -3788,5 +3788,11 @@ a.btn{text-decoration:none!important}</style>
 <script>/* фаза белгісі бойынша бет түсі: Сабақ басы — алтын, ортасы — көл-көк, соңы — арша-жасыл */
 (function(){const f=()=>{const p=document.getElementById('phase');if(!p)return;const t=(p.textContent||'').toLowerCase();document.body.dataset.ph=t.includes('басы')?'basy':t.includes('соңы')?'sony':'ortasy';};
 const o=new MutationObserver(f);document.addEventListener('DOMContentLoaded',()=>{const p=document.getElementById('phase');if(p)o.observe(p,{childList:true,characterData:true,subtree:true});f();});})();</script>
+<script>MASC_LINES.groups=['point','Планета ауырып тұр! Әр топ өз сферасына бір сөзбен тілек айтсын.'];MASC_LINES.fb=['wave','Қараңдаршы — планетамыз сауықты ма? Атыңды басып, өзіңді бағала!'];
+(function(){const g=STAGES.find(x=>x.id==='groups'),f=STAGES.find(x=>x.id==='fb'),x=STAGES.find(x=>x.id==='fix');
+if(g){g.method='«Планетаға 4 тілек» + «Геосфералар»';g.mdesc='Психологиялық ахуал: тақтадағы «ауырған» планетаға әр топ өз сферасы атынан бір сөзбен тілек айтады — сфера жанданады. 4 топ: Су (гидросфера), Ауа (атмосфера), Топырақ (литосфера), Биота (биосфера); деңгейі тең.'}
+if(f){f.method='«Сауыққан планета» + «Бағдаршам»';f.mdesc='Сабақ басындағы планетаға орала отырып, әр оқушы 🟢🟡🔴 арқылы өзін бағалайды; жасыл көбейген сайын планета сауығады. Таңертеңгі тілек → «оны орындау үшін мен не істеймін?».'}
+if(x){x.mdesc='Әр топ Абай қаласын өз сферасы бойынша талдайды: 2 фактор, дәлел, ықтимал деңгей (7-кесте), 2 шешім, ЖИ-ге сұрақ. 4 сфераны қосып, қаланың жалпы деңгейін анықтайды.'}})();</script>
+<script src="ea2.js?v=1"></script>
 </body>
 </html>
