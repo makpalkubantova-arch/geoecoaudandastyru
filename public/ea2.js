@@ -62,7 +62,7 @@
   function redraw(id, fn) { const el = document.getElementById(id); if (el) el.innerHTML = fn(); }
   SL.groups = function () { return `<div class="full" id="grx" style="display:flex;flex-direction:column;gap:14px">${grInner()}</div>`; };
 
-  /* ---------- Мұғалімдер мен қонақтар: «Планетаға сыйлық» ---------- */
+  /* ---------- Мұғалімдер: «Планетаға сыйлық» ---------- */
   const GIFT = { tree: ['🌳', 'Ағаш', 'биосфера'], drop: ['💧', 'Мөлдір тамшы', 'гидросфера'], bird: ['🕊️', 'Таза ауа', 'атмосфера'], flower: ['🌸', 'Құнарлы жер', 'литосфера'] };
   window.GIFT = GIFT;
   const _rg = renderGuest;
@@ -78,7 +78,7 @@
   function guestGifts() { return allGuests().filter(g => g.gift && GIFT[g.gift]); }
   function orbit(list) {
     return list.slice(0, 18).map((g, i, A) => { const a = (-90 + i * 360 / Math.max(A.length, 8)) * Math.PI / 180, x = 50 + 52 * Math.cos(a), y = 50 + 52 * Math.sin(a);
-      return `<div class="gorb" style="left:${x}%;top:${y}%;animation-delay:${i * .15}s"><span>${GIFT[g.gift][0]}</span><small>${esc((g.who || 'Қонақ').split(' ')[0])}</small></div>`; }).join('');
+      return `<div class="gorb" style="left:${x}%;top:${y}%;animation-delay:${i * .15}s"><span>${GIFT[g.gift][0]}</span><small>${esc((g.who || 'Мұғалім').split(' ')[0])}</small></div>`; }).join('');
   }
 
   /* ---------- 2. Сабақ соңы: «Сауыққан планета» + бағдаршам ---------- */
@@ -97,21 +97,21 @@
     const wl = order.filter(id => W[id]).map(id => { const g = grp(id); return `<span style="background:${g.color};color:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-size:17px">${g.icon} ${esc(W[id])}</span>`; }).join(' ');
     const names = R.length ? `<div style="display:grid;grid-template-columns:repeat(${R.length > 18 ? 3 : 2},1fr);gap:6px 10px;align-content:start;overflow:auto;min-height:0">${R.map(r => { const g = grp(r.g), c = H[r.key]; return `<button onclick="healTap('${esc(r.key)}')" style="display:flex;align-items:center;gap:8px;font:inherit;font-size:19px;font-weight:700;padding:7px 10px;border-radius:12px;cursor:pointer;text-align:left;border:2px solid ${c ? LT[c][0] : '#dfe7e4'};background:${c ? LT[c][0] + '22' : '#fff'};color:#0E3B35"><span style="width:10px;height:10px;border-radius:50%;flex:none;background:${g ? g.color : '#ccc'}"></span><span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.name)}</span><span>${c ? LT[c][1] : '🍂'}</span></button>`; }).join('')}</div>`
       : `<div style="display:flex;gap:12px;flex-wrap:wrap">${Object.keys(LT).map(k => `<button class="btn" style="background:${LT[k][0]};font-size:24px" onclick="healCnt('${k}')">${LT[k][1]} +1 · ${S.healN && S.healN[k] || 0}</button>`).join('')}</div>`;
-    return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="mid" style="font-size:36px">🌍 Сабақ басындағы планета сауықты ма?</div>${wl ? `<span style="font-size:17px;color:var(--muted);font-weight:700">Таңертеңгі тілектер:</span>${wl}` : ''}</div>
+    return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="mid" style="font-size:36px">🌍 Сабақ басындағы планета сауықты ма?</div>${wl ? `<span style="font-size:17px;color:var(--muted);font-weight:700">Сабақ басындағы тілектер:</span>${wl}` : ''}</div>
       <div class="grow" style="display:grid;grid-template-columns:440px 1fr;gap:20px;min-height:0">
         <div class="card" style="padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><div class="pwrap${win ? ' win' : ''}" style="width:100%;max-width:360px;position:relative">${win ? '<div class="prain"></div>' : ''}${planet(v)}${orbit(GG)}${win ? '<i class="psp" style="left:6%;top:12%">✨</i><i class="psp" style="right:4%;top:6%;animation-delay:.4s">✨</i><i class="psp" style="right:10%;bottom:12%;animation-delay:.8s">🕊️</i><i class="psp" style="left:2%;bottom:20%;animation-delay:1.2s">🌸</i><i class="psp" style="left:44%;top:-6%;animation-delay:.6s">☀️</i>' : ''}</div>
           <div style="font-size:30px;font-weight:900;color:${hp >= 70 ? '#1FA67A' : hp >= 40 ? '#E8A317' : '#E2475F'}">${win ? '🎉 ' : ''}Планета ${hp}% сауықты</div>
-          <div style="font-size:16px;font-weight:700;color:var(--muted);text-align:center">Сабақтағы ұпай: ${Math.round(act * 100)}% · Өзін-өзі бағалау: ${Math.round(self * 100)}%${GG.length ? ` · 🎩 Мұғалімдер сыйлығы: +${Math.round(gb * 100)}%` : ''}</div>
+          <div style="font-size:16px;font-weight:700;color:var(--muted);text-align:center">Сабақтағы ұпай: ${Math.round(act * 100)}% · Өзін-өзі бағалау: ${Math.round(self * 100)}%${GG.length ? ` · 👩‍🏫 Мұғалімдер сыйлығы: +${Math.round(gb * 100)}%` : ''}</div>
           <div style="display:flex;gap:12px;font-size:20px;font-weight:800">${Object.keys(LT).map(k => `<span>${LT[k][1]} ${cnt[k]}</span>`).join('')}</div></div>
         <div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-height:0">
           <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:17px;font-weight:700;color:var(--muted)">${Object.keys(LT).map(k => `<span>${LT[k][1]} ${LT[k][2]}</span>`).join('')}<span>· атыңды бір рет бас → 🟢, тағы → 🟡, тағы → 🔴</span></div>
           ${names}
           <div style="display:flex;gap:14px;align-items:center;margin-top:auto"><div class="card" style="flex:1;padding:12px 16px;font-size:20px;background:#E9F7F1;box-shadow:none">💬 2–3 оқушы: <b>«Таңертеңгі тілегіміз орындалуы үшін мен … істеймін»</b></div>
           </div>
-          <div style="display:flex;gap:12px;align-items:stretch;min-height:0"><div style="flex:none;transform:scale(.85);transform-origin:left top;margin-bottom:-24px">${qrBlockFor(guestURL(), '🎩 Мұғалімдер', 'Планетаға сыйлық + пікір')}</div>
+          <div style="display:flex;gap:12px;align-items:stretch;min-height:0"><div style="flex:none;transform:scale(.85);transform-origin:left top;margin-bottom:-24px">${qrBlockFor(guestURL(), '👩‍🏫 Мұғалімдер', 'Планетаға сыйлық + пікір')}</div>
           <div style="flex:1;min-width:0;background:#FFF6DD;border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;overflow:hidden">
-            <div style="display:flex;gap:10px;align-items:center;font-weight:900;font-size:19px">🎩 Мұғалімдер бағы <span style="font-size:24px">${GG.slice(0, 12).map(g => GIFT[g.gift][0]).join('') || '🌱'}</span><span style="flex:1"></span>${avg ? `<span style="color:#B7791F">★ ${avg} / 5</span>` : ''}<span style="color:var(--muted);font-size:16px">${GA.length} пікір</span></div>
-            ${GA.filter(g => g.s1 || g.w).slice(-2).reverse().map(g => `<div style="font-size:16px;line-height:1.3"><b>${g.gift && GIFT[g.gift] ? GIFT[g.gift][0] : '🎩'} ${esc(g.who || 'Қонақ')}:</b> ${esc(g.s1 || g.w).slice(0, 110)}</div>`).join('') || '<div style="font-size:16px;color:var(--muted)">QR арқылы: планетаға сыйлық таңдап, сабақты бағалаңыз — сыйлығыңыз планетаның айналасында шығады.</div>'}</div></div></div></div>`;
+            <div style="display:flex;gap:10px;align-items:center;font-weight:900;font-size:19px">👩‍🏫 Мұғалімдер бағы <span style="font-size:24px">${GG.slice(0, 12).map(g => GIFT[g.gift][0]).join('') || '🌱'}</span><span style="flex:1"></span>${avg ? `<span style="color:#B7791F">★ ${avg} / 5</span>` : ''}<span style="color:var(--muted);font-size:16px">${GA.length} пікір</span></div>
+            ${GA.filter(g => g.s1 || g.w).slice(-2).reverse().map(g => `<div style="font-size:16px;line-height:1.3"><b>${g.gift && GIFT[g.gift] ? GIFT[g.gift][0] : '👩‍🏫'} ${esc(g.who || 'Мұғалім')}:</b> ${esc(g.s1 || g.w).slice(0, 110)}</div>`).join('') || '<div style="font-size:16px;color:var(--muted)">QR арқылы: планетаға сыйлық таңдап, сабақты бағалаңыз — сыйлығыңыз планетаның айналасында шығады.</div>'}</div></div></div></div>`;
   }
   window.healTap = k => { const nx = { undefined: 'g', g: 'y', y: 'r', r: undefined }; const c = nx[S.heal[k]]; if (c) S.heal[k] = c; else delete S.heal[k]; save(); redraw('fbx', fbInner); };
   window.healCnt = k => { S.healN = S.healN || {}; S.healN[k] = (S.healN[k] || 0) + 1; save(); redraw('fbx', fbInner); };
@@ -177,9 +177,25 @@
   .prain{position:absolute;left:-6%;right:-6%;top:-10%;height:62%;border-radius:50% 50% 0 0;border:14px solid transparent;border-top-color:#F87171;box-shadow:inset 0 14px 0 -0px #FBBF24,inset 0 28px 0 0 #34D399,inset 0 42px 0 0 #60A5FA;opacity:.55;clip-path:inset(0 0 40% 0);pointer-events:none}
   .gorb{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;animation:gpop .6s cubic-bezier(.2,1.6,.4,1) both;z-index:2}.gorb span{font-size:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))}.gorb small{font-size:12px;font-weight:800;background:#fff;border-radius:999px;padding:0 6px;color:#0E3B35;white-space:nowrap}
   @keyframes gpop{from{opacity:0;transform:translate(-50%,-50%) scale(.2)}}
+  .wplan svg{animation:wspin 6s ease-in-out infinite}@keyframes wspin{50%{transform:translateY(-14px) rotate(4deg)}}
   .psp{position:absolute;font-style:normal;font-size:34px;animation:psp 2s ease-in-out infinite}
   @keyframes psp{50%{transform:translateY(-12px) scale(1.2);opacity:.6}}`;
   document.head.appendChild(css);
+
+  /* ---------- 0. Алғашқы экран: «Сабағыма қош келдіңіздер!» ---------- */
+  if (!STAGES.find(x => x.id === 'welcome')) STAGES.unshift({ id: 'welcome', title: 'Сабағыма қош келдіңіздер!', min: 0, kind: 'Сабақ басы · Қарсы алу', method: 'Қарсы алу экраны', mdesc: 'Сабақ басталғанға дейін тақтада тұрады: тақырып, оқу мақсаты, сабақ мақсаты.' });
+  MASC_LINES.welcome = ['wave', 'Құрметті әріптестер, сабағымызға қош келдіңіздер!'];
+  SL.welcome = function () { const st = S.settings || {}, hv = { aua: 1, su: 1, topyraq: 1, biota: 1 };
+    return `<div class="full wlc" style="display:grid;grid-template-columns:1fr 520px;gap:34px;top:110px;bottom:130px">
+      <div style="display:flex;flex-direction:column;gap:18px;min-height:0;justify-content:center">
+        <div style="font-size:30px;font-weight:800;color:#1FA67A">Құрметті әріптестер!</div>
+        <div style="font-size:84px;font-weight:900;line-height:1;color:#0E3B35">Сабағыма<br><span class="grad">қош келдіңіздер!</span></div>
+        <div class="card" style="padding:18px 24px;border-left:10px solid #1C8FCB"><div style="font-size:18px;font-weight:800;color:var(--muted)">ТАҚЫРЫП</div><div style="font-size:40px;font-weight:900;line-height:1.1">${esc(LESSON.topic)}</div></div>
+        <div class="card" style="padding:16px 24px;border-left:10px solid #E8A317"><div style="font-size:18px;font-weight:800;color:var(--muted)">ОҚУ МАҚСАТЫ</div><div style="font-size:23px;font-weight:700;line-height:1.35">${esc(LESSON.goalCode)}</div></div>
+        <div class="card" style="padding:16px 24px;border-left:10px solid #1FA67A"><div style="font-size:18px;font-weight:800;color:var(--muted)">САБАҚ МАҚСАТЫ</div>${LESSON.aims.map(a => { const p = a.split(':'); return `<div style="font-size:20px;line-height:1.35;margin-top:4px"><b>${esc(p[0])}:</b>${esc(p.slice(1).join(':'))}</div>`; }).join('')}</div>
+        <div style="font-size:21px;font-weight:700;color:var(--muted)">${esc(LESSON.subject)} · ${esc(LESSON.grade)} · Мұғалім: ${esc(LESSON.teacher)}${st.school ? ' · ' + esc(st.school) : ''}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:0"><div class="wplan" style="width:100%;max-width:470px">${planet(hv)}</div>
+        <div style="font-size:24px;font-weight:800;text-align:center;color:#0E3B35">🌍 Жер — біздің ортақ үйіміз</div></div></div>`; };
 
   /* ---------- 6. renderSlide орамы ---------- */
   const _r = renderSlide;
