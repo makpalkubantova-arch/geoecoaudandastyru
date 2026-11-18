@@ -211,7 +211,7 @@ table.kmj th{background:#eef7f3;font-size:13px}
 .sheet td,.sheet th{border:1px solid #999;padding:8px;vertical-align:top;text-align:left}
 .lines{border-bottom:1px solid #999;height:30px}
 .crbox{margin-top:14px;font-size:13px;border:1px dashed #999;border-radius:10px;padding:10px}
-@media print{.noprint{display:none!important}body{background:#fff}#print{padding:0}.sheet{border:0;border-radius:0;margin:0}}
+@media print{.noprint{display:none!important}body{background:#fff!important}body>*:not(#print){display:none!important}#print{display:block!important;padding:0}.sheet{border:0;border-radius:0;margin:0;page-break-after:always;break-after:page;box-shadow:none}.sheet:last-child{page-break-after:auto}}
 @media (max-width:760px){.two{grid-template-columns:1fr}.srow{grid-template-columns:1fr 70px 100px 30px}}
 
 /* ===== ЭкоАймақ design layer ===== */
@@ -452,7 +452,7 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
 .tbub{overflow:visible;white-space:normal;font-size:17px;line-height:1.3;max-width:560px}
 #student .brand{font-size:18px!important}#student .brand .logo{width:36px;height:36px}
 .hm{left:auto!important;right:-40px!important;bottom:-70px!important;transform:scale(.8);transform-origin:bottom right}
-</style>
+a.btn{text-decoration:none!important}</style>
 </head>
 <body>
 <div class="bgblobs"><i></i><i></i><i></i></div>
@@ -471,6 +471,7 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
     <button class="card tile" onclick="go('student')"><div class="ic" style="background:#fef3c7">📱</div><b>Оқушы беті</b><small>Тек тапсырма кезінде ашылады: топ таңдайды, тапсырманы орындайды, өзін тексереді.</small></button>
     <button class="card tile" onclick="go('print')"><div class="ic" style="background:#ede9fe">🖨️</div><b>Парақшалар</b><small>Барлық тапсырманың қағаз нұсқасы және бағалау парағы</small></button>
   </div>
+  <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;margin:14px 0"><b style="margin-right:6px">📥 Материалдар:</b><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf" target="_blank">🗂️ Парақшалар (PDF)</a></div>
   <div class="route">
     <div class="card"><div class="num" style="background:#1C8FCB">1</div><div><b>Дүниежүзі</b><small>Чернобыльден Амазонияға дейін: планетаның апат және қауіп аймақтары</small></div></div>
     <div class="card"><div class="num" style="background:#E2475F">2</div><div><b>Қазақстан</b><small>5 деңгей, 47 провинция: Арал, Семей, Кенді Алтай, Балқаш</small></div></div>
@@ -3010,10 +3011,10 @@ const STAGES=[
  {id:'v1',title:'Жаңа сабақ: дүниежүзінен Қазақстанға',min:3,kind:'Сабақ ортасы · Жаңа тақырып',method:'«Белсенді көру 3-2-1»',mdesc:'Видео дүниежүзі картасынан басталып, Қазақстанға жақындайды. Оқушылар парақшаға: 3 аймақ, 2 дерек, 1 сұрақ жазады.',bloom:'Білу',res:'Тақта · 3-2-1 парақшасы'},
  {id:'v2',title:'Жаңа сабақ: инфографика',min:2,kind:'Сабақ ортасы · Жаңа тақырып',method:'«Белсенді көру 3-2-1» (жалғасы)',mdesc:'Екінші видеодан кейін мұғалім 4 принципті қорытады: шекара, өлшем, 5 деңгей, провинциялар.',bloom:'Білу, түсіну',res:'Тақта · 7-кесте'},
 {id:'world',title:'Дүниежүзі: бұзылу деңгейі',min:3,kind:'Сабақ ортасы · Жаңа тақырып',method:'«Картамен жұмыс» + «Неге сандар әртүрлі?»',mdesc:'Мұғалім дүниежүзі картасындағы апат және қауіп аймақтарын көрсетеді. Оқушылар екі зерттеудің сандарын салыстырып, айырмашылықтың себебін (критерийді) табады.',bloom:'Түсіну, талдау',res:'Тақта · дүниежүзі картасы',zhi:'Әлемдік карталар спутник деректері мен компьютерлік модельдер арқылы жасалады. Критерий өзгерсе, нәтиже де өзгереді: ЖИ-ден де, адамнан да «қандай критериймен?» деп сұрау керек.'},
- {id:'k1',title:'2-тексеру: Сәйкестендір (Қазақстан)',min:4,kind:'Сабақ ортасы · Түсінуді тексеру',method:'«Сәйкестендір» (жеке жұмыс)',mdesc:'8 аймақты 5 деңгейдің біріне жатқызады. Телефонда өзін бірден тексереді, телефон болмаса — парақша.',task:'t1',bloom:'Түсіну',res:'Телефон (QR) немесе 1-парақша',zhi:'Нейрожелілер спутник суреттерін «сыныптайды» — дәл осылай аймақты деңгейге жатқызады. Оқушы бүгін сол алгоритмнің «адам нұсқасын» орындайды.'},
+ {id:'k1',title:'2-тексеру: Сәйкестендір (Қазақстан)',min:4,kind:'Сабақ ортасы · Түсінуді тексеру',method:'«Сәйкестендір» (жеке жұмыс)',mdesc:'8 аймақты 5 деңгейдің біріне жатқызады. Телефонда өзін бірден тексереді, телефон болмаса — парақша.',task:'t1',bloom:'Түсіну',res:'Тақта (3D глобус) · 2-парақша',zhi:'Нейрожелілер спутник суреттерін «сыныптайды» — дәл осылай аймақты деңгейге жатқызады. Оқушы бүгін сол алгоритмнің «адам нұсқасын» орындайды.'},
  {id:'k2',title:'1-тексеру: Сарапшылар алаңы (дүниежүзі)',min:7,kind:'Сабақ ортасы · Түсінуді тексеру',method:'«Кейс-стади: Сарапшылар алаңы» (топтық)',mdesc:'Әр топқа дүниежүзінен бір аймақ. Топ — халықаралық сарапшылар: компоненттер, қайтымдылық, деңгей және Қазақстандағы ұқсас аймақ. 1 спикер 40 секундта қорғайды.',task:'t2',bloom:'Қолдану, талдау',res:'Кейс-карта (парақша) · телефон міндетті емес',zhi:'Ормандардың жойылуын спутник + ЖИ жүйелері күн сайын бақылайды. Сарапшы ЖИ берген дабылды нақты дерекпен тексеруі тиіс.'},
- {id:'k3',title:'3-тексеру: ЖИ-ді тексер',min:4,kind:'Сабақ ортасы · Түсінуді тексеру',method:'«Фактчекинг: ЖИ-ді тексер» (жұптық)',mdesc:'Чат-бот жазған 7 тұжырым. Жұптар «Дұрыс / Қате» деп белгілеп, қатені оқулықтан түзетеді.',task:'t3',bloom:'Бағалау',res:'Тақта · телефон немесе 3-парақша',zhi:'Тапсырманың өзі ЖИ-мен байланысты: ЖИ сенімді түрде қате айта алады. Ақпаратты бастапқы дереккөзбен тексеру — цифрлық сауаттылық.'},
- {id:'fix',title:'Бекіту: Абай қаласының экопаспорты',min:6,kind:'Сабақ соңы · Бекіту',method:'«Экопаспорт» (топтық постер)',mdesc:'Топтар өз қаласының ықтимал деңгейін анықтап, 2 фактор, дәлел және 2 шешім жазады. Рөлдер: спикер, хатшы, сарапшы, уақыт сақшысы.',task:'t4',bloom:'Жинақтау, жасау',res:'Ватман/парақша · 4-парақша',zhi:'Топ ЖИ-ге қоятын бір сұрақ құрастырады және жауабын қалай тексеретінін жазады.'},
+ {id:'k3',title:'3-тексеру: ЖИ-ді тексер',min:4,kind:'Сабақ ортасы · Түсінуді тексеру',method:'«Фактчекинг: ЖИ-ді тексер» (жұптық)',mdesc:'Чат-бот жазған 7 тұжырым. Жұптар «Дұрыс / Қате» деп белгілеп, қатені оқулықтан түзетеді.',task:'t3',bloom:'Бағалау',res:'Тақта · 4-парақша',zhi:'Тапсырманың өзі ЖИ-мен байланысты: ЖИ сенімді түрде қате айта алады. Ақпаратты бастапқы дереккөзбен тексеру — цифрлық сауаттылық.'},
+ {id:'fix',title:'Бекіту: Абай қаласының экопаспорты',min:6,kind:'Сабақ соңы · Бекіту',method:'«Экопаспорт» (топтық постер)',mdesc:'Топтар өз қаласының ықтимал деңгейін анықтап, 2 фактор, дәлел және 2 шешім жазады. Рөлдер: спикер, хатшы, сарапшы, уақыт сақшысы.',task:'t4',bloom:'Жинақтау, жасау',res:'Ватман · 5-парақша',zhi:'Топ ЖИ-ге қоятын бір сұрақ құрастырады және жауабын қалай тексеретінін жазады.'},
  {id:'rate',title:'Рейтинг',min:1,kind:'Сабақ соңы',method:'«Ұпай тақтасы»',mdesc:'Критерийлер бойынша жиналған топ ұпайлары. Ұпай — баға емес, формативті кері байланыс.'},
  {id:'fb',title:'Кері байланыс',min:3,kind:'Сабақ соңы · Рефлексия',method:'«Бағдаршам» + «Екі жұлдыз, бір тілек»',mdesc:'Әр оқушы түсті карточка көтереді. Мұғалім санын енгізеді. Топтар бір-біріне 2 жұлдыз, 1 тілек айтады.'},
  {id:'hw',title:'Үй тапсырмасы',min:1,kind:'Сабақ соңы',method:'Саралап берілген үй тапсырмасы',mdesc:'Оқушы өз деңгейіне сай біреуін таңдайды.'}];
@@ -3347,7 +3348,7 @@ function renderTeacher(){
    <button class="btn ghost" style="margin-top:10px" onclick="if(confirmClear()){dbReq('','DELETE').then(()=>{LIVE={students:{},guests:{}};renderTeacher()}).catch(()=>alertNet())}">📡 Тірі жауаптарды тазалау (Firebase)</button>
    <h3 style="margin-top:22px">Телефон қалай қосылады?</h3><div style="font-size:15px;line-height:1.5;color:var(--muted);margin-top:6px">Оқушы беті QR арқылы ашылады, сайт интернетте орналасқан болса ғана. Тақтадағы ұпайды мұғалім қояды — оқушы телефоны мен тақта бір-бірімен байланыспайды (интернетсіз де жұмыс істеу үшін). Жауаптар тақтаға өзі түсуі үшін келесі кезеңде Firebase қосамыз.</div>
    <div style="margin-top:14px">${qrBlock()}</div></div></div>`}
-  $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><button class="btn ghost" onclick="go('home')">⌂</button></div>
+  $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf" target="_blank">🗂️ Парақшалар (PDF)</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
    <div class="tabs">${tabs.map(t=>`<button class="${tTab===t[0]?'on':''}" onclick="tTab='${t[0]}';renderTeacher()">${t[1]}</button>`).join('')}</div>${body}`;
 }
 function bumpT(t,g,k){S.scores[t]=S.scores[t]||{};const v=sc(t,g).slice();v[k]=(v[k]+1)%(TASKS[t].d[k][1]+1);S.scores[t][g]=v;save();renderTeacher()}
@@ -3381,18 +3382,18 @@ function renderStudent(){
 function head(t,sub){return `<h2>${t}</h2><div class="sub">${sub} · ${esc(LESSON.grade)} · ${esc(LESSON.topic)} · Аты-жөні / тобы: ____________________</div>`}
 function crbox(tid){const t=TASKS[tid];return `<div class="crbox"><b>Критерий:</b> ${esc(t.crit)}<br>${t.d.map(d=>'☐ '+esc(d[0])+' — '+d[1]+' ұп.').join('<br>')}</div>`}
 function renderPrint(){
-  $('#print').innerHTML=`<div class="noprint" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap"><b style="font-size:22px">🖨️ Парақшалар</b><div style="flex:1"></div><button class="btn" onclick="print()">Басып шығару / PDF</button><button class="btn ghost" onclick="go('home')">⌂</button></div>
-  <div class="sheet">${head('Белсенді көру: 3-2-1','Жаңа сабақ, видео кезінде')}
+  $('#print').innerHTML=`<div class="noprint" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap"><b style="font-size:22px">🖨️ Парақшалар</b><div style="flex:1"></div><button class="btn" onclick="print()">Басып шығару / PDF</button><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf" target="_blank">PDF жүктеу</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
+  <div class="sheet">${head('1-парақша: Белсенді көру 3-2-1','Видео кезінде (глобус пен карта) · жеке жұмыс · 5 мин')}
    <table><tr><th style="width:30%">3 аймақ</th><td><div class="lines"></div><div class="lines"></div><div class="lines"></div></td></tr><tr><th>2 дерек</th><td><div class="lines"></div><div class="lines"></div></td></tr><tr><th>1 сұрақ</th><td><div class="lines"></div></td></tr></table></div>
-  <div class="sheet">${head('1-парақша: Сарапшылар алаңы (дүниежүзі) — кейс-карталар','Топтық жұмыс · 8 мин (4 мин дайындық + спикер 1 мин) · Блум: қолдану, талдау')}
-   ${GROUPS.map(g=>`<div style="border:2px solid ${g.color};border-radius:12px;padding:12px;margin-bottom:10px"><b>${g.icon} ${g.name} тобы — ${esc(CASES[g.id].t)}</b><p style="font-size:13.5px;margin-top:4px">${esc(CASES[g.id].p)}</p></div>`).join('')}
-   <table><tr><th>1. Зардап шеккен компоненттер</th><td style="height:46px"></td></tr><tr><th>2. Қайтымды / қайтымсыз?</th><td style="height:46px"></td></tr><tr><th>3. Деңгей + 2 дәлел</th><td style="height:60px"></td></tr><tr><th>4. Қазақстандағы ұқсас аймақ</th><td style="height:40px"></td></tr></table>${crbox('t2')}</div>
-  <div class="sheet">${head('2-парақша: Сәйкестендір (Қазақстан)','Жеке жұмыс · 6 мин · тақтада кездейсоқ оқушы тексереді · Блум: түсіну')}
+  <div class="sheet">${head('2-парақша: Видео бойынша тапсырма — 3D глобус (аймақ → деңгей)','Жеке жұмыс · 9 мин · тақтада кездейсоқ оқушы глобуспен тексереді · Блум: түсіну')}
    <table><tr><th>Аймақ</th><th style="width:150px">Деңгей (1–5)</th></tr>${MATCH.map((m,i)=>`<tr><td>${i+1}. ${esc(m[0])}</td><td></td></tr>`).join('')}</table>
    <p style="margin-top:10px;font-size:13px">1 — Апатты (81–100%) · 2 — Қауіпті (61–80%) · 3 — Шиеленіскен (41–60%) · 4 — Қанағаттанарлық (21–40%) · 5 — Қолайлы (0–20%)</p>${crbox('t1')}</div>
-  <div class="sheet">${head('3-парақша: ЖИ-ді тексер','Жұптық жұмыс · 4 мин · телефонсыз · Блум: бағалау')}
+  <div class="sheet">${head('3-парақша: Сарапшылар алаңы (дүниежүзі) — кейс-карталар','Топтық жұмыс · 8 мин (4 мин дайындық + спикер 1 мин) · Блум: қолдану, талдау')}
+   ${GROUPS.map(g=>`<div style="border:2px solid ${g.color};border-radius:12px;padding:12px;margin-bottom:10px"><b>${g.icon} ${g.name} тобы — ${esc(CASES[g.id].t)}</b><p style="font-size:13.5px;margin-top:4px">${esc(CASES[g.id].p)}</p></div>`).join('')}
+   <table><tr><th>1. Зардап шеккен компоненттер</th><td style="height:46px"></td></tr><tr><th>2. Қайтымды / қайтымсыз?</th><td style="height:46px"></td></tr><tr><th>3. Деңгей + 2 дәлел</th><td style="height:60px"></td></tr><tr><th>4. Қазақстандағы ұқсас аймақ</th><td style="height:40px"></td></tr></table>${crbox('t2')}</div>
+  <div class="sheet">${head('4-парақша: ЖИ-ді тексер','Жұптық жұмыс · 4 мин · телефонсыз · Блум: бағалау')}
    <table><tr><th>Чат-бот жазған тұжырым</th><th style="width:90px">Д / Қ</th><th style="width:35%">Түзету (оқулықтан)</th></tr>${CLAIMS.map((c,i)=>`<tr><td>${i+1}. ${esc(c[0])}</td><td></td><td></td></tr>`).join('')}</table>${crbox('t3')}</div>
-  <div class="sheet">${head('4-парақша: Абай қаласының экопаспорты','Топтық жұмыс · 9 мин (3 мин дайындық + әр топ 1,5 мин қорғау) · Блум: жинақтау')}
+  <div class="sheet">${head('5-парақша: Абай қаласының экопаспорты','Топтық жұмыс · 9 мин (3 мин дайындық + әр топ 1,5 мин қорғау) · Блум: жинақтау')}
    <table>${['Ықтимал деңгей (7-кесте)','2 антропогендік фактор','Дәлел: қай компонент өзгерді? Қайтымды ма?','2 нақты шешім','ЖИ-ге бір сұрақ және оны тексеру жолы','Рөлдер: спикер / хатшы / сарапшы / уақыт сақшысы'].map(x=>`<tr><th style="width:38%">${x}</th><td style="height:60px"></td></tr>`).join('')}</table>${crbox('t4')}</div>
   <div class="sheet"><h2>Бағалау парағы (мұғалімге)</h2><div class="sub">${esc(LESSON.grade)} · ${esc(LESSON.topic)}</div>
    <table><tr><th>Тапсырма / дескриптор</th>${GROUPS.map(g=>`<th>${g.name}</th>`).join('')}</tr>${Object.values(TASKS).map(t=>`<tr><td colspan="5" style="background:#eee"><b>${esc(t.name)}</b> — ${esc(t.crit)}</td></tr>`+t.d.map(d=>`<tr><td>${esc(d[0])} (${d[1]})</td>${GROUPS.map(()=>'<td></td>').join('')}</tr>`).join('')).join('')}<tr><th>Барлығы (${MAXT})</th>${GROUPS.map(()=>'<td></td>').join('')}</tr></table></div>
@@ -3510,7 +3511,7 @@ if(!location.hash)go('home');
 .efb .note{background:#fff;border-radius:12px;padding:8px 12px;font-size:18px;line-height:1.35}
 .efb .note small{display:block;color:#5b6b80;font-size:13px;font-weight:700}
 .eflag{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:60;background:#7c3aed;color:#fff;font-weight:800;font-size:16px;padding:5px 14px;border-radius:999px}
-</style>
+a.btn{text-decoration:none!important}</style>
 <script id="ea-pro-js">
 /* ===== ЖАҢА АҒЫН (45 мин, 10 бөлім): тақырып пен мақсатқа сай ===== */
 (function(){
@@ -3531,10 +3532,10 @@ const EA = {
     goal:['«Мақсатты бірге құрамыз»','Бүкіл сынып','16 ұпай → 10 балл','10.3.2.3'],
     v2:['«Белсенді көру» (жалғасы)','Жеке · парақша','','7-кесте'],
     world:['«Картамен жұмыс» + «Неге сандар әртүрлі?»','Бүкіл сынып','','Оқулық'],
-    k2:['«Кейс-стади: Сарапшылар алаңы» + спикер','Топтық','К2 · 4 ұпай','7-кесте'],
+    k2:['«Кейс-стади: Сарапшылар алаңы» + спикер','Топтық · парақша №3','К2 · 4 ұпай','7-кесте'],
     k1:['«Глобус-эстафета» · кездейсоқ оқушы тақтада','Жеке · тақта + парақша №2','К3 · 3 ұпай','видео + 7-кесте'],
-    k3:['«Фактчекинг: ЖИ-ді тексер»','Жұптық · парақша №3','К4 · 3 ұпай','7-кесте'],
-    fix:['«Экопаспорт» + қорғау','Топтық · ватман','К5 · 4 ұпай','7-кесте'],
+    k3:['«Фактчекинг: ЖИ-ді тексер»','Жұптық · парақша №4','К4 · 3 ұпай','7-кесте'],
+    fix:['«Экопаспорт» + қорғау','Топтық · ватман · парақша №5','К5 · 4 ұпай','7-кесте'],
     rate:['«Ұпай → 10 балл» · мадақтау','Бүкіл сынып','16 ұпай → 10 балл',''],
     fb:['«Ұтымды · Қызықты · Ұсыныс»','Жеке · оқушылар','',''],
     hw:['Деңгейлік үй тапсырмасы','Жеке','','Оқулық']},
@@ -3580,7 +3581,7 @@ const MD = {
   k2:'Әр топ дүниежүзінің бір апат аймағын (кейс) талдайды: 4 мин дайындық, сосын спикер 1 минутта сарапшы ретінде сөйлейді — компоненттер, қайтымдылық, деңгей (7-кесте), Қазақстандағы ұқсас аймақ.',
   k1:'3D глобус: алдымен ұғым мен дүниежүзі (Нигер атырауы, Норильск, Чернобыль, Амазония), сосын Қазақстан (Арал, Семей, Балқаш, Теміртау, Астана). Платформа оқушыны кездейсоқ таңдайды, ол тақтада жауапты басады. Барлық сұрақтың жауабы видеода бар.',
   v1:'Бір видео (2:40) глобус үстінде: ұғым, 5 деңгей (7-кесте), 52% және 3% (Hannah 1994; Plumptre 2021), 4 дүниежүзілік аймақ (UNEP, WWF), Қазақстанның 8 аймағы, Абай қаласы. Соңында дереккөздер.',
-  k3:'Чат-бот жазған 7 тұжырымның 3-і қате. Жұптар парақша №3-те «Дұрыс/Қате» белгілеп, қатені оқулық дерегімен (7-кесте) түзетеді. Телефонсыз.',
+  k3:'Чат-бот жазған 7 тұжырымның 3-і қате. Жұптар парақша №4-те «Дұрыс/Қате» белгілеп, қатені оқулық дерегімен (7-кесте) түзетеді. Телефонсыз.',
   fix:'Топтар Абай қаласының экопаспортын толтырады: аймақ, ықтимал деңгей (7-кесте), 2 фактор, дәлел, 2 нақты шешім, ЖИ-ге сұрақ. 3 мин дайындық + әр топ 1,5 мин қорғау.',
   rate:'16 ұпай → 10 балл: топтық (үй тапсырмасы, сарапшылар, экопаспорт) + жеке (сәйкестендір) + жұптық (ЖИ-ді тексер). Үздіктер атымен, белсенділерге ⭐.',
   fb:'Оқушылар телефоннан үш жол жазады: ұтымды болғаны, қызықты болғаны, ұсыныс. Пікірлер тақтада бірден шығады.',
@@ -3689,7 +3690,7 @@ SL.v1 = function () { return `<div class="main" style="display:flex;flex-directi
 
 
 /* 3. ЖИ-ді тексер: телефонсыз, парақшамен */
-const _k3 = SL.k3; SL.k3 = function () { return _k3().replace(qrBlock(), `<div class="card" style="padding:14px 20px;font-size:21px;font-weight:700">📄 Парақша №3 · жұппен · телефонсыз. Соңында «Тексеру» — бірге талдаймыз.</div>`); };
+const _k3 = SL.k3; SL.k3 = function () { return _k3().replace(qrBlock(), `<div class="card" style="padding:14px 20px;font-size:21px;font-weight:700">📄 Парақша №4 · жұппен · телефонсыз. Соңында «Тексеру» — бірге талдаймыз.</div>`); };
 /* 4. кері байланыс: Ұтымды · Қызықты · Ұсыныс */
 SL.fb = function () { const G = allGuests(), St = liveStudents().map(x => ({ n: x.name, a: x.ans || {} }));
   const col = (title, ico, c, gk, sk) => { const items = G.filter(f => f[gk]).map(f => ({ w: f.who || 'Оқушы', t: f[gk], r: '🎩' })).concat(St.filter(x => x.a[sk]).map(x => ({ w: x.n, t: x.a[sk], r: '🎓' })));
@@ -3783,7 +3784,7 @@ body[data-ph="sony"]{--ph:#1FA67A;--ph2:#4CD69A}
 .eastu span,.eastu .st,.eastu>div>*{}
 .stitle{background:rgba(255,255,255,.92);border-radius:14px;padding:6px 14px;box-shadow:0 8px 18px -12px rgba(14,59,53,.5)}
 @media (prefers-reduced-motion:reduce){.ea-ph i,.eab,.eahd::after{animation:none}.ea-ph i:first-child{opacity:1}}
-</style>
+a.btn{text-decoration:none!important}</style>
 <script>/* фаза белгісі бойынша бет түсі: Сабақ басы — алтын, ортасы — көл-көк, соңы — арша-жасыл */
 (function(){const f=()=>{const p=document.getElementById('phase');if(!p)return;const t=(p.textContent||'').toLowerCase();document.body.dataset.ph=t.includes('басы')?'basy':t.includes('соңы')?'sony':'ortasy';};
 const o=new MutationObserver(f);document.addEventListener('DOMContentLoaded',()=>{const p=document.getElementById('phase');if(p)o.observe(p,{childList:true,characterData:true,subtree:true});f();});})();</script>
