@@ -451,7 +451,7 @@ h1,h2,h3,.big,.mid,.brand,.method,.timer .t,.lamp .cnt,.rrow .pts,.levels5 small
 .tbub::before{content:"";position:absolute;left:-10px;top:50%;margin-top:-9px;border:9px solid transparent;border-right-color:#fff;border-left:0}
 .tbub{overflow:visible;white-space:normal;font-size:17px;line-height:1.3;max-width:560px}
 #student .brand{font-size:18px!important}#student .brand .logo{width:36px;height:36px}
-.hm{left:-150px!important;bottom:-40px!important}
+.hm{left:auto!important;right:-40px!important;bottom:-70px!important;transform:scale(.8);transform-origin:bottom right}
 </style>
 </head>
 <body>
@@ -3515,19 +3515,19 @@ if(!location.hash)go('home');
 /* ===== ЖАҢА АҒЫН (45 мин, 10 бөлім): тақырып пен мақсатқа сай ===== */
 (function(){
 const EA = {
-  order: ['hello','groups','warm','v1','goal','k2','k1','k3','fix','rate','fb','hw'],
-  min: {invite:0,hello:1,groups:1,warm:3,v1:4,goal:1,k2:8,k1:9,k3:4,fix:9,rate:2,fb:2,hw:1},
+  order: ['groups','warm','v1','k1','k2','k3','fix','rate','fb','hw'],
+  min: {invite:0,hello:0,groups:2,warm:3,v1:5,goal:0,k1:9,k2:8,k3:4,fix:9,rate:2,fb:2,hw:1},
   title: {
-    hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Топқа бөлу: геожүйе компоненттері', warm:'Үй тапсырмасы: фото-жұмбақ',
-    v1:'Видео: глобуста — дүниежүзінен Қазақстанға', goal:'Тақырып, мақсат және бағалау', v2:'2-видео: 5 деңгей', world:'Дүниежүзі: неге 52% және 3%?',
-    k2:'Сарапшылар алаңы: дүниежүзі аймақтары', k1:'3D глобус: аймақты деңгейге жатқыз', k3:'ЖИ-ді тексер', fix:'Абай қаласының экопаспорты',
+    hello:'Сәлемдесу: «Табиғатқа тілек»', groups:'Сәлемдесу және топқа бөлу', warm:'Үй тапсырмасы: фото-жұмбақ',
+    v1:'Видео: глобус пен картада — дүниежүзінен Қазақстанға', goal:'Тақырып, мақсат және бағалау', v2:'2-видео: 5 деңгей', world:'Дүниежүзі: неге 52% және 3%?',
+    k2:'Сарапшылар алаңы: дүниежүзі аймақтары', k1:'Видео бойынша тапсырма: 3D глобус', k3:'ЖИ-ді тексер', fix:'Абай қаласының экопаспорты',
     rate:'Баға · рейтинг · үздіктер', fb:'Кері байланыс: ұтымды · қызықты · ұсыныс', hw:'Үй тапсырмасы: өз деңгейіңді таңда'},
   /* әдіс · жұмыс түрі · критерий/ұпай · оқулық */
   meta: {
     hello:['«Табиғатқа тілек» — психологиялық ахуал','Бүкіл сынып','',''],
-    groups:['«Геожүйе компоненттері» — деңгейі тең 4 топ','Топтық','',''],
+    groups:['«Табиғатқа тілек» + «Геожүйе компоненттері»','Бүкіл сынып → 4 топ','',''],
     warm:['«Фото-жұмбақ» + «Ыстық орындық»','Топтық','К1 · 2 ұпай','Өткен тақырыпты қайталау'],
-    v1:['«Белсенді көру 3-2-1»','Жеке · парақша №1','','7-кесте'],
+    v1:['«Белсенді көру 3-2-1» + «Мақсатты бірге құрамыз»','Жеке · парақша №1','16 ұпай → 10 балл','10.3.2.3 · 7-кесте'],
     goal:['«Мақсатты бірге құрамыз»','Бүкіл сынып','16 ұпай → 10 балл','10.3.2.3'],
     v2:['«Белсенді көру» (жалғасы)','Жеке · парақша','','7-кесте'],
     world:['«Картамен жұмыс» + «Неге сандар әртүрлі?»','Бүкіл сынып','','Оқулық'],
@@ -3541,9 +3541,9 @@ const EA = {
   /* «Сен не істейсің?» */
   stu: {
     hello:['Туған жеріңе бір сөзбен тілек айт'],
-    groups:['Тобыңды тап: Су · Ауа · Топырақ · Биота','Рөліңді ал: спикер, хатшы, сарапшы'],
+    groups:['Туған жеріңе бір сөзбен тілек айт','Тобыңды тап: Су · Ауа · Топырақ · Биота','Рөліңді ал'],
     warm:['Топпен бір суретті таңда','30 секундта: не өзгерді? неге?','Деңгейін болжа'],
-    v1:['Видеоны көр','Парақшаға: 3 аймақ · 2 дерек · 1 сұрақ','Деңгейлердің түсін есте сақта'],
+    v1:['Видеоны көр','Парақшаға: 3 аймақ · 2 дерек · 1 сұрақ','Тақырып пен мақсатты болжа'],
     goal:['Тақырыпты болжа','Мақсат пен 16 ұпайды біл'],
     v2:['5 деңгейді пайызымен жаз','Түстерін есте сақта'],
     world:['Картадан апат аймақтарын тап','Неге 52% және 3%? — себебін айт'],
@@ -3556,9 +3556,9 @@ const EA = {
     hw:['Деңгейіңді таңда','Күнделікке жаз']},
   tea: {
     hello:'Сәлемдесіп, әр оқушыға туған жеріне бір сөзбен тілек айтқызады.',
-    groups:'«Кездейсоқ, бірақ тең бөлу» батырмасын басып, топтар мен рөлдерді шығарады.',
+    groups:'Сәлемдесіп, әр оқушыға туған жеріне бір сөзбен тілек айтқызады. Сосын «Кездейсоқ, бірақ тең бөлу» батырмасын басып, топтар мен рөлдерді шығарады.',
     warm:'4 суретті көрсетеді. Әр топ бір суретті таңдап, 30 секундта не өзгергенін және деңгейін айтады. Топқа 0–2 ұпай қояды.',
-    v1:'Глобустағы видеоны (2:40) қосады: ұғым → 5 деңгей → дүниежүзінің 4 аймағы → Қазақстанның 8 аймағы → Абай қаласы. Оқушылар «3-2-1» парағын толтырады.',
+    v1:'Глобус пен картадағы видеоны (2:40) қосады: ұғым → 5 деңгей → дүниежүзінің 4 аймағы → Қазақстанның 8 аймағы → Абай қаласы. Оқушылар «3-2-1» парағын толтырады. Видеодан кейін «🎯 Мақсат және бағалау» батырмасымен тақырып, оқу мақсаты (10.3.2.3) мен 16 ұпайлық бағалауды ашады.',
     goal:'Тақырыпты оқушылар болжайды; мұғалім оқу мақсатын (10.3.2.3) және бағалауды (16 ұпай → 10 балл) ашады.',
     v2:'2-видеоны қосады, 5 деңгейді пайызымен қорытады.',
     world:'Картаны көрсетіп, «Неге 52% және 3%?» деп сұрайды: аудандастыру нәтижесі критерийге байланысты.',
@@ -3674,6 +3674,19 @@ SL.k1 = function () { const K = S.k1b, i = K.i, q = GQ[i], a = K.ans[i], who = a
 SL.v1 = function () { return `<div class="main" style="display:flex;flex-direction:column;gap:14px"><div class="mid">Видео</div>
   <video class="vid" src="media/video3.mp4" controls preload="metadata" poster="media/video3.jpg"></video>
   <div class="card" style="padding:14px 20px;font-size:22px"><b>3-2-1:</b> 3 аймақ · 2 дерек (сан) · 1 сұрақ — парақша №1-ге жаз. <span style="color:var(--muted)">Глобус тапсырмасының жауаптары осы видеода.</span></div></div>`; };
+/* видео ішінде: мақсат пен бағалау (бөлек кезең емес) */
+(function(){ const _v1 = SL.v1; SL.v1 = function(){ return _v1().replace('</video>', '</video><button class="btn" style="align-self:flex-start;font-size:20px;padding:12px 22px" onclick="goalOv(1)">🎯 Тақырып, мақсат және бағалау</button>'); };
+ window.goalOv = function(on){ let o = document.getElementById('goalOv'); if (!on) { if (o) o.remove(); return; } if (o) return;
+  o = document.createElement('div'); o.id = 'goalOv'; o.style.cssText = 'position:fixed;inset:0;z-index:999;background:rgba(10,40,35,.55);display:grid;place-items:center';
+  const T = Object.values(TASKS);
+  o.innerHTML = `<div class="card" style="width:min(1100px,92vw);max-height:88vh;overflow:auto;padding:28px 34px;position:relative"><button class="btn ghost sm" style="position:absolute;right:18px;top:16px" onclick="goalOv(0)">✕</button>
+   <div class="mid" style="margin:0 0 12px">Тақырып: <span class="grad">Геоэкологиялық аудандастыру</span></div>
+   <div style="font-size:17px;font-weight:700;color:var(--muted)">Оқу мақсаты</div><div style="font-size:23px;font-weight:700;margin:4px 0 14px">${esc(LESSON.goalCode)}</div>
+   <div style="font-size:17px;font-weight:700;color:var(--muted)">Сабақ мақсаты</div>${LESSON.aims.map(a=>`<div style="font-size:20px;margin-top:6px">• ${esc(a)}</div>`).join('')}
+   <div style="font-size:17px;font-weight:700;color:var(--muted);margin-top:14px">Бағалау: ${T.length} критерий, барлығы ${MAXT} ұпай → 10 балл</div>${T.map(t=>`<div style="font-size:19px;margin-top:6px">✓ ${esc(t.crit)} <span style="color:var(--muted)">(${t.d.reduce((a,b)=>a+b[1],0)} ұп.)</span></div>`).join('')}</div>`;
+  o.onclick = e => { if (e.target === o) goalOv(0); }; document.body.appendChild(o); };
+})();
+
 
 /* 3. ЖИ-ді тексер: телефонсыз, парақшамен */
 const _k3 = SL.k3; SL.k3 = function () { return _k3().replace(qrBlock(), `<div class="card" style="padding:14px 20px;font-size:21px;font-weight:700">📄 Парақша №3 · жұппен · телефонсыз. Соңында «Тексеру» — бірге талдаймыз.</div>`); };
