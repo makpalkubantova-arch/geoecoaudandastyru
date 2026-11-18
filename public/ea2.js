@@ -141,6 +141,12 @@
   function indVal(r, t) { const o = (S.ind || {})[r.key] || {}; if (o[t] != null && o[t] !== '') return { v: +o[t], auto: false }; const a = t === 't1' ? autoT1(r.live) : autoT3(r.live); return a == null ? { v: null } : { v: a, auto: true }; }
   function dockBody(t) {
     const T = TASKS[t], mx = maxOf(t);
+    if (GT.includes(t) && !S.dockFull) return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;flex:1;min-height:0">${GROUPS.map((g, gi) => { const sm = sc(t, g.id).reduce((a, b) => a + b, 0); const pv = GROUPS[(gi + GROUPS.length - 1) % GROUPS.length];
+      return `<div style="border:3px solid ${g.color};border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;background:#fff;justify-content:center">
+        <b style="font-size:30px;text-align:center">${g.icon} ${g.name}</b><div style="font-size:16px;color:var(--muted);font-weight:700;text-align:center">🔍 тексерген: ${pv.icon} ${pv.name} тобы</div>
+        <div style="display:grid;grid-template-columns:repeat(${Math.min(mx + 1, 3)},1fr);gap:10px">${Array.from({ length: mx + 1 }, (_, p) => `<button onclick="dkTot('${t}','${g.id}',${p})" style="font:inherit;font-size:40px;font-weight:900;padding:14px 0;border-radius:16px;cursor:pointer;border:3px solid ${g.color};background:${sm === p ? g.color : '#fff'};color:${sm === p ? '#fff' : g.color}">${p}</button>`).join('')}</div>
+        <div style="text-align:center;font-size:20px;font-weight:900;color:${g.color}">${sm} / ${mx} ұпай ✓</div></div>`; }).join('')}</div>
+      <div style="font-size:16px;color:var(--muted)">Бір рет бассаңыз — топтың ұпайы қойылды. <button class="btn ghost" style="padding:4px 12px;font-size:15px" onclick="S.dockFull=true;drawDock()">Дескриптор бойынша қою</button></div>`;
     if (GT.includes(t)) return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:1;min-height:0">${GROUPS.map((g, gi) => { const v = sc(t, g.id), sm = v.reduce((a, b) => a + b, 0);
       return `<div style="border:3px solid ${g.color};border-radius:18px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:0;background:#fff">
         <div style="display:flex;align-items:center;gap:8px"><b style="font-size:24px">${g.icon} ${g.name}</b><span style="flex:1"></span><b style="font-size:30px;color:${g.color}">${sm}<small style="font-size:18px;color:var(--muted)">/${mx}</small></b></div>
@@ -163,6 +169,8 @@
   }
   function drawDock() { const d = document.getElementById('sdock'); const st = STAGES[S.stage]; if (d && st && st.task) d.innerHTML = dockHTML(st.task); }
   window.dkTog = () => { S.dock = !S.dock; save(); drawDock(); };
+  window.dkTot = (t, g, p) => { S.scores[t] = S.scores[t] || {}; let r = p; S.scores[t][g] = TASKS[t].d.map(d => { const x = Math.min(d[1], r); r -= x; return x; }); save(); drawDock(); flash(g, p); };
+  function flash(g, p) { const G = grp(g); const el = document.createElement('div'); el.className = 'dkfl'; el.style.background = G.color; el.textContent = `${G.icon} ${G.name}: +${p}`; document.querySelector('#slideHost .slide')?.appendChild(el); setTimeout(() => el.remove(), 1600); }
   window.dkSet = (t, g, k, p) => { S.scores[t] = S.scores[t] || {}; const v = sc(t, g).slice(); v[k] = p; S.scores[t][g] = v; save(); drawDock(); };
   window.dkInd = (key, t, p) => { const o = (S.ind || {})[key] || {}; setInd(key, t, (o[t] != null && +o[t] === p) ? '' : p); drawDock(); };
 
@@ -178,6 +186,7 @@
   .gorb{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;animation:gpop .6s cubic-bezier(.2,1.6,.4,1) both;z-index:2}.gorb span{font-size:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))}.gorb small{font-size:12px;font-weight:800;background:#fff;border-radius:999px;padding:0 6px;color:#0E3B35;white-space:nowrap}
   @keyframes gpop{from{opacity:0;transform:translate(-50%,-50%) scale(.2)}}
   .wplan svg{animation:wspin 6s ease-in-out infinite}@keyframes wspin{50%{transform:translateY(-14px) rotate(4deg)}}
+  .dkfl{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:60;color:#fff;font-size:64px;font-weight:900;padding:18px 40px;border-radius:30px;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:dkfl 1.6s ease both;pointer-events:none}@keyframes dkfl{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%)}}
   .psp{position:absolute;font-style:normal;font-size:34px;animation:psp 2s ease-in-out infinite}
   @keyframes psp{50%{transform:translateY(-12px) scale(1.2);opacity:.6}}`;
   document.head.appendChild(css);
@@ -200,12 +209,13 @@
   /* ---------- 6. renderSlide орамы ---------- */
   const _r = renderSlide;
   renderSlide = function () {
-    if (window._lastStg !== S.stage) { S.dock = false; window._lastStg = S.stage; }
+    if (window._lastStg !== S.stage) { S.dock = false; S.dockFull = false; window._lastStg = S.stage; }
     _r(); const st = STAGES[S.stage], stg = document.getElementById('stage'), sl = document.querySelector('#slideHost .slide');
     if (!sl) return; stg.dataset.tk = st.task ? '1' : '';
     if (st.task) { sl.insertAdjacentHTML('beforeend', '<div id="sdock"></div>'); drawDock(); }
   };
   window.addEventListener('focus', () => { if (location.hash === '#board') drawDock(); });
+  let _ao = -1; setInterval(() => { const st = STAGES[S.stage], T = S.timer || {}; if (location.hash === '#board' && st && st.task && T.total > 0 && T.run && T.end && T.end - Date.now() <= 0 && _ao !== S.stage) { _ao = S.stage; S.dock = true; drawDock(); } }, 1000);
   let _gn = -1; setInterval(() => { if (location.hash !== '#board') return; if (!S.dock) drawDock(); if (STAGES[S.stage] && STAGES[S.stage].id === 'fb') { const n = allGuests().length; if (n !== _gn) { _gn = n; redraw('fbx', fbInner); } } }, 4000);
   if (location.hash === '#board') renderSlide();
 })();
