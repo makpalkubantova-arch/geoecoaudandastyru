@@ -3225,7 +3225,7 @@ world(){return `<div class="main" style="display:flex;flex-direction:column;gap:
 /* Аймақ гидінің дауысы: media/gid/<кезең>.mp3 */
 const GID=new Audio();setTimeout(()=>{const b=document.getElementById('gidBtn');if(b)b.textContent=gidOn()?'🔊':'🔇'},0);GID.preload='auto';
 function gidOn(){try{return localStorage.getItem('gidVoice')!=='0'}catch(e){return true}}
-function gidSay(id){try{GID.pause();if(!gidOn()||!(MASC_LINES[id]))return;GID.src='media/gid/'+id+'.mp3?v=2';GID.currentTime=0;const p=GID.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+function gidSay(id){try{GID.pause();if(!gidOn()||!(MASC_LINES[id]))return;GID.src='media/gid/'+id+'.mp3?v=3';GID.currentTime=0;const p=GID.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
 function gidToggle(){const on=!gidOn();try{localStorage.setItem('gidVoice',on?'1':'0')}catch(e){}if(!on)GID.pause();else gidSay(STAGES[S.stage|0].id);const b=document.getElementById('gidBtn');if(b)b.textContent=on?'🔊':'🔇'}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.mfloat,.tav')){gidSay(STAGES[S.stage|0].id)}});
 function speak(el,text){clearInterval(window._tw);clearTimeout(window._tt);if(!el)return;const rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm){el.textContent=text;return}let i=0;el.textContent='';window._tt=setTimeout(()=>{const h=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(h)},32);window._tw=h},450)}
@@ -3793,6 +3793,6 @@ const o=new MutationObserver(f);document.addEventListener('DOMContentLoaded',()=
 if(g){g.method='«Планетаға 4 тілек» + «Геосфералар»';g.mdesc='Психологиялық ахуал: тақтадағы «ауырған» планетаға әр топ өз сферасы атынан бір сөзбен тілек айтады — сфера жанданады. 4 топ: Су (гидросфера), Ауа (атмосфера), Топырақ (литосфера), Биота (биосфера); деңгейі тең.'}
 if(f){f.method='«Сауыққан планета» + «Бағдаршам»';f.mdesc='Сабақ басындағы планетаға орала отырып, әр оқушы 🟢🟡🔴 арқылы өзін бағалайды; жасыл көбейген сайын планета сауығады. Таңертеңгі тілек → «оны орындау үшін мен не істеймін?».'}
 if(x){x.mdesc='Әр топ Абай қаласын өз сферасы бойынша талдайды: 2 фактор, дәлел, ықтимал деңгей (7-кесте), 2 шешім, ЖИ-ге сұрақ. 4 сфераны қосып, қаланың жалпы деңгейін анықтайды.'}})();</script>
-<script src="ea2.js?v=6"></script>
+<script src="ea2.js?v=7"></script>
 </body>
 </html>

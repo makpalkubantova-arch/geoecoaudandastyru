@@ -193,18 +193,18 @@
 
   /* ---------- 0. Алғашқы экран: «Сабағыма қош келдіңіздер!» ---------- */
   if (!STAGES.find(x => x.id === 'welcome')) STAGES.unshift({ id: 'welcome', title: 'Сабағыма қош келдіңіздер!', min: 0, kind: 'Сабақ басы · Қарсы алу', method: 'Қарсы алу экраны', mdesc: 'Сабақ басталғанға дейін тақтада тұрады: тақырып, оқу мақсаты, сабақ мақсаты.' });
-  MASC_LINES.welcome = ['wave', 'Құрметті әріптестер, сабағымызға қош келдіңіздер!'];
+  MASC_LINES.welcome = ['wave', 'Сабағымызға қош келдіңіздер!'];
   SL.welcome = function () { const st = S.settings || {}, hv = { aua: 1, su: 1, topyraq: 1, biota: 1 };
     return `<div class="full wlc" style="display:grid;grid-template-columns:1fr 520px;gap:34px;top:110px;bottom:130px">
       <div style="display:flex;flex-direction:column;gap:18px;min-height:0;justify-content:center">
-        <div style="font-size:30px;font-weight:800;color:#1FA67A">Құрметті әріптестер!</div>
         <div style="font-size:84px;font-weight:900;line-height:1;color:#0E3B35">Сабағыма<br><span class="grad">қош келдіңіздер!</span></div>
         <div class="card" style="padding:18px 24px;border-left:10px solid #1C8FCB"><div style="font-size:18px;font-weight:800;color:var(--muted)">ТАҚЫРЫП</div><div style="font-size:40px;font-weight:900;line-height:1.1">${esc(LESSON.topic)}</div></div>
         <div class="card" style="padding:16px 24px;border-left:10px solid #E8A317"><div style="font-size:18px;font-weight:800;color:var(--muted)">ОҚУ МАҚСАТЫ</div><div style="font-size:23px;font-weight:700;line-height:1.35">${esc(LESSON.goalCode)}</div></div>
         <div class="card" style="padding:16px 24px;border-left:10px solid #1FA67A"><div style="font-size:18px;font-weight:800;color:var(--muted)">САБАҚ МАҚСАТЫ</div>${LESSON.aims.map(a => { const p = a.split(':'); return `<div style="font-size:20px;line-height:1.35;margin-top:4px"><b>${esc(p[0])}:</b>${esc(p.slice(1).join(':'))}</div>`; }).join('')}</div>
-        <div style="font-size:21px;font-weight:700;color:var(--muted)">${esc(LESSON.subject)} · ${esc(LESSON.grade)} · Мұғалім: ${esc(LESSON.teacher)}${st.school ? ' · ' + esc(st.school) : ''}</div></div>
+        <div style="display:flex;gap:16px"><div class="card" style="flex:1;padding:14px 24px"><div style="font-size:18px;font-weight:800;color:var(--muted)">МҰҒАЛІМ</div><div style="font-size:30px;font-weight:900">${esc(LESSON.teacher)}</div></div>
+        <div class="card" style="flex:none;padding:14px 30px"><div style="font-size:18px;font-weight:800;color:var(--muted)">СЫНЫП</div><div style="font-size:30px;font-weight:900">${esc(LESSON.grade)}</div></div></div></div>
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:0"><div class="wplan" style="width:100%;max-width:470px">${planet(hv)}</div>
-        <div style="font-size:24px;font-weight:800;text-align:center;color:#0E3B35">🌍 Жер — біздің ортақ үйіміз</div></div></div>`; };
+</div></div>`; };
 
   /* ---------- 6. renderSlide орамы ---------- */
   const _r = renderSlide;
