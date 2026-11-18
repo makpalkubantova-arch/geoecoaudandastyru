@@ -62,6 +62,25 @@
   function redraw(id, fn) { const el = document.getElementById(id); if (el) el.innerHTML = fn(); }
   SL.groups = function () { return `<div class="full" id="grx" style="display:flex;flex-direction:column;gap:14px">${grInner()}</div>`; };
 
+  /* ---------- Мұғалімдер мен қонақтар: «Планетаға сыйлық» ---------- */
+  const GIFT = { tree: ['🌳', 'Ағаш', 'биосфера'], drop: ['💧', 'Мөлдір тамшы', 'гидросфера'], bird: ['🕊️', 'Таза ауа', 'атмосфера'], flower: ['🌸', 'Құнарлы жер', 'литосфера'] };
+  window.GIFT = GIFT;
+  const _rg = renderGuest;
+  window.gGift = k => { GF.gift = k; renderGuest(true); };
+  renderGuest = function (keep) {
+    _rg(keep); const box = document.querySelector('#guest .gq');
+    if (GF.sent) { const c = document.querySelector('#guest .panel h2'); if (c && GF.gift && GIFT[GF.gift]) c.insertAdjacentHTML('afterend', `<div style="font-size:60px">${GIFT[GF.gift][0]}</div><p style="font-size:17px;font-weight:700;color:#1FA67A">Сыйлығыңыз тақтадағы планетаның айналасында пайда болды!</p>`); return; }
+    if (!box) return;
+    box.insertAdjacentHTML('beforebegin', `<div class="card gq" style="background:linear-gradient(135deg,#E9F7F1,#EAF4FF)"><label style="font-size:19px">🌍 Планетаға сыйлық қалдырыңыз</label>
+      <p style="color:var(--muted);font-size:15px;margin:4px 0 10px">Сабақ ұнаса — сыйлығыңыз тақтадағы планетаны жасартып, атыңызбен көрінеді.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${Object.keys(GIFT).map(k => `<button onclick="gGift('${k}')" style="display:flex;align-items:center;gap:10px;font:inherit;font-weight:800;font-size:17px;padding:12px;border-radius:14px;cursor:pointer;text-align:left;border:3px solid ${GF.gift === k ? '#1FA67A' : '#d6e4df'};background:${GF.gift === k ? '#D3F3E5' : '#fff'};color:#0E3B35"><span style="font-size:34px">${GIFT[k][0]}</span><span>${GIFT[k][1]}<small style="display:block;font-weight:600;color:var(--muted)">${GIFT[k][2]}</small></span></button>`).join('')}</div></div>`);
+  };
+  function guestGifts() { return allGuests().filter(g => g.gift && GIFT[g.gift]); }
+  function orbit(list) {
+    return list.slice(0, 18).map((g, i, A) => { const a = (-90 + i * 360 / Math.max(A.length, 8)) * Math.PI / 180, x = 50 + 52 * Math.cos(a), y = 50 + 52 * Math.sin(a);
+      return `<div class="gorb" style="left:${x}%;top:${y}%;animation-delay:${i * .15}s"><span>${GIFT[g.gift][0]}</span><small>${esc((g.who || 'Қонақ').split(' ')[0])}</small></div>`; }).join('');
+  }
+
   /* ---------- 2. Сабақ соңы: «Сауыққан планета» + бағдаршам ---------- */
   const LT = { g: ['#22c55e', '🟢', 'Түсіндім, басқаға түсіндіре аламын'], y: ['#eab308', '🟡', 'Түсіндім, сұрағым бар'], r: ['#f43f5e', '🔴', 'Көмек керек'] };
   function fbInner() {
@@ -70,7 +89,9 @@
     const n = cnt.g + cnt.y + cnt.r, base = Math.max(R.length, n, 1);
     const self = n ? (cnt.g + cnt.y * .55 + cnt.r * .15) / base : 0;
     const act = R.length ? R.reduce((a, r) => a + indOf(r).tot, 0) / (R.length * MAXT) : GROUPS.reduce((a, g) => a + grpPart(g.id), 0) / (GROUPS.length * 10);
-    const h = Math.min(1, (n ? self * .5 : 0) + act * .5 + (n && act > .75 ? .05 : 0)), hp = Math.round(h * 100), win = hp >= 80;
+    const GG = guestGifts(), gb = Math.min(.1, GG.length * .02), GA = allGuests();
+    const rs = GA.flatMap(g => Object.values(g.r || {}).map(Number)).filter(x => x > 0), avg = rs.length ? (rs.reduce((a, b) => a + b, 0) / rs.length).toFixed(1) : '';
+    const h = Math.min(1, (n ? self * .5 : 0) + act * .5 + gb + (n && act > .75 ? .05 : 0)), hp = Math.round(h * 100), win = hp >= 80;
     const v = {}; order.forEach(id => v[id] = Math.max(h, 0.04));
     const W = S.planet.wish || {};
     const wl = order.filter(id => W[id]).map(id => { const g = grp(id); return `<span style="background:${g.color};color:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-size:17px">${g.icon} ${esc(W[id])}</span>`; }).join(' ');
@@ -78,15 +99,19 @@
       : `<div style="display:flex;gap:12px;flex-wrap:wrap">${Object.keys(LT).map(k => `<button class="btn" style="background:${LT[k][0]};font-size:24px" onclick="healCnt('${k}')">${LT[k][1]} +1 · ${S.healN && S.healN[k] || 0}</button>`).join('')}</div>`;
     return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="mid" style="font-size:36px">🌍 Сабақ басындағы планета сауықты ма?</div>${wl ? `<span style="font-size:17px;color:var(--muted);font-weight:700">Таңертеңгі тілектер:</span>${wl}` : ''}</div>
       <div class="grow" style="display:grid;grid-template-columns:440px 1fr;gap:20px;min-height:0">
-        <div class="card" style="padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><div class="pwrap${win ? ' win' : ''}" style="width:100%;max-width:360px;position:relative">${win ? '<div class="prain"></div>' : ''}${planet(v)}${win ? '<i class="psp" style="left:6%;top:12%">✨</i><i class="psp" style="right:4%;top:6%;animation-delay:.4s">✨</i><i class="psp" style="right:10%;bottom:12%;animation-delay:.8s">🕊️</i><i class="psp" style="left:2%;bottom:20%;animation-delay:1.2s">🌸</i><i class="psp" style="left:44%;top:-6%;animation-delay:.6s">☀️</i>' : ''}</div>
+        <div class="card" style="padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><div class="pwrap${win ? ' win' : ''}" style="width:100%;max-width:360px;position:relative">${win ? '<div class="prain"></div>' : ''}${planet(v)}${orbit(GG)}${win ? '<i class="psp" style="left:6%;top:12%">✨</i><i class="psp" style="right:4%;top:6%;animation-delay:.4s">✨</i><i class="psp" style="right:10%;bottom:12%;animation-delay:.8s">🕊️</i><i class="psp" style="left:2%;bottom:20%;animation-delay:1.2s">🌸</i><i class="psp" style="left:44%;top:-6%;animation-delay:.6s">☀️</i>' : ''}</div>
           <div style="font-size:30px;font-weight:900;color:${hp >= 70 ? '#1FA67A' : hp >= 40 ? '#E8A317' : '#E2475F'}">${win ? '🎉 ' : ''}Планета ${hp}% сауықты</div>
-          <div style="font-size:16px;font-weight:700;color:var(--muted);text-align:center">Сабақтағы ұпай: ${Math.round(act * 100)}% · Өзін-өзі бағалау: ${Math.round(self * 100)}%</div>
+          <div style="font-size:16px;font-weight:700;color:var(--muted);text-align:center">Сабақтағы ұпай: ${Math.round(act * 100)}% · Өзін-өзі бағалау: ${Math.round(self * 100)}%${GG.length ? ` · 🎩 Мұғалімдер сыйлығы: +${Math.round(gb * 100)}%` : ''}</div>
           <div style="display:flex;gap:12px;font-size:20px;font-weight:800">${Object.keys(LT).map(k => `<span>${LT[k][1]} ${cnt[k]}</span>`).join('')}</div></div>
         <div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-height:0">
           <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:17px;font-weight:700;color:var(--muted)">${Object.keys(LT).map(k => `<span>${LT[k][1]} ${LT[k][2]}</span>`).join('')}<span>· атыңды бір рет бас → 🟢, тағы → 🟡, тағы → 🔴</span></div>
           ${names}
           <div style="display:flex;gap:14px;align-items:center;margin-top:auto"><div class="card" style="flex:1;padding:12px 16px;font-size:20px;background:#E9F7F1;box-shadow:none">💬 2–3 оқушы: <b>«Таңертеңгі тілегіміз орындалуы үшін мен … істеймін»</b></div>
-          <div style="transform:scale(.8);transform-origin:right center">${qrBlockFor(guestURL(), '🎩 Қонақтар', 'Ұтымды · Қызықты · Ұсыныс')}</div></div></div></div>`;
+          </div>
+          <div style="display:flex;gap:12px;align-items:stretch;min-height:0"><div style="flex:none;transform:scale(.85);transform-origin:left top;margin-bottom:-24px">${qrBlockFor(guestURL(), '🎩 Мұғалімдер', 'Планетаға сыйлық + пікір')}</div>
+          <div style="flex:1;min-width:0;background:#FFF6DD;border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;overflow:hidden">
+            <div style="display:flex;gap:10px;align-items:center;font-weight:900;font-size:19px">🎩 Мұғалімдер бағы <span style="font-size:24px">${GG.slice(0, 12).map(g => GIFT[g.gift][0]).join('') || '🌱'}</span><span style="flex:1"></span>${avg ? `<span style="color:#B7791F">★ ${avg} / 5</span>` : ''}<span style="color:var(--muted);font-size:16px">${GA.length} пікір</span></div>
+            ${GA.filter(g => g.s1 || g.w).slice(-2).reverse().map(g => `<div style="font-size:16px;line-height:1.3"><b>${g.gift && GIFT[g.gift] ? GIFT[g.gift][0] : '🎩'} ${esc(g.who || 'Қонақ')}:</b> ${esc(g.s1 || g.w).slice(0, 110)}</div>`).join('') || '<div style="font-size:16px;color:var(--muted)">QR арқылы: планетаға сыйлық таңдап, сабақты бағалаңыз — сыйлығыңыз планетаның айналасында шығады.</div>'}</div></div></div></div>`;
   }
   window.healTap = k => { const nx = { undefined: 'g', g: 'y', y: 'r', r: undefined }; const c = nx[S.heal[k]]; if (c) S.heal[k] = c; else delete S.heal[k]; save(); redraw('fbx', fbInner); };
   window.healCnt = k => { S.healN = S.healN || {}; S.healN[k] = (S.healN[k] || 0) + 1; save(); redraw('fbx', fbInner); };
@@ -150,6 +175,8 @@
   .pwrap svg{transition:filter 1s}.pwrap.win svg{filter:drop-shadow(0 0 26px #5DD3A2) drop-shadow(0 0 8px #FFE27A);animation:pglow 2.4s ease-in-out infinite}
   @keyframes pglow{50%{transform:scale(1.04)}}
   .prain{position:absolute;left:-6%;right:-6%;top:-10%;height:62%;border-radius:50% 50% 0 0;border:14px solid transparent;border-top-color:#F87171;box-shadow:inset 0 14px 0 -0px #FBBF24,inset 0 28px 0 0 #34D399,inset 0 42px 0 0 #60A5FA;opacity:.55;clip-path:inset(0 0 40% 0);pointer-events:none}
+  .gorb{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;animation:gpop .6s cubic-bezier(.2,1.6,.4,1) both;z-index:2}.gorb span{font-size:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))}.gorb small{font-size:12px;font-weight:800;background:#fff;border-radius:999px;padding:0 6px;color:#0E3B35;white-space:nowrap}
+  @keyframes gpop{from{opacity:0;transform:translate(-50%,-50%) scale(.2)}}
   .psp{position:absolute;font-style:normal;font-size:34px;animation:psp 2s ease-in-out infinite}
   @keyframes psp{50%{transform:translateY(-12px) scale(1.2);opacity:.6}}`;
   document.head.appendChild(css);
@@ -162,6 +189,6 @@
     if (st.task) { sl.insertAdjacentHTML('beforeend', '<div id="sdock"></div>'); drawDock(); }
   };
   window.addEventListener('focus', () => { if (location.hash === '#board') drawDock(); });
-  setInterval(() => { if (location.hash === '#board' && !S.dock) drawDock(); if (location.hash === '#board' && STAGES[S.stage] && STAGES[S.stage].id === 'fb') { const el = document.getElementById('fbx'); if (el && !el.matches(':hover')) {} } }, 4000);
+  let _gn = -1; setInterval(() => { if (location.hash !== '#board') return; if (!S.dock) drawDock(); if (STAGES[S.stage] && STAGES[S.stage].id === 'fb') { const n = allGuests().length; if (n !== _gn) { _gn = n; redraw('fbx', fbInner); } } }, 4000);
   if (location.hash === '#board') renderSlide();
 })();

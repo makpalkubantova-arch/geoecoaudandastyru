@@ -471,7 +471,7 @@ a.btn{text-decoration:none!important}</style>
     <button class="card tile" onclick="go('student')"><div class="ic" style="background:#fef3c7">📱</div><b>Оқушы беті</b><small>Тек тапсырма кезінде ашылады: топ таңдайды, тапсырманы орындайды, өзін тексереді.</small></button>
     <button class="card tile" onclick="go('print')"><div class="ic" style="background:#ede9fe">🖨️</div><b>Парақшалар</b><small>Барлық тапсырманың қағаз нұсқасы және бағалау парағы</small></button>
   </div>
-  <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;margin:14px 0"><b style="margin-right:6px">📥 Материалдар:</b><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx?v=2" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf?v=2" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">🗂️ Парақшалар (PDF)</a></div>
+  <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;margin:14px 0"><b style="margin-right:6px">📥 Материалдар:</b><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx?v=3" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf?v=3" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">🗂️ Парақшалар (PDF)</a></div>
   <div class="route">
     <div class="card"><div class="num" style="background:#1C8FCB">1</div><div><b>Дүниежүзі</b><small>Чернобыльден Амазонияға дейін: планетаның апат және қауіп аймақтары</small></div></div>
     <div class="card"><div class="num" style="background:#E2475F">2</div><div><b>Қазақстан</b><small>5 деңгей, 47 провинция: Арал, Семей, Кенді Алтай, Балқаш</small></div></div>
@@ -3348,7 +3348,7 @@ function renderTeacher(){
    <button class="btn ghost" style="margin-top:10px" onclick="if(confirmClear()){dbReq('','DELETE').then(()=>{LIVE={students:{},guests:{}};renderTeacher()}).catch(()=>alertNet())}">📡 Тірі жауаптарды тазалау (Firebase)</button>
    <h3 style="margin-top:22px">Телефон қалай қосылады?</h3><div style="font-size:15px;line-height:1.5;color:var(--muted);margin-top:6px">Оқушы беті QR арқылы ашылады, сайт интернетте орналасқан болса ғана. Тақтадағы ұпайды мұғалім қояды — оқушы телефоны мен тақта бір-бірімен байланыспайды (интернетсіз де жұмыс істеу үшін). Жауаптар тақтаға өзі түсуі үшін келесі кезеңде Firebase қосамыз.</div>
    <div style="margin-top:14px">${qrBlock()}</div></div></div>`}
-  $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx?v=2" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf?v=2" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">🗂️ Парақшалар (PDF)</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
+  $('#teacher').innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="brand"><div class="logo">◐</div>Мұғалім панелі</div><div style="flex:1"></div><button class="btn" onclick="go('board')">🖥️ Тақтаға</button><button class="btn ghost" onclick="go('print')">🖨️ Парақшалар</button><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.docx?v=3" download>📄 ҚМЖ (Word)</a><a class="btn ghost" href="materials/QMZh-EkoAimaq-10A.pdf?v=3" target="_blank">📄 ҚМЖ (PDF)</a><a class="btn ghost" href="materials/Paraqshalar-EkoAimaq-10A.pdf?v=2" target="_blank">🗂️ Парақшалар (PDF)</a><button class="btn ghost" onclick="go('home')">⌂</button></div>
    <div class="tabs">${tabs.map(t=>`<button class="${tTab===t[0]?'on':''}" onclick="tTab='${t[0]}';renderTeacher()">${t[1]}</button>`).join('')}</div>${body}`;
 }
 function bumpT(t,g,k){S.scores[t]=S.scores[t]||{};const v=sc(t,g).slice();v[k]=(v[k]+1)%(TASKS[t].d[k][1]+1);S.scores[t][g]=v;save();renderTeacher()}
@@ -3409,8 +3409,8 @@ function guestURL(){return location.href.split('#')[0]+'#guest'}
 function gText(){const L=[`Сабаққа кері байланыс — ${LESSON.subject}, ${LESSON.grade}, ${LESSON.teacher}`,`Тақырып: ${LESSON.topic}`];if(GF.who||GF.role)L.push(`Аты: ${GF.who} ${GF.role?'('+GF.role+')':''}`);
   GCRIT.forEach((c,i)=>L.push(`• ${c}: ${GF.r[i]?'★'.repeat(GF.r[i])+' ('+GF.r[i]+'/5)':'—'}`));L.push(`⭐ ${GF.s1||'—'}`,`⭐ ${GF.s2||'—'}`,`💡 Тілек: ${GF.w||'—'}`);return L.join('\n')}
 function gRate(i,v){GF.r[i]=v;renderGuest(true)}
-function gSubmit(){if(!Object.keys(GF.r).length&&!GF.s1&&!GF.w){$('#gerr').textContent='Кемінде бір бағаны немесе пікірді толтырыңыз.';return}
-  S.guestFb=S.guestFb||[];S.guestFb.push({who:GF.who,role:GF.role,r:GF.r,s1:GF.s1,s2:GF.s2,w:GF.w,at:new Date().toLocaleTimeString('kk-KZ',{hour:'2-digit',minute:'2-digit'})});save();dbReq('guests','POST',S.guestFb[S.guestFb.length-1]).catch(()=>{});GF.sent=true;renderGuest(true);scrollTo(0,0)}
+function gSubmit(){if(!Object.keys(GF.r).length&&!GF.s1&&!GF.w&&!GF.gift){$('#gerr').textContent='Кемінде бір бағаны немесе пікірді толтырыңыз.';return}
+  S.guestFb=S.guestFb||[];S.guestFb.push({who:GF.who,role:GF.role,r:GF.r,s1:GF.s1,s2:GF.s2,w:GF.w,gift:GF.gift||'',at:new Date().toLocaleTimeString('kk-KZ',{hour:'2-digit',minute:'2-digit'})});save();dbReq('guests','POST',S.guestFb[S.guestFb.length-1]).catch(()=>{});GF.sent=true;renderGuest(true);scrollTo(0,0)}
 function gCopy(btn){const t=gText();try{navigator.clipboard.writeText(t).then(()=>{btn.textContent='✓ Көшірілді'},()=>{btn.textContent='Көшіру мүмкін болмады'})}catch(e){btn.textContent='Көшіру мүмкін болмады'}}
 function renderGuest(keep){const s=S.settings;if(!keep)GF={who:'',role:'',r:{},s1:'',s2:'',w:'',sent:false};
   const wa='https://wa.me/'+(s.wa||'').replace(/\D/g,'')+'?text='+encodeURIComponent(gText());
@@ -3793,6 +3793,6 @@ const o=new MutationObserver(f);document.addEventListener('DOMContentLoaded',()=
 if(g){g.method='«Планетаға 4 тілек» + «Геосфералар»';g.mdesc='Психологиялық ахуал: тақтадағы «ауырған» планетаға әр топ өз сферасы атынан бір сөзбен тілек айтады — сфера жанданады. 4 топ: Су (гидросфера), Ауа (атмосфера), Топырақ (литосфера), Биота (биосфера); деңгейі тең.'}
 if(f){f.method='«Сауыққан планета» + «Бағдаршам»';f.mdesc='Сабақ басындағы планетаға орала отырып, әр оқушы 🟢🟡🔴 арқылы өзін бағалайды; жасыл көбейген сайын планета сауығады. Таңертеңгі тілек → «оны орындау үшін мен не істеймін?».'}
 if(x){x.mdesc='Әр топ Абай қаласын өз сферасы бойынша талдайды: 2 фактор, дәлел, ықтимал деңгей (7-кесте), 2 шешім, ЖИ-ге сұрақ. 4 сфераны қосып, қаланың жалпы деңгейін анықтайды.'}})();</script>
-<script src="ea2.js?v=2"></script>
+<script src="ea2.js?v=3"></script>
 </body>
 </html>
