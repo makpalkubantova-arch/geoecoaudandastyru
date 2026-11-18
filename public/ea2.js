@@ -5,7 +5,7 @@
   const order = ['aua', 'su', 'topyraq', 'biota'];
   S.planet = S.planet || { wish: {}, on: {} };
   S.heal = S.heal || {};
-  S.dock = !!S.dock;
+  S.dock = false;
 
   /* ---------- планета SVG: v = {aua,su,topyraq,biota} → 0..1 (жандану) ---------- */
   function planet(v, size) {
@@ -184,6 +184,7 @@
   /* ---------- 6. renderSlide орамы ---------- */
   const _r = renderSlide;
   renderSlide = function () {
+    if (window._lastStg !== S.stage) { S.dock = false; window._lastStg = S.stage; }
     _r(); const st = STAGES[S.stage], stg = document.getElementById('stage'), sl = document.querySelector('#slideHost .slide');
     if (!sl) return; stg.dataset.tk = st.task ? '1' : '';
     if (st.task) { sl.insertAdjacentHTML('beforeend', '<div id="sdock"></div>'); drawDock(); }
