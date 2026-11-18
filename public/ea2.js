@@ -180,6 +180,7 @@
   .sdbar{height:66px;display:flex;align-items:center;gap:14px;padding:0 14px 0 22px;background:#fff;border-radius:18px;box-shadow:0 14px 30px -14px rgba(14,59,53,.55),inset 0 0 0 3px #E8A317;cursor:pointer}
   .sdpanel{height:560px;background:rgba(255,255,255,.98);border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 30px 60px -20px rgba(14,59,53,.6),inset 0 0 0 3px #E8A31755}
   #stage[data-tk="1"] .who{display:none}
+  .glbox{background:#EAF5FB!important;box-shadow:inset 0 0 0 2px #CFE3EC}
   .pwrap svg{transition:filter 1s}.pwrap.win svg{filter:drop-shadow(0 0 26px #5DD3A2) drop-shadow(0 0 8px #FFE27A);animation:pglow 2.4s ease-in-out infinite}
   @keyframes pglow{50%{transform:scale(1.04)}}
   .prain{position:absolute;left:-6%;right:-6%;top:-10%;height:62%;border-radius:50% 50% 0 0;border:14px solid transparent;border-top-color:#F87171;box-shadow:inset 0 14px 0 -0px #FBBF24,inset 0 28px 0 0 #34D399,inset 0 42px 0 0 #60A5FA;opacity:.55;clip-path:inset(0 0 40% 0);pointer-events:none}
@@ -205,6 +206,47 @@
         <div class="card" style="flex:none;padding:14px 30px"><div style="font-size:18px;font-weight:800;color:var(--muted)">СЫНЫП</div><div style="font-size:30px;font-weight:900">${esc(LESSON.grade)}</div></div></div></div>
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:0"><div class="wplan" style="width:100%;max-width:470px">${planet(hv)}</div>
 </div></div>`; };
+
+
+  /* ---------- 7. Видео: екі видео бір видео; тапсырма — «Планетаның жаралары» картасы (глобус жоқ) ---------- */
+  const _v1 = SL.v1; SL.v1 = function () { return _v1().replace('media/video3.mp4', 'media/video12.mp4').replace('media/video3.jpg', 'media/video12.jpg').replace('>Видео</div>', '>Видео: «Планетаның жаралары» → Қазақстан → 5 деңгей</div>'); };
+  const HOT = [
+    ['Норильск', 69.35, 88.2, 'r'], ['Чернобыль', 51.39, 30.1, 'r', 'L'], ['Арал', 45, 60, 'r'], ['Фукусима', 37.42, 141.03, 'r'], ['Бхопал', 23.26, 77.41, 'r', 'L'], ['Нигер атырауы', 4.8, 6.5, 'r'],
+    ['Ганг өзені', 25.3, 83, 'y'], ['Сахел', 15, 2, 'y', 'L'], ['Калимантан ормандары', 0.5, 114, 'y'], ['Амазония', -6, -62, 'y'], ['Мексика шығанағы', 26, -90, 'y', 'L'], ['Тынық мұхит қоқыс дағы', 32, -145, 'y', 'L']];
+  const HKZ = [['Семей полигоны', 50.1, 78.4, 'r'], ['Кенді Алтай', 49.95, 82.6, 'r'], ['Каспий теңізі', 45.5, 50.5, 'r', 'L'], ['Мұнай өндіру', 46.1, 53.4, 'y'], ['Балқаш', 46.6, 74.9, 'y'], ['Қарағанды–Теміртау', 49.9, 73.1, 'y'], ['Кіші Арал', 46.6, 61.4, 'b'], ['Бурабай', 53.08, 70.3, 'g'], ['Абай қаласы', 49.63, 72.85, 'b', 'L']];
+  const HC = { r: '#E2475F', y: '#E8A317', g: '#1FA67A', b: '#1C8FCB' };
+  const NQ = [
+    { lv: 'Ұғым', p: 'Дүниежүзі', lon: 55, lat: 28, k: 1.25, q: 'Геоэкологиялық аудандастыруда шекараны не анықтайды?', o: ['Табиғи-ландшафтылық әркелкілік пен геожүйенің бұзылу дәрежесі', 'Облыстардың әкімшілік шекарасы', 'Халық саны', 'Климат белдеулері'], src: 'Видео · 1-принцип' },
+    { lv: 'Ұғым', p: '5 деңгей', lon: 55, lat: 28, k: 1.25, q: 'Апатты деңгейде геожүйе неше пайыз бұзылған?', o: ['81–100%', '61–80%', '41–60%', '0–20%'], src: '7-кесте' },
+    { lv: 'Дүниежүзі', p: 'Чернобыль', lon: 30.1, lat: 51.39, k: 2.4, q: 'Картадағы қызыл белгі — Чернобыль. Қызыл белгі нені білдіреді?', o: ['Апат аймағы: өзгеріс қайтымсыз', 'Қауіп аймағы: қалпына келтіруге болады', 'Қолайлы аймақ', 'Қорық аймағы'], src: 'Видео · картаның шартты белгісі' },
+    { lv: 'Дүниежүзі', p: 'Сахел', lon: 2, lat: 15, k: 2.4, q: 'Сахел — сары белгі. Бұл аймақ туралы не дұрыс?', o: ['Қауіп аймағы: қалпына келтіруге болады', 'Апат аймағы: өзгеріс қайтымсыз', 'Табиғат мүлде өзгермеген', 'Ядролық сынақ аймағы'], src: 'Видео · картаның шартты белгісі' },
+    { lv: 'Дүниежүзі', p: 'Апат аймағы?', lon: 55, lat: 28, k: 1.25, q: 'Мына аймақтардың қайсысы картада апат аймағы (қызыл)?', o: ['Норильск', 'Ганг өзені', 'Сахел', 'Калимантан ормандары'], src: 'Видео' },
+    { lv: 'Дүниежүзі', p: 'Қауіп аймағы?', lon: 55, lat: 28, k: 1.25, q: 'Мына аймақтардың қайсысы картада қауіп аймағы (сары)?', o: ['Калимантан ормандары', 'Фукусима', 'Чернобыль', 'Нигер атырауы'], src: 'Видео' },
+    { lv: 'Қазақстан', p: 'Арал', lon: 60, lat: 45, k: 7, q: 'Арал теңізі қай деңгейге жатады?', o: ['1 — Апатты (81–100%)', '2 — Қауіпті (61–80%)', '3 — Шиеленіскен (41–60%)', '5 — Қолайлы (0–20%)'], src: 'Видео · 7-кесте' },
+    { lv: 'Қазақстан', p: 'Семей полигоны', lon: 78.4, lat: 50.1, k: 7, q: 'Семей ядролық полигоны қай деңгейге жатады?', o: ['1 — Апатты: жабылғанына 35 жыл болса да', '4 — Қанағаттанарлық', '5 — Қолайлы', '3 — Шиеленіскен'], src: 'Видео' },
+    { lv: 'Қазақстан', p: 'Каспий теңізі', lon: 50.5, lat: 45.5, k: 6, q: 'Каспий теңізінің деңгейі 2006–2025 жылдары қанша төмендеді?', o: ['2,37 м', '0,5 м', '10 м', 'Төмендеген жоқ'], src: '«Қазгидромет»' },
+    { lv: 'Қазақстан', p: 'Балқаш', lon: 74.9, lat: 46.6, k: 7, q: 'Балқаш көлі қай деңгейге жатады және неге?', o: ['2 — Қауіпті: мыс балқыту зауыты, Іле суы', '1 — Апатты: ядролық сынақ', '5 — Қолайлы: ұлттық парк', '4 — Қанағаттанарлық: мұнай'], src: 'Видео' },
+    { lv: 'Қазақстан', p: 'Кіші Арал', lon: 61.4, lat: 46.6, k: 7, q: 'Кіші (Солтүстік) Арал неге қайта толып келеді?', o: ['Көкарал бөгетінің арқасында', 'Жауын көбейгендіктен', 'Каспийден су әкелінді', 'Мұздық еріді'], src: 'ҚР Су ресурстары министрлігі' },
+    { lv: 'Біздің өңір', p: 'Қарағанды–Теміртау', lon: 70, lat: 48.5, k: 6, q: 'Біздің өңір — Қарағанды–Теміртау қай деңгейде? Ал Абай қаласы ше?', o: ['2 — Қауіпті (61–80%): металлургия мен көмір', '5 — Қолайлы (0–20%)', '4 — Қанағаттанарлық (21–40%)', '1 — Апатты (81–100%)'], src: 'Видео · «Қазгидромет»' }];
+  const GQ = window.GQ; GQ.length = 0; NQ.forEach(q => GQ.push(q));
+  if (!S.k1b || S.k1b.v !== 3) S.k1b = { v: 3, i: 0, who: null, ans: {}, used: [], ord: {} };
+  window.k1Reset = () => { S.k1b = { v: 3, i: 0, who: null, ans: {}, used: [], ord: {} }; save(); renderSlide(); };
+  const lbl = (x, t, px, py, col, big, left) => { x.font = `800 ${big ? 30 : 19}px "Golos Text", sans-serif`; const w = x.measureText(t).width + (big ? 26 : 18), hh = big ? 46 : 32, lx = left ? px - w - (big ? 20 : 14) : px + (big ? 20 : 14), ly = py - hh / 2;
+    x.fillStyle = big ? '#0E3B35' : '#fff'; x.strokeStyle = col; x.lineWidth = big ? 0 : 2.5; x.beginPath(); x.roundRect(lx, ly, w, hh, 9); x.fill(); if (!big) x.stroke();
+    x.fillStyle = big ? '#fff' : '#0E3B35'; x.textBaseline = 'middle'; x.fillText(t, lx + (big ? 13 : 9), py + 1); };
+  window.gDrawFlat = function (gRot, gK, GW) { const c = document.getElementById('glcv'); if (!c || !GW || !window.d3) return; const cw = Math.round(c.clientWidth * 1.4), ch = Math.round(c.clientHeight * 1.4); if (cw > 50 && (c.width !== cw || c.height !== ch)) { c.width = cw; c.height = ch; } const x = c.getContext('2d'), Wd = c.width, Hd = c.height;
+    const lon = -gRot[0], lat = -gRot[1], base = Math.min(Wd / 4.6, Hd / 2.5);
+    const pr = (d3.geoNaturalEarth1 || d3.geoEquirectangular)().rotate([-lon, 0]).center([0, lat]).scale(base * gK).translate([Wd / 2, Hd / 2]), p = d3.geoPath(pr, x);
+    x.clearRect(0, 0, Wd, Hd); x.fillStyle = '#EAF5FB'; x.fillRect(0, 0, Wd, Hd);
+    x.beginPath(); p(GW.land); x.fillStyle = '#D6ECD8'; x.fill(); x.beginPath(); p(GW.mesh); x.strokeStyle = 'rgba(70,120,90,.45)'; x.lineWidth = 1; x.stroke();
+    x.beginPath(); p(GW.kz); x.fillStyle = 'rgba(80,200,140,.55)'; x.fill(); x.strokeStyle = '#2BA86A'; x.lineWidth = 2.5; x.stroke();
+    const q = GQ[S.k1b.i], t = (Date.now() / 1100) % 1, list = gK >= 4 ? HKZ.concat(HOT.filter(h => h[0] === 'Арал' ? false : true)) : HOT;
+    list.forEach(h => { const pt = pr([h[2], h[1]]); if (!pt || pt[0] < -40 || pt[0] > Wd + 40 || pt[1] < -40 || pt[1] > Hd + 40) return; const [px, py] = pt, col = HC[h[3]], on = q && q.lv !== 'Ұғым' && h[0].startsWith(q.p);
+      const R = on ? 16 : 9; x.globalAlpha = (1 - t) * .55; x.beginPath(); x.arc(px, py, R + t * (on ? 56 : 26), 0, 7); x.fillStyle = col; x.fill(); x.globalAlpha = .25; x.beginPath(); x.arc(px, py, R * 2.2, 0, 7); x.fill(); x.globalAlpha = 1;
+      x.beginPath(); x.arc(px, py, R, 0, 7); x.fillStyle = col; x.fill(); x.strokeStyle = '#fff'; x.lineWidth = on ? 4 : 3; x.stroke();
+      if (!on) lbl(x, h[0], px, py, col, false, h[4] === 'L'); });
+    if (q && q.lv !== 'Ұғым') { const h = HOT.concat(HKZ).find(h => h[0].startsWith(q.p)); if (h) { const pt = pr([h[2], h[1]]); if (pt) lbl(x, q.p, pt[0], pt[1], HC[h[3]], true, h[4] === 'L'); } }
+    x.font = '700 16px "Golos Text", sans-serif'; x.textBaseline = 'middle'; [['r', 'Апат аймағы: өзгеріс қайтымсыз'], ['y', 'Қауіп аймағы: қалпына келтіруге болады']].forEach((L, n) => { const yy = Hd - 22 - n * 26; x.fillStyle = HC[L[0]]; x.beginPath(); x.arc(22, yy, 7, 0, 7); x.fill(); x.fillStyle = '#334'; x.fillText(L[1], 36, yy + 1); }); };
 
   /* ---------- 6. renderSlide орамы ---------- */
   const _r = renderSlide;
